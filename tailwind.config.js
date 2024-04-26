@@ -8,15 +8,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      //thêm gì mới vô chú thích, comment các thứ vô đây để ae xem cho tiện nhe
       colors: {
-        primary: "#0A773D",
-        primarylight: "#5CA927",
-        secondary: "#6B7280",
+        primary: "#0A773D", // màu xanh đậm bách hoá xanh
+        primarylight: "#5CA927", // màu xanh ngả vàng ví dụ như bên phải cùng của header
+        secondary: "#6B7280", // quên r :vvv
         accent: "#4CAF50",
-        txtprimary: "#E9EDF0",
+        txtprimary: "#E9EDF0", // màu chữ đen ngả xanh đen xíu
         txtgreen: "#007E42",
-        txtgray: "#515764",
-        // Add more custom colors as needed
+        txtgray: "#515764", // màu chữ xám dùng cho header
       },
       gradientColors: {
         primary: ["#0A773D", "#5CA927"],
