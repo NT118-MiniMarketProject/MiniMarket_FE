@@ -37,7 +37,7 @@ return (
     }}
   >
     <Tab.Screen
-      name={"HomeStackScreen"}
+      name={"Trang chủ"}
       options={({route}) => ({
         tabBarStyle: {display: getTabBarVisibility(route,"HomeScreen")},
         tabBarIcon: ({ focused }) => (
@@ -47,7 +47,7 @@ return (
             color={focused ? "#007E42" : "#515764"}
           />
         ),
-        headerShown: false,
+        headerShown: true,
       })}
       component={HomeStackScreen}
     />
@@ -99,7 +99,7 @@ return (
     </Tab.Screen> */}
 
     <Tab.Screen
-      name={"AccountStackScreen"}
+      name={"Tài khoản"}
 
       options={{
         tabBarIcon: ({ focused }) => (
@@ -109,7 +109,7 @@ return (
             color={focused ? "#007E42" : "#515764"}
           />
         ),
-        headerShown: false,
+        headerShown: true,
       }}
       component={AccountStackScreen}
     />
