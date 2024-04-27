@@ -16,7 +16,7 @@ const HomeStackScreen: React.FC = () => {
   return (
       <HomeStack.Navigator>
         <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false}}/>
-        <HomeStack.Screen name='DetailScreen' component={DetailScreen} options={{presentation: "modal"}} />
+        <HomeStack.Screen name='DetailScreen' component={DetailScreen} options={{headerShown: false}} />
       </HomeStack.Navigator>
     // <View className="flex-1 items-center justify-center bg-white">
     //   <Text className="text-red-400 font-bold">

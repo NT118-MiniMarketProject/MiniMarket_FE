@@ -14,12 +14,17 @@ import HomeScreen from '../../screens/Home/HomeScreen';
 import AccountStackScreen from '../../screens/stacks/AccountStackScreen';
 import { getTabBarVisibility } from '../../utils/functions';
 import { RouteProp } from '@react-navigation/native';
+import DealStackScreen from '../../screens/stacks/DealStackScreen';
+import CartStackScreen from '../../screens/stacks/CartStackScreen';
+import TestScreen from '../../screens/TestScreen';
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const Tabs = () => {
+  const fontSize = 12;
+  const iconSize = 22;
 return (
   <Tab.Navigator
     screenOptions={{
@@ -31,7 +36,7 @@ return (
         backgroundColor: "white",
       },
       tabBarLabelStyle: {
-        fontSize: 13,
+        fontSize: fontSize,
       },
       header: () => <Header />,
     }}
@@ -43,73 +48,67 @@ return (
         tabBarIcon: ({ focused }) => (
           <AntDesign
             name="home"
-            size={23} // decrease icon size a little bit
+            size={iconSize} // decrease icon size a little bit
             color={focused ? "#007E42" : "#515764"}
           />
         ),
-        headerShown: true,
       })}
       component={HomeStackScreen}
     />
 
-    {/* <Tab.Screen
-      name={"Deals"}
+    <Tab.Screen
+      name={"Khuyến mãi"}
       options={{
         tabBarIcon: ({ focused }) => (
           <MaterialCommunityIcons
             name="sale"
-            size={23} // decrease icon size a little bit
+            size={iconSize} // decrease icon size a little bit
             color={focused ? "#007E42" : "#515764"}
           />
         ),
-        headerShown: false,
       }}
-      component={HomeStackScreen}
-    /> */}
+      component={DealStackScreen}
+    />
 
-    {/* <Tab.Screen
-      name={"Cart"}
-
+    <Tab.Screen
+      name={"Giỏ hàng"}
       options={{
         tabBarIcon: ({ focused }) => (
           <AntDesign
             name="shoppingcart"
-            size={23} // decrease icon size a little bit
+            size={iconSize} // decrease icon size a little bit
             color={focused ? "#007E42" : "#515764"}
           />
         ),
       }}
-    >
-      {() => <HomeScreen />}
-    </Tab.Screen>
+      component={CartStackScreen}
+    />
+   
     <Tab.Screen
-      name={"Notification"}
+      name={"Thông báo"}
 
       options={{
         tabBarIcon: ({ focused }) => (
           <Ionicons
             name="notifications-outline"
+            size={iconSize}
             color={focused ? "#007E42" : "#515764"}
           />
         ),
-        headerShown: false,
       }}
-    >
-      {() => <HomeScreen />}
-    </Tab.Screen> */}
+      component={TestScreen}
+    />
 
     <Tab.Screen
       name={"Tài khoản"}
-
       options={{
         tabBarIcon: ({ focused }) => (
           <Feather
             name="user"
-            size={23} // decrease icon size a little bit
+            size={iconSize} // decrease icon size a little bit
             color={focused ? "#007E42" : "#515764"}
           />
         ),
-        headerShown: true,
       }}
       component={AccountStackScreen}
     />
