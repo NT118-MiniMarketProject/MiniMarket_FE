@@ -15,6 +15,13 @@ const AccountScreen = () => {
       }}>
         <Text>Xem thông tin cá nhân</Text>
       </TouchableOpacity>
+      <TouchableOpacity className='px-2 py-1 rounded-md' onPress={
+        () => {
+          navigation.navigate("AccountLoginScreen")
+        }
+      }>
+        <Text>Đăng nhập</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }

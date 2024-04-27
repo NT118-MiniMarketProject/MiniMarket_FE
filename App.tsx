@@ -6,6 +6,8 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import HomeStackScreen from './screens/stacks/HomeStackScreen';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import LoginScreen from './screens/Authen/LoginScreen';
+import SignUpScreen from './screens/Authen/SignUpScreen';
 
 
 
