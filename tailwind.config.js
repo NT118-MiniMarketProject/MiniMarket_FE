@@ -22,6 +22,8 @@ module.exports = {
         txtgray: "#515764", // màu chữ xám dùng cho header
         txtblue: "#0095FD",
         txtyellow: "#FFF066",
+        white: "#EFFFFB", //chỉ là màu trắng
+        black: "#5C595B", //chỉ là màu đen
       },
       gradientColors: {
         primary: ["#0A773D", "#5CA927"],
@@ -39,6 +41,9 @@ module.exports = {
         "14m": 14,
         "15m": 15,
       },
+      borderWidth: {
+        '1.2': '1.2px',
+      }
     },
   },
   plugins: [],
