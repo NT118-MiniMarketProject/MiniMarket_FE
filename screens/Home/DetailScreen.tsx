@@ -6,10 +6,10 @@ import { useRoute } from "@react-navigation/native";
 
 const DetailScreen = () => {
   const route = useRoute<any>();
-  const { itemId } = route.params || {};
+  // const { itemId } = route.params || {};
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-red-400 font-bold">{itemId}</Text>
+    <View className="bg-white">
+      <Text className="text-red-400 font-bold">He nho he nhoks</Text>
       <StatusBar style="auto" />
     </View>
   );

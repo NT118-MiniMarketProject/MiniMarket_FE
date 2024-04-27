@@ -11,12 +11,17 @@ module.exports = {
       //thêm gì mới vô chú thích, comment các thứ vô đây để ae xem cho tiện nhe
       colors: {
         primary: "#0A773D", // màu xanh đậm bách hoá xanh
-        primarylight: "#5CA927", // màu xanh ngả vàng ví dụ như bên phải cùng của header
+        primarylight: "#6BB019", // màu xanh ngả vàng ví dụ như bên phải cùng của header
+        lightgreen: "#EFFFF2",
         secondary: "#6B7280", // quên r :vvv
         accent: "#4CAF50",
-        txtprimary: "#E9EDF0", // màu chữ đen ngả xanh đen xíu
+        txtprimary: "#006133", // màu chữ xanh lá đậm
+        txtsecond: "#222B45", // màu chữ đen ngả xanh đen xíu
+        txtdarkgreen: "#006133",
         txtgreen: "#007E42",
         txtgray: "#515764", // màu chữ xám dùng cho header
+        txtblue: "#0095FD",
+        txtyellow: "#FFF066",
       },
       gradientColors: {
         primary: ["#0A773D", "#5CA927"],
@@ -25,7 +30,14 @@ module.exports = {
       fontSize: {
         "2xs": "0.625rem", // Custom size: 10px
         "3xs": "0.5rem", // Custom size: 8px
-        "sHome": "2rem", // Custom size: 80px
+        sHome: "2rem", // Custom size: 80px
+        // fontsize custom mình kí hiệu bằng chữ m ở đây
+        "10m": 10,
+        "11m": 11,
+        "12m": 12, // này là chủ yếu nhất nhe, size header, tiêu đề sp ks
+        "13m": 13,
+        "14m": 14,
+        "15m": 15,
       },
     },
   },
