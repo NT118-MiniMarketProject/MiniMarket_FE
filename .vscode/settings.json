@@ -2,6 +2,9 @@
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "cSpell.words": [
         "Authen",
-        "Ionicons"
+        "Đăng",
+        "formik",
+        "Ionicons",
+        "nhập"
     ]
 }

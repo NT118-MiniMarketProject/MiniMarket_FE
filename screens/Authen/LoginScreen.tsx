@@ -19,10 +19,13 @@ import {
 } from '../../components/styles';
 import { StatusBar } from 'expo-status-bar';
 import { Formik } from 'formik';
-import { View, TouchableOpacity, Text, KeyboardAvoidingView, ScrollView} from 'react-native';
+import { View, TouchableOpacity, Text, ScrollView} from 'react-native';
 import Separator from '../../components/Common/Separator';
 import MyTextInput, { ICON } from '../../components/Common/MyTextInput';
 import KeyboardAvoidingWrapper from '../../components/Common/KeyboardAvoidingWrapper';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../utils/types';
 
 const LoginScreen = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -31,6 +34,8 @@ const LoginScreen = () => {
         setPasswordVisible(!passwordVisible);
     };
 
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    
     return (
         <KeyboardAvoidingWrapper>
             <StyledContainer>
@@ -40,8 +45,8 @@ const LoginScreen = () => {
                             require('../../assets/images/brand-logo.png')}
                             resizeMode='contain'
                             />
-                        <PageTitle>Đăng nhập</PageTitle>
-                        <SubTitle>GreenMart chào bạn!</SubTitle>
+                        {/* <PageTitle>Đăng nhập</PageTitle> */}
+                        <SubTitle>GreenMart mừng bạn trở lại!</SubTitle>
                     <FormContainer>
                         <Formik
                             initialValues={{mail: '', password: ''}}
@@ -53,7 +58,8 @@ const LoginScreen = () => {
                                 };
                                 return (
                                     <>
-                                    <ScrollView>
+                                    <View>
+                                    <ScrollView keyboardShouldPersistTaps="always">
                                         <TextInputContainer>
                                             <MyTextInput
                                                 name='mail' 
@@ -83,6 +89,7 @@ const LoginScreen = () => {
                                             </TouchableOpacity>
                                         </TextInputContainer>
                                     </ScrollView>
+                                    </View>
                                     <StyledButton onPress={() => handleSubmit()} disabled={!isFormFilled()}>
                                         <GradientButtonTextContainer
                                             colors={ !isFormFilled() ? ['transparent', 'transparent'] : ['#11998e', '#38ef7d'] }
@@ -120,7 +127,7 @@ const LoginScreen = () => {
 
                         <Redirect>
                             <Text style={{marginRight: 5, color: Colors.black}}>Bạn chưa có tài khoản?</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate("Đăng ký")}>
                                 <TextLink>Đăng ký</TextLink>
                             </TouchableOpacity>
                         </Redirect>

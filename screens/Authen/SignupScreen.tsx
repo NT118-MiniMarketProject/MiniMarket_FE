@@ -16,9 +16,12 @@ import {
 } from '../../components/styles';
 import { StatusBar } from 'expo-status-bar';
 import { Formik } from 'formik';
-import { TouchableOpacity, Text, ScrollView} from 'react-native';
+import { TouchableOpacity, Text, ScrollView, View} from 'react-native';
 import MyTextInput, { ICON } from '../../components/Common/MyTextInput';
 import KeyboardAvoidingWrapper from '../../components/Common/KeyboardAvoidingWrapper';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../utils/types';
 
 const SignUpScreen = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -26,6 +29,8 @@ const SignUpScreen = () => {
     const setPasswordVisibleHandler = () => {
         setPasswordVisible(!passwordVisible);
     };
+
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
     return (
         <KeyboardAvoidingWrapper>
@@ -35,7 +40,7 @@ const SignUpScreen = () => {
                     <PageLogo source={
                             require('../../assets/images/brand-logo.png')}
                             resizeMode='contain'/>
-                    <PageTitle>Đăng ký</PageTitle>
+                    {/* <PageTitle>Đăng ký</PageTitle> */}
                     <SubTitle>Chào mừng bạn đến với GreenMart!</SubTitle>
                     <FormContainer>
                         <Formik
@@ -48,6 +53,7 @@ const SignUpScreen = () => {
                                 };
                                 return (
                                     <>
+                                    <View>
                                     <ScrollView keyboardShouldPersistTaps="always">
                                         <TextInputContainer>
                                             <MyTextInput
@@ -95,6 +101,7 @@ const SignUpScreen = () => {
                                                 setFieldValue={setFieldValue}/>
                                         </TextInputContainer>
                                     </ScrollView>
+                                    </View>
                                     <StyledButton onPress={() => handleSubmit()} disabled={!isFormFilled()}>
                                         <GradientButtonTextContainer
                                             colors={ !isFormFilled() ? ['transparent', 'transparent'] : ['#11998e', '#38ef7d'] }
@@ -111,7 +118,7 @@ const SignUpScreen = () => {
                         </Formik>
                         <Redirect>
                             <Text style={{marginRight: 5, color: Colors.black}}>Bạn đã có tài khoản?</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate("Đăng nhập")}>
                                 <TextLink>Đăng nhập</TextLink>
                             </TouchableOpacity>
                         </Redirect>

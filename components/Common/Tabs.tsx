@@ -13,7 +13,7 @@ import HomeStackScreen from '../../screens/stacks/HomeStackScreen';
 import HomeScreen from '../../screens/Home/HomeScreen';
 import AccountStackScreen from '../../screens/stacks/AccountStackScreen';
 import { getTabBarVisibility } from '../../utils/functions';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import DealStackScreen from '../../screens/stacks/DealStackScreen';
 import CartStackScreen from '../../screens/stacks/CartStackScreen';
 import TestScreen from '../../screens/TestScreen';
@@ -87,28 +87,36 @@ return (
     <Tab.Screen
       name={"Thông báo"}
 
-      options={{
-        tabBarIcon: ({ focused }) => (
-          <Ionicons
-            name="notifications-outline"
-            size={iconSize}
-            color={focused ? "#007E42" : "#515764"}
-          />
-        ),
+      options={{ 
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="notifications-outline"
+              size={iconSize}
+              color={focused ? "#007E42" : "#515764"}
+            />
+          )
       }}
       component={TestScreen}
     />
 
     <Tab.Screen
       name={"Tài khoản"}
-      options={{
-        tabBarIcon: ({ focused }) => (
-          <Feather
-            name="user"
-            size={iconSize} // decrease icon size a little bit
-            color={focused ? "#007E42" : "#515764"}
-          />
-        ),
+      options={({route}) => {
+        const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+        const arr = ['Đăng nhập', 'Đăng ký'];
+        let tabBarVisible = ['Đăng nhập', 'Đăng ký'].includes(routeName) ? "none" : "flex";
+        let headerVisible = ['Đăng nhập', 'Đăng ký'].includes(routeName) ? false : true;
+        return {
+          tabBarIcon: ({ focused }) => (
+            <Feather
+              name="user"
+              size={iconSize} // decrease icon size a little bit
+              color={focused ? "#007E42" : "#515764"}
+            />
+          ),
+          tabBarStyle: {display: tabBarVisible as "flex" | "none"},
+          headerShown: headerVisible
+        };
       }}
       component={AccountStackScreen}
     />

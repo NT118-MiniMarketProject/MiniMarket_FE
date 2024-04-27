@@ -23,17 +23,16 @@ const linkTextSize = 14;
 
 export const StyledContainer = styled.View`
     flex: 1;
-    padding: 35px 13px;
-    padding-top: ${Constants.statusBarHeight + 10}px;
+    padding: 30px 13px;
     background-color: ${Colors.greenBackground}; 
 `;
-
+// padding-top: ${Constants.statusBarHeight + 10}px;
 export const InnerContainer = styled.View` 
     flex: 1;
     background-color: ${Colors.white};
     align-items: center;
     border-radius: 10px;
-    padding-top: 50px;
+    padding-top: 20px;
     padding-bottom: 20px;
     padding-horizontal: 3px;
 `;
