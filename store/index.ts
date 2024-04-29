@@ -18,6 +18,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import productReviewSlice from "./features/Product/productReviewSlice";
 import wishlistSlice from "./features/Products/wishlistSlice";
 import categoryHeaderSlice from "./features/Collection/categoryHeaderSlice";
+import categoryGroupDetailSlice from "./features/Collection/categoryGroupDetailSlice";
 
 
 export const store = configureStore({
@@ -38,7 +39,8 @@ export const store = configureStore({
     order: orderSlice.reducer,
     orderList: orderListSlice.reducer,
     wishlist: wishlistSlice.reducer,
-    categoryHeader: categoryHeaderSlice.reducer
+    categoryHeader: categoryHeaderSlice.reducer,
+    categoryGroupDetail: categoryGroupDetailSlice.reducer
   },
   devTools: process.env.NODE_ENV==="development",
 });

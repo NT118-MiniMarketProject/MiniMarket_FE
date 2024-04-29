@@ -5,10 +5,13 @@ import { TouchableOpacity } from 'react-native'
 import { AntDesign, Feather, EvilIcons } from "@expo/vector-icons";
 import SafeView from './SafeView';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../utils/types';
 
 const Header = () => {
     const [text, setText] = useState('');
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
     <LinearGradient
       className="rounded-xl"
@@ -17,7 +20,11 @@ const Header = () => {
       end={[1, 0]}
     >
       <SafeView classname="flex-row items-center space-x-2 bg-white rounded-lg px-3 py-1 mx-2 mb-3">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={
+         () => {
+          navigation.navigate("CategoriesScreen");
+         } 
+        }>
           <AntDesign name="bars" size={24} color="#0A773D" />
         </TouchableOpacity>
         <View className="bg-white flex-1 rounded-lg py-1 px-2 flex-row items-center">

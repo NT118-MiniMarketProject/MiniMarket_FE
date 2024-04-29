@@ -127,9 +127,9 @@ const LoginScreen = () => {
 
                         <Redirect>
                             <Text style={{marginRight: 5, color: Colors.black}}>Bạn chưa có tài khoản?</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate("Đăng ký")}>
+                            {/* <TouchableOpacity onPress={() => navigation.navigate("Đăng ký")}>
                                 <TextLink>Đăng ký</TextLink>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </Redirect>
                     </FormContainer>
                     

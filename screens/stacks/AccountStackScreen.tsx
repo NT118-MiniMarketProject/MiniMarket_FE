@@ -4,8 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import AccountScreen from '../Account/AccountScreen';
 import AccountInfoScreen from '../Account/AccountInfoScreen';
 import LoginScreen from '../Authen/LoginScreen';
-import SignUpScreen from '../Authen/SignUpScreen';
-
+import SignUpScreen from '../Authen/SignupScreen';
 const AccountStack = createStackNavigator();
 
 
