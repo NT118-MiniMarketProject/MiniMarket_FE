@@ -118,9 +118,9 @@ const SignUpScreen = () => {
                         </Formik>
                         <Redirect>
                             <Text style={{marginRight: 5, color: Colors.black}}>Bạn đã có tài khoản?</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate("Đăng nhập")}>
+                            {/* <TouchableOpacity onPress={() => navigation.navigate("Đăng nhập")}>
                                 <TextLink>Đăng nhập</TextLink>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </Redirect>
                     </FormContainer>
                 </InnerContainer>

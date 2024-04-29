@@ -42,8 +42,9 @@ return (
     }}
   >
     <Tab.Screen
-      name={"Trang chủ"}
+      name={"HomeStackScreen"}
       options={({route}) => ({
+        title: "Trang chủ",
         tabBarStyle: {display: getTabBarVisibility(route,"HomeScreen")},
         tabBarIcon: ({ focused }) => (
           <AntDesign
@@ -57,8 +58,9 @@ return (
     />
 
     <Tab.Screen
-      name={"Khuyến mãi"}
+      name={"DealStackScreen"}
       options={{
+        title: "Khuyến mãi",
         tabBarIcon: ({ focused }) => (
           <MaterialCommunityIcons
             name="sale"
@@ -71,8 +73,9 @@ return (
     />
 
     <Tab.Screen
-      name={"Giỏ hàng"}
+      name={"CartStackScreen"}
       options={{
+        title: "Giỏ hàng",
         tabBarIcon: ({ focused }) => (
           <AntDesign
             name="shoppingcart"
@@ -85,9 +88,9 @@ return (
     />
    
     <Tab.Screen
-      name={"Thông báo"}
-
+      name={"NotiStackScreen"}
       options={{ 
+        title: "Thông báo",
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name="notifications-outline"
@@ -100,7 +103,7 @@ return (
     />
 
     <Tab.Screen
-      name={"Tài khoản"}
+      name={"AccountStackScreen"}
       options={({route}) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
         const arr = ['Đăng nhập', 'Đăng ký'];
@@ -115,7 +118,8 @@ return (
             />
           ),
           tabBarStyle: {display: tabBarVisible as "flex" | "none"},
-          headerShown: headerVisible
+          headerShown: headerVisible,
+          title: "Tài khoản",
         };
       }}
       component={AccountStackScreen}
