@@ -107,8 +107,8 @@ return (
       options={({route}) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
         const arr = ['AccountLoginScreen', 'AccountSignUpScreen'];
-        let tabBarVisible = ['AccountLoginScreen', 'AccountSignUpScreen'].includes(routeName) ? "none" : "flex";
-        let headerVisible = ['AccountLoginScreen', 'AccountSignUpScreen'].includes(routeName) ? false : true;
+        let tabBarVisible = arr.includes(routeName) ? "none" : "flex";
+        let headerVisible = arr.includes(routeName) ? false : true;
         return {
           tabBarIcon: ({ focused }) => (
             <Feather

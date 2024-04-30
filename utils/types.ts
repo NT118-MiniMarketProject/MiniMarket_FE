@@ -9,6 +9,7 @@ type RootStackParamList = {
   HomeStackScreen: undefined,
   AccountLoginScreen: undefined,
   AccountSignUpScreen: undefined,
+  CategoriesScreen: undefined,
 };
 
 type TabStackParamList = {

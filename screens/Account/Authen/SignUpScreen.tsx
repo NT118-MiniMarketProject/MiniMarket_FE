@@ -70,7 +70,7 @@ const SignUpScreen = ({navigation} : any) => {
     return (
         <KeyboardAvoidingWrapper>
             <StyledContainer>
-                <StatusBar style='auto'/>
+                {/* <StatusBar style='auto'/> Lỗi <Header/> bị đẩy xuống sau khi vào trang login rồi quay lại*/}
                 <InnerContainer>
                     <PageLogo source={
                             require('../../../assets/images/brand-logo.png')}

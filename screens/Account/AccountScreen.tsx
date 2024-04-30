@@ -51,10 +51,10 @@ const AccountScreen = () => {
           }}>
             <Text>Xem thông tin cá nhân</Text>
           </TouchableOpacity>
-          <TouchableOpacity className='flex-row justify-center items-center px-5 py-2 rounded-md border-1.2 border-black self-end m-3'
+          <TouchableOpacity className='w-32 flex-row justify-center items-center px-5 py-2 rounded-md border-1.2 border-black self-end m-4'
             onPress={() => {setIsLoggingOut(true); logout();}}
             disabled={isLoggingOut}
-            style={{backgroundColor: isLoggingOut ? Colors.disabledBtn : Colors.white}}
+            style={{backgroundColor: isLoggingOut ? Colors.disabledBtn : Colors.white, borderColor: isLoggingOut ? Colors.disabledText : Colors.black}}
           >
             {isLoggingOut && <ActivityIndicator color={Colors.disabledText}/>}
             <Text className='p-1' style={{color: isLoggingOut ? Colors.disabledText: Colors.black}}>
