@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     FormContainer,
     InnerContainer,
@@ -12,25 +12,60 @@ import {
     StyledButtonText,
     Redirect,
     SubTitle,
-    GradientButtonTextContainer
-} from '../../components/styles';
+    GradientButtonTextContainer,
+    toastConfig
+} from '../../../components/styles';
 import { StatusBar } from 'expo-status-bar';
-import { Formik } from 'formik';
-import { TouchableOpacity, Text, ScrollView, View} from 'react-native';
-import MyTextInput, { ICON } from '../../components/Common/MyTextInput';
-import KeyboardAvoidingWrapper from '../../components/Common/KeyboardAvoidingWrapper';
-import { useNavigation } from '@react-navigation/native';
+import { Formik, FormikProps } from 'formik';
+import { TouchableOpacity, Text, ScrollView, View, Keyboard, ActivityIndicator} from 'react-native';
+import MyTextInput, { ICON } from '../../../components/Common/MyTextInput';
+import KeyboardAvoidingWrapper from '../../../components/Common/KeyboardAvoidingWrapper';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../utils/types';
+import { RootStackParamList } from '../../../utils/types';
+import axios from 'axios';
+import Toast, { ToastOptions } from 'react-native-root-toast';
 
-const SignUpScreen = () => {
+const domain = "https://minimarket-be.onrender.com";
+const defaultErrMsg = "Ops! There's something wrong, try again later";
+
+const SignUpScreen = ({navigation} : any) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [loginBtnDisable, setLoginBtnDisable] = useState(true);
+    
+    const formikRef = useRef<FormikProps<any>>(null);
+    useFocusEffect(useCallback(() => {
+        formikRef.current?.resetForm();
+        // console.log('sign up form is reset')
+    }, []));
 
     const setPasswordVisibleHandler = () => {
         setPasswordVisible(!passwordVisible);
     };
 
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const handleSignUp = async ({name, email, phone, password} : {name: string, email: string, phone: string, password: string}, 
+    setSubmitting: (isSubmitting: boolean) => void) => {
+        // url: https://minimarket-be.onrender.com/api/v1/auth/register
+        const url = domain + '/api/v1/auth/register';
+        try {
+            const response = await axios.post(url, {name, email, phone, password});
+            // console.log('>>> Response: ', response);
+            const user = response.data?.user;
+            if(user) {
+                Toast.show("Sign up successfully", toastConfig as ToastOptions);
+                navigation.navigate('AccountLoginScreen', {email});
+            }else {
+                Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+            }
+        }catch(err) {
+            // console.error('>>> Error: ', err);
+            let msg = (err as any).response.data.msg ?? defaultErrMsg;
+            Toast.show(msg, toastConfig as ToastOptions);
+        }finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <KeyboardAvoidingWrapper>
@@ -38,19 +73,33 @@ const SignUpScreen = () => {
                 <StatusBar style='auto'/>
                 <InnerContainer>
                     <PageLogo source={
-                            require('../../assets/images/brand-logo.png')}
+                            require('../../../assets/images/brand-logo.png')}
                             resizeMode='contain'/>
-                    {/* <PageTitle>Đăng ký</PageTitle> */}
+                    <PageTitle>Đăng ký</PageTitle>
                     <SubTitle>Chào mừng bạn đến với GreenMart!</SubTitle>
                     <FormContainer>
                         <Formik
-                            initialValues={{name: '', mail: '', phone: '', password: ''}}
-                            onSubmit={values => alert(JSON.stringify(values, null, 2))} >
+                            initialValues={{name: '', email: '', phone: '', password: ''}}
+                            onSubmit={(values, {setSubmitting, setFieldValue}) => {
+                                if(!values.name.trim() || !values.email.trim() || !values.phone.trim() || !values.password.trim()) {
+                                    values.name.trim() || setFieldValue('name', '');
+                                    values.email.trim() || setFieldValue('email', '');
+                                    values.phone.trim() || setFieldValue('phone', '');
+                                    values.password.trim() || setFieldValue('password', '');
+                                    Toast.show("Please fill all fields", toastConfig as ToastOptions);
+                                    setSubmitting(false);
+                                    return;
+                                }
+                                handleSignUp(values, setSubmitting);
+                            }}
+                            innerRef={formikRef}
+                        >
 
-                            {({ handleChange, handleBlur, handleSubmit, values, setFieldValue}) => {
-                                const isFormFilled = () => {
-                                    return (values.name && values.mail && values.phone && values.password);
-                                };
+                            {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, isSubmitting}) => {
+                                useEffect(() => {
+                                    // update loginBtnDisabled whenever values.email or values.password changes
+                                    setLoginBtnDisable(!(values.name && values.email && values.phone && values.password) || isSubmitting);
+                                }, [values.name, values.email, values.phone, values.password, isSubmitting]);
                                 return (
                                     <>
                                     <View>
@@ -67,12 +116,12 @@ const SignUpScreen = () => {
                                         </TextInputContainer>
                                         <TextInputContainer>
                                             <MyTextInput
-                                                name='mail' 
+                                                name='email' 
                                                 headIcons={[ICON.mail]}
                                                 placeholder='Email'
-                                                onChangeText={handleChange('mail')}
-                                                onBlur={handleBlur('mail')}
-                                                value={values.mail}
+                                                onChangeText={handleChange('email')}
+                                                onBlur={handleBlur('email')}
+                                                value={values.email}
                                                 setFieldValue={setFieldValue}
                                                 keyboardType='email-address'/>
                                         </TextInputContainer>
@@ -102,11 +151,16 @@ const SignUpScreen = () => {
                                         </TextInputContainer>
                                     </ScrollView>
                                     </View>
-                                    <StyledButton onPress={() => handleSubmit()} disabled={!isFormFilled()}>
+                                    <StyledButton onPress={() => {
+                                        Keyboard.dismiss();
+                                        handleSubmit();
+                                    }} 
+                                    disabled={loginBtnDisable}>
                                         <GradientButtonTextContainer
-                                            colors={ !isFormFilled() ? ['transparent', 'transparent'] : ['#11998e', '#38ef7d'] }
+                                            colors={ loginBtnDisable ? ['transparent', 'transparent'] : ['#11998e', '#38ef7d'] }
                                             start={{x: 0, y: 0}} end={{x: 1, y: 0}} >
-                                            <StyledButtonText disabled={!isFormFilled()}>
+                                            {isSubmitting && <ActivityIndicator color="#8e8e8e"/>}
+                                            <StyledButtonText disabled={loginBtnDisable}>
                                                 Đăng ký
                                             </StyledButtonText>
                                         </GradientButtonTextContainer>
@@ -118,9 +172,9 @@ const SignUpScreen = () => {
                         </Formik>
                         <Redirect>
                             <Text style={{marginRight: 5, color: Colors.black}}>Bạn đã có tài khoản?</Text>
-                            {/* <TouchableOpacity onPress={() => navigation.navigate("Đăng nhập")}>
+                            <TouchableOpacity onPress={() => navigation.navigate("AccountLoginScreen")}>
                                 <TextLink>Đăng nhập</TextLink>
-                            </TouchableOpacity> */}
+                            </TouchableOpacity>
                         </Redirect>
                     </FormContainer>
                 </InnerContainer>

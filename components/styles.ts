@@ -2,6 +2,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Toast from 'react-native-root-toast';
+import { FlexAlignType } from 'react-native';
 
 export const Colors = {
     primary: "#33B87C",
@@ -10,7 +12,9 @@ export const Colors = {
     black: "#5C595B",
     placeholder: "#adacad",
     blue: "#2F89FC",
-    yellow: "#F6EC72"
+    yellow: "#F6EC72",
+    disabledBtn: '#ccc',
+    disabledText: '#8e8e8e',
     
 };
 
@@ -23,16 +27,16 @@ const linkTextSize = 14;
 
 export const StyledContainer = styled.View`
     flex: 1;
-    padding: 30px 13px;
+    padding: 35px 13px;
+    padding-top: ${Constants.statusBarHeight + 10}px;
     background-color: ${Colors.greenBackground}; 
 `;
-// padding-top: ${Constants.statusBarHeight + 10}px;
 export const InnerContainer = styled.View` 
     flex: 1;
     background-color: ${Colors.white};
     align-items: center;
     border-radius: 10px;
-    padding-top: 20px;
+    padding-top: 35px;
     padding-bottom: 20px;
     padding-horizontal: 3px;
 `;
@@ -120,7 +124,8 @@ export const StyledButton = styled.TouchableOpacity<StyledButtonProps>`
 `;
 
 export const GradientButtonTextContainer = styled(LinearGradient)`
-    flex:1;
+    flex: 1;
+    flex-direction: row;
     align-self: stretch;
     border-radius: ${btnBorderRadius}px;
     justify-content: center;
@@ -134,6 +139,7 @@ interface StyledButtonTextProps {
 export const StyledButtonText = styled.Text<StyledButtonTextProps>`
     font-size: ${btnTextSize}px;
     color: ${Colors.white};
+    padding: 5px;
 
     ${props => props.disabled == true && `
         color: #8e8e8e;
@@ -166,3 +172,22 @@ export const Redirect = styled.View`
     align-items: center;
     margin-top: auto;
 `;
+
+export const toastConfig = {
+    position: Toast.positions.CENTER,
+    shadow: true,
+    animation: true,
+    hideOnPress: true,
+    opacity: 0.7,
+    textStyle: {
+        fontSize: 14,
+    },
+    containerStyle: {
+        width: 250,
+        minHeight: 50,
+        paddingHorizontal: 3,
+        paddingVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+    }
+}
