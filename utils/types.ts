@@ -3,12 +3,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 // Define the types for your navigation stack
 type RootStackParamList = {
   Home: undefined; // Home screen with no parameters
-  Tabs: { screen: string; params?: { paramKey: string } } | undefined; // Tabs screen with no parameters
-  DetailScreen: { itemId: number }; // Details screen with a parameter named 'itemId' of type number
-  AccountInfo: undefined;
-  HomeStackScreen: undefined;
-  AccountLoginScreen: undefined;
-  CategoriesScreen: undefined;
+  DetailScreen: { itemId: number}; // Details screen with a parameter named 'itemId' of type number
+  Tabs: undefined; // Tabs screen with no parameters
+  AccountInfo: undefined,
+  HomeStackScreen: undefined,
+  AccountLoginScreen: undefined,
+  AccountSignUpScreen: undefined,
+  CategoriesScreen: undefined,
 };
 
 type TabStackParamList = {

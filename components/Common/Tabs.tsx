@@ -106,9 +106,9 @@ return (
       name={"AccountStackScreen"}
       options={({route}) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-        const arr = ['Đăng nhập', 'Đăng ký'];
-        let tabBarVisible = ['Đăng nhập', 'Đăng ký'].includes(routeName) ? "none" : "flex";
-        let headerVisible = ['Đăng nhập', 'Đăng ký'].includes(routeName) ? false : true;
+        const arr = ['AccountLoginScreen', 'AccountSignUpScreen'];
+        let tabBarVisible = arr.includes(routeName) ? "none" : "flex";
+        let headerVisible = arr.includes(routeName) ? false : true;
         return {
           tabBarIcon: ({ focused }) => (
             <Feather
