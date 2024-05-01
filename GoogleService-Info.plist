@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>950590133752-l4nckikkuk6mn68ldldscsgg7pj4hi7c.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.950590133752-l4nckikkuk6mn68ldldscsgg7pj4hi7c</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>950590133752-610rv13vbof66456b797oqvoqqkf5mek.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCKGRDAd6-T2FhbXxpGdIh4KgEVNlVDkGg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>950590133752</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.minimarket.marketapp</string>
+	<key>PROJECT_ID</key>
+	<string>minimarket-c10ae</string>
+	<key>STORAGE_BUCKET</key>
+	<string>minimarket-c10ae.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:950590133752:ios:28592b5ffd4dfbb933320d</string>
+</dict>
+</plist>

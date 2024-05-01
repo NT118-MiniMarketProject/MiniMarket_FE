@@ -8,16 +8,21 @@ import CategoriesScreen from './screens/CategoriesScreen';
 import DrawerHeader from './components/Common/DrawerHeader';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
-import { CredentialContext } from './contexts/CredentialContext';
-
+import React, { useEffect, useState } from 'react';
+import { CredentialContext, CredentialType } from './contexts/CredentialContext';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [credential, setCredential] = useState(null);
+  const [credential, setCredential] = useState<CredentialType | null>(null);
 
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+
+//Kiểm tra credential có tồn tại trong AsyncStorage để persist login
   useEffect(() => {
     const checkCredential  = async () => {
       try {
@@ -34,7 +39,34 @@ export default function App() {
     checkCredential();
   }, []);
 
-  if (!appIsReady) {
+//Thiết lập kết nối đến firebase auth 
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+  
+  // Handle user state changes
+  function onAuthStateChanged(user: any) {
+    // console.log(">>> USER STATE CHANGE: ", user);
+    user ? setCredential({provider: "firebase", user: user}) : setCredential(null);
+    if(initializing) setInitializing(false);
+  }
+
+//Lưu credential vào AsyncStorage mỗi khi credential được cập nhật
+  useEffect(() => {
+    try {
+      AsyncStorage.setItem('credential', JSON.stringify(credential))
+    }catch(e) {
+      console.error('Persist login failed: ', e);
+    }
+  }, [credential]);
+
+//Cấu hình GoogleSignin 
+  GoogleSignin.configure({
+    webClientId: "950590133752-jg5susmqc6nef5le6q1jikl5uvg2ctov.apps.googleusercontent.com",
+  }); 
+
+  if (!appIsReady || initializing) {
     return null;
   }
   return (

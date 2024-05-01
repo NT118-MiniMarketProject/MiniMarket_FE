@@ -1,6 +1,5 @@
 import { Text, View, TextInput, StyleSheet, StatusBar} from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import { AntDesign, Feather, EvilIcons } from "@expo/vector-icons";
 import SafeView from './SafeView';

@@ -103,6 +103,7 @@ interface StyledButtonProps {
 }
 
 export const StyledButton = styled.TouchableOpacity<StyledButtonProps>`
+    flex-direction: row;
     height: 50px;
     align-items: center;
     justify-content: center;

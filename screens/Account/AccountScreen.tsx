@@ -7,8 +7,9 @@ import { RootStackParamList } from '../../utils/types'
 import { CredentialContext } from '../../contexts/CredentialContext'
 import Toast, { ToastOptions } from 'react-native-root-toast'
 import { Colors, toastConfig } from '../../components/styles'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
@@ -16,7 +17,7 @@ const defaultErrMsg = "Ops! There's something wrong, try again later";
 const AccountScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const {credential, setCredential} = useContext(CredentialContext);
-  const {name} = credential ?? {};
+  const {name, displayName} = credential?.user ?? {};
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const logout = async () => {
@@ -24,14 +25,26 @@ const AccountScreen = () => {
       Toast.show('Not logged in', toastConfig as ToastOptions);
       return;
     }
+
+    setIsLoggingOut(true);
     // url: https://minimarket-be.onrender.com/api/v1/auth/logout
     const url = domain + '/api/v1/auth/logout';
     try {
-      const response = await axios.delete(url);
-      // console.log(response);
-      await AsyncStorage.removeItem('credential');
-      setCredential(null);
-      Toast.show(response.data?.msg ?? 'Logout successfully!', toastConfig as ToastOptions);
+      if(credential.provider === 'password') {
+        const response = await axios.delete(url);
+        // console.log(response);
+        setCredential(null);
+        Toast.show(response.data?.msg ?? 'Logout successfully!', toastConfig as ToastOptions);
+      }else if(credential.provider === 'firebase') {
+        const providerId = auth().currentUser?.providerData[0].providerId;
+        if(providerId === 'google.com') {
+          await GoogleSignin.revokeAccess();
+          await auth().signOut();
+        }else if(providerId === 'facebook.com') {
+  
+        }
+        Toast.show('Logout successfully!', toastConfig as ToastOptions);
+      }
     }catch(err) {
       console.log(err);
       Toast.show(defaultErrMsg, toastConfig as ToastOptions);
@@ -42,7 +55,7 @@ const AccountScreen = () => {
 
   return (
     <SafeAreaView>
-      <Text>{credential ? `Thông tin người dùng ${name}` : 'Người dùng chưa đăng nhập'}</Text>
+      <Text>{credential ? `Thông tin người dùng ${name || displayName}` : 'Người dùng chưa đăng nhập'}</Text>
       {
         credential ? 
         (<>
@@ -52,14 +65,14 @@ const AccountScreen = () => {
             <Text>Xem thông tin cá nhân</Text>
           </TouchableOpacity>
           <TouchableOpacity className='w-32 flex-row justify-center items-center px-5 py-2 rounded-md border-1.2 border-black self-end m-4'
-            onPress={() => {setIsLoggingOut(true); logout();}}
+            onPress={logout}
             disabled={isLoggingOut}
             style={{backgroundColor: isLoggingOut ? Colors.disabledBtn : Colors.white, borderColor: isLoggingOut ? Colors.disabledText : Colors.black}}
           >
-            {isLoggingOut && <ActivityIndicator color={Colors.disabledText}/>}
             <Text className='p-1' style={{color: isLoggingOut ? Colors.disabledText: Colors.black}}>
               Đăng xuất
             </Text>
+            {isLoggingOut && <ActivityIndicator color={Colors.disabledText} className='absolute right-1'/>}
           </TouchableOpacity>
         </>) :
         (<View className='p-4 flex-row justify-end space-x-4'>

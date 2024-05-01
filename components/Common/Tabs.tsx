@@ -1,4 +1,3 @@
-import { Text, View } from 'react-native'
 import React from 'react'
 import {
     Feather,
@@ -10,10 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Header from './Header';
 import HomeStackScreen from '../../screens/stacks/HomeStackScreen';
-import HomeScreen from '../../screens/Home/HomeScreen';
 import AccountStackScreen from '../../screens/stacks/AccountStackScreen';
 import { getTabBarVisibility } from '../../utils/functions';
-import { RouteProp, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import DealStackScreen from '../../screens/stacks/DealStackScreen';
 import CartStackScreen from '../../screens/stacks/CartStackScreen';
 import TestScreen from '../../screens/TestScreen';

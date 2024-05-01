@@ -16,7 +16,8 @@ import {
     Redirect,
     SubTitle,
     GradientButtonTextContainer,
-    toastConfig
+    toastConfig,
+    Icon
 } from '../../../components/styles';
 import { StatusBar } from 'expo-status-bar';
 import { Formik, FormikProps } from 'formik';
@@ -28,7 +29,8 @@ import axios from 'axios';
 import Toast, { ToastOptions } from 'react-native-root-toast';
 import { useFocusEffect } from '@react-navigation/native';
 import { CredentialContext } from '../../../contexts/CredentialContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
@@ -37,6 +39,9 @@ const LoginScreen = ({navigation, route} : any) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [loginBtnDisable, setLoginBtnDisable] = useState(true);
     const {setCredential} = useContext(CredentialContext);
+    const [isSubmitting, setSubmitting] = useState(false);
+    const [isSigningInGoogle, setIsSigningInGoogle] = useState(false);
+    const [isSigningInFacebook, setIsSigningInFacebook] = useState(false);
     
     const formikRef = useRef<FormikProps<any>>(null);
     useFocusEffect(useCallback(() => {
@@ -48,7 +53,51 @@ const LoginScreen = ({navigation, route} : any) => {
         setPasswordVisible(!passwordVisible);
     };
 
-    const handleLogin = async ({email, password} : {email: string, password: string}, setSubmitting: (isSubmitting: boolean) => void) => {
+// START Google Sign in
+    const handleGoogleSignIn = async () => {
+        try {
+            //Phải chạy GoogleSigin.signOut() trước GoogleSignin.SignIn() mới xuất hiện cửa sổ chọn tk Google
+            // await GoogleSignin.signOut();
+
+            // Check if your device supports Google Play
+            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+
+            // Get the users ID toke
+            const { idToken } = await GoogleSignin.signIn();
+            // console.log(idToken);
+
+            // Create a Google credential with the token
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+            // Sign-in the user with the credential
+            return auth().signInWithCredential(googleCredential);
+        }catch(e) {
+            throw e;
+        }
+    };
+
+    const onGoogleBtnPress = async () => {
+        setIsSigningInGoogle(true);
+        try {
+            const user = await handleGoogleSignIn();
+            // setCredential({provider: "google", user: user.user}); // set trong onAuthStateChanged rồi
+            // console.log(">>> USER ON PRESS: ", user);
+            Toast.show("Sign in successfully!", toastConfig as ToastOptions);
+        }catch(e: any) {
+            console.error(e);
+            if (e.code === statusCodes.SIGN_IN_CANCELLED) {
+                Toast.show("Sign in was cancelled", toastConfig as ToastOptions);
+            } else {
+                Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+            }
+        }finally {
+            setIsSigningInGoogle(false);
+        }
+    };
+// END Google sign in
+
+// START email/password sign in
+    const handleLogin = async ({email, password} : {email: string, password: string}) => {
         // url: https://minimarket-be.onrender.com/api/v1/auth/login
         const url = domain + '/api/v1/auth/login';
         // email="test@gmail.com"; password="test123456";
@@ -59,7 +108,7 @@ const LoginScreen = ({navigation, route} : any) => {
             if(user) {
                 Toast.show("Login successfully!", toastConfig as ToastOptions);
                 // navigation.navigate('AccountScreen'); không cần navigate manual v nx vì stack được tạo lại tự động nên sẽ mặc định vào trang này
-                await persistLogin(user);
+                setCredential({provider: "password", user: user});
             }else {
                 Toast.show(defaultErrMsg, toastConfig as ToastOptions);
             }
@@ -71,15 +120,7 @@ const LoginScreen = ({navigation, route} : any) => {
             setSubmitting(false);
         }
     };
-
-    const persistLogin = async (credential : any) => {
-        try {
-            await AsyncStorage.setItem('credential', JSON.stringify(credential));
-            setCredential(credential);
-        }catch(e) {
-            console.error('Persist login failed: ', e);
-        }   
-    }
+// END email/password sign in
 
     return (
         <KeyboardAvoidingWrapper>
@@ -95,7 +136,7 @@ const LoginScreen = ({navigation, route} : any) => {
                     <FormContainer>
                         <Formik
                             initialValues={{email: route.params?.email || '', password: ''}}
-                            onSubmit={(values, {setSubmitting, setFieldValue}) => {
+                            onSubmit={(values, {setFieldValue}) => {
                                 if(!values.email.trim() || !values.password.trim()) {
                                     values.email.trim() || setFieldValue('email', '');
                                     values.password.trim() || setFieldValue('password', '');
@@ -103,15 +144,15 @@ const LoginScreen = ({navigation, route} : any) => {
                                     setSubmitting(false);
                                     return;
                                 }
-                                handleLogin(values, setSubmitting);
+                                handleLogin(values);
                             }}
                             innerRef={formikRef}
                         >
-                            {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, isSubmitting}) => {
+                            {({ handleChange, handleBlur, handleSubmit, values, setFieldValue}) => {
                                 useEffect(() => {
                                     // update loginBtnDisabled whenever values.email or values.password changes
-                                    setLoginBtnDisable(!(values.email && values.password) || isSubmitting);
-                                }, [values.email, values.password, isSubmitting]);
+                                    setLoginBtnDisable(!(values.email && values.password) || isSubmitting || isSigningInGoogle || isSigningInFacebook);
+                                }, [values.email, values.password, isSubmitting, isSigningInGoogle, isSigningInFacebook]);
                                 return (
                                     <>
                                     <View>
@@ -154,10 +195,10 @@ const LoginScreen = ({navigation, route} : any) => {
                                         <GradientButtonTextContainer
                                             colors={ loginBtnDisable ? ['transparent', 'transparent'] : ['#11998e', '#38ef7d'] }
                                             start={{x: 0, y: 0}} end={{x: 1, y: 0}} >
-                                            {isSubmitting && <ActivityIndicator color="#8e8e8e"/>}
                                             <StyledButtonText disabled={loginBtnDisable}>
                                                 Đăng nhập
                                             </StyledButtonText>
+                                            {isSubmitting && <ActivityIndicator color={Colors.disabledText} className='absolute right-4'/>}
                                         </GradientButtonTextContainer>
                                     </StyledButton>
                                     </>
@@ -172,18 +213,34 @@ const LoginScreen = ({navigation, route} : any) => {
 
                         <Separator label='HOẶC'/> 
 
-                        <StyledButton thirdparty>
+                        <StyledButton thirdparty onPress={onGoogleBtnPress} 
+                            disabled={isSigningInGoogle || isSigningInFacebook || isSubmitting}>
                             <ThirdPartyLogoContainer>
-                                <ThirdPartyLogo source={require('../../../assets/images/google.png')} />
+                                {(isSigningInGoogle || isSigningInFacebook || isSubmitting) ? (
+                                    <Icon size={30} name='logo-google' color={Colors.disabledText}/>
+                                ):(
+                                    <ThirdPartyLogo source={require('../../../assets/images/google.png')} />
+                                )}
                             </ThirdPartyLogoContainer>
-                            <StyledButtonText thirdparty>Đăng nhập với Google</StyledButtonText>
+                            <StyledButtonText thirdparty disabled={isSigningInGoogle || isSigningInFacebook || isSubmitting}>
+                                Đăng nhập với Google
+                            </StyledButtonText>
+                            {isSigningInGoogle && <ActivityIndicator color={Colors.disabledText} className='absolute right-4'/>}
                         </StyledButton>
 
-                        <StyledButton thirdparty>
+                        <StyledButton thirdparty
+                            disabled={isSigningInGoogle || isSigningInFacebook || isSubmitting}>
                             <ThirdPartyLogoContainer>
-                                <ThirdPartyLogo source={require('../../../assets/images/facebook.png')} />
+                                {(isSigningInGoogle || isSigningInFacebook || isSubmitting) ? (
+                                    <Icon size={30} name='logo-facebook' color={Colors.disabledText}/>
+                                ):(
+                                    <ThirdPartyLogo source={require('../../../assets/images/facebook.png')} />
+                                )}
                             </ThirdPartyLogoContainer>
-                            <StyledButtonText thirdparty>Đăng nhập với Facebook</StyledButtonText>
+                            <StyledButtonText thirdparty disabled={isSigningInGoogle || isSigningInFacebook || isSubmitting}>
+                                Đăng nhập với Facebook
+                            </StyledButtonText>
+                            {isSigningInFacebook && <ActivityIndicator color={Colors.disabledText} className='absolute right-4'/>}
                         </StyledButton>
 
                         <Redirect>
