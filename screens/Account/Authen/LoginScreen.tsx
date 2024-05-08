@@ -104,7 +104,7 @@ const LoginScreen = ({ navigation, route }: any) => {
       // console.log(">>> USER ON PRESS: ", user);
       Toast.show("Sign in successfully!", toastConfig as ToastOptions);
     } catch (e: any) {
-      console.error(e);
+      console.warn(e);
       if (e.code === statusCodes.SIGN_IN_CANCELLED) {
         Toast.show("Sign in was cancelled", toastConfig as ToastOptions);
       } else {
@@ -139,7 +139,7 @@ const LoginScreen = ({ navigation, route }: any) => {
         Toast.show(defaultErrMsg, toastConfig as ToastOptions);
       }
     } catch (err) {
-      // console.error('>>> Error: ', err);
+      console.warn(">>> Error: ", err);
       let msg = (err as any).response?.data?.msg ?? defaultErrMsg;
       Toast.show(msg, toastConfig as ToastOptions);
     } finally {

@@ -15,6 +15,16 @@ import {
 } from "./contexts/CredentialContext";
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import DealProduct from "./components/Common/DealProduct";
+import { View } from "react-native";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
+import Product from "./components/Common/Product";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import HomeScreen from "./screens/Home/HomeScreen";
+import HomeProductBlock from "./components/Home/HomeProductBlock";
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +84,47 @@ export default function App() {
   if (!appIsReady || initializing) {
     return null;
   }
+
+  // const dummyProduct = {
+  //   id: 520, //id san pham
+  //   name: "Dầu hướng dương hữu cơ Sloboda 1.8 lít",
+  //   thumbnail:
+  //     "https://cdn.tgdd.vn/Products/Images/2286/311051/bhx/dau-huong-duong-huu-co-sloboda-nhan-xanh-can-2-lit-202307201600375678.jpg",
+  //   reg_price: 142000,
+  //   discount_price: 126380,
+  //   discount_percent: 11,
+  //   rating: 4,
+  //   numOfRatings: 10,
+  //   category_name: "Dầu ăn",
+  //   canonical: "1.8l",
+  // };
+
+  // const products = [];
+  // for (let i = 0; i < 6; i++) {
+  //   products.push(dummyProduct);
+  // }
+  // return (
+  //   <GestureHandlerRootView className="pt-28 h-full bg-black">
+  //     <View className={"w-full bg-white flex-row flex-wrap justify-between"}>
+  //       {products.map((product) => (
+  //         <View
+  //           style={{
+  //             flexGrow: 0,
+  //             flexShrink: 0,
+  //             maxHeight: "50%",
+  //             flexBasis: "33%",
+  //             borderStyle: "solid",
+  //             borderColor: Colors.black,
+  //             borderWidth: 1,
+  //           }}
+  //         >
+  //           <Product {...product} />
+  //         </View>
+  //       ))}
+  //     </View>
+  //   </GestureHandlerRootView>
+  // );
+
   return (
     <CredentialContext.Provider value={{ credential, setCredential }}>
       <RootSiblingParent>

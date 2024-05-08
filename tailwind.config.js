@@ -43,7 +43,7 @@ module.exports = {
       },
       borderWidth: {
         '1.2': '1.2px',
-      }
+      },
     },
   },
   plugins: [],

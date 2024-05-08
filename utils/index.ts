@@ -1,5 +1,5 @@
 // Variables
-export const tenmien: string = "http://127.0.0.1:8000";
+export const tenmien: string = "http://192.168.1.8:8000";
 
 // Intefaces
 export interface productHomeInterface {
@@ -11,8 +11,17 @@ export interface productHomeInterface {
   discount_price: number;
   discount_percent?: number;
   rating: number;
+  numOfRatings?: number;
   category_name?: string;
+  canonical?: string | null;
 }
+
+export interface categoryGroupInterface {
+  id: number;
+  name: string;
+  thumbnail: string;
+}
+
 export interface productInfoInterface extends productHomeInterface {
   canonical?: string;
   quantity?: number;

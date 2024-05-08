@@ -46,6 +46,9 @@ const AccountScreen = () => {
         );
       } else if (credential.provider === "firebase") {
         const providerId = auth().currentUser?.providerData[0].providerId;
+        // console.log(providerId);
+        // console.log(">>> Credential user: ", credential.user.providerData);
+        // console.log(">>> auth().currentUser: ", auth().currentUser?.providerData);
         if (providerId === "google.com") {
           await GoogleSignin.revokeAccess();
           await auth().signOut();

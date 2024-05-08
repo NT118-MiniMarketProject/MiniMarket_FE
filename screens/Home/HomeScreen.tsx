@@ -10,17 +10,18 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { fetchcategoryHeader } from "../../store/features/Collection/categoryHeaderSlice";
 import HomeCategories from "../../components/Home/HomeCategories";
 import HomeDeal from "../../components/Home/HomeDeal";
-
-
+import HomeProducts from "../../components/Home/HomeProducts";
+import HomeProductBlock from "../../components/Home/HomeProductBlock";
 
 const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  
+
   return (
     <View className="bg-gray-100 mt-1">
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <HomeCategories />
         <HomeDeal />
+        <HomeProducts />
       </ScrollView>
     </View>
   );
