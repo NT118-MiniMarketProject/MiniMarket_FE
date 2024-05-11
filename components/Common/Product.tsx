@@ -38,7 +38,7 @@ const Product = ({
             </Text>
 
             {/* Giá */}
-            <View>
+            <View className="overflow-hidden">
               {discount_price && discount_price < reg_price ? (
                 <>
                   <View className="flex-row">

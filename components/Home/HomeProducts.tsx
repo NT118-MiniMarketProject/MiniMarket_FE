@@ -1,70 +1,103 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import Product from "../Common/Product";
-import { categoryGroupInterface, tenmien } from "../../utils";
+import {
+  categoryGroupInterface,
+  dummyCategoryGroup,
+  dummyProduct,
+  ngrok,
+  productHomeInterface,
+  tenmien,
+  tenmien1,
+} from "../../utils";
 import axios from "axios";
 import HomeProductBlock from "./HomeProductBlock";
-
-const dummyCategoryGroup = [
-  {
-    id: 1,
-    name: "THỊT, CÁ, TRỨNG, HẢI SẢN",
-    thumbnail:
-      "https://genk.mediacdn.vn/k:thumb_w/640/2016/protein-foods-1000-1471225685968/thitcatrungsualamthenaodechonduocnguonproteinlanhmanh.jpg",
-  },
-  {
-    id: 2,
-    name: "RAU, CỦ, NẤM, TRÁI CÂY",
-    thumbnail:
-      "https://pqm.vn/wp-content/uploads/2021/02/dong-nam-a-nhung-loai-trai-cay-va-rau-tuoi-ngon-hap-dan-151.jpg",
-  },
-  {
-    id: 3,
-    name: "DẦU ĂN, NƯỚC CHẤM, GIA VỊ",
-    thumbnail:
-      "https://www.tuongan.com.vn/public/themes/tuongan//img/sanpham-banner-4.png",
-  },
-  {
-    id: 4,
-    name: "KEM, THỰC PHẨM ĐÔNG MÁT",
-    thumbnail:
-      "https://www.pricechopper.com/wp-content/uploads/2023/02/r3_022623_FrozenFoodMonth_montage.png",
-  },
-];
+import ProductBlockSkeleton from "../Common/ProductBlockSkeleton";
+import { Colors } from "../styles";
 
 export default function HomeProducts() {
   const [categoryGroups, setCategoryGroups] = useState<
     categoryGroupInterface[]
   >([]);
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetchingCateGroups, setIsFetchingCateGroup] = useState(true);
+  const [products, setProducts] = useState<productHomeInterface[][]>([]);
+  const [isFetchingProducts, setIsFetchingProducts] = useState(false);
 
   useEffect(() => {
     const fetchCategoryGroups = async () => {
       try {
-        const response = await axios.get(`${tenmien}/api/danhmuc`);
-        const data = response.data;
-        console.log({ data });
+        const response = await axios.get(`${ngrok}/api/danhmuc`);
+        setCategoryGroups(response.data);
+        await loadProductBlock(response.data);
       } catch (e) {
         console.log(e);
         // Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+        console.warn(e);
         setCategoryGroups(dummyCategoryGroup);
+        await loadProductBlock(dummyCategoryGroup);
       } finally {
-        setIsFetching(false);
+        setIsFetchingCateGroup(false);
       }
     };
 
     fetchCategoryGroups();
   }, []);
 
+  const loadProductBlock = async (categroups: categoryGroupInterface[]) => {
+    // console.log("products: ", products.length);
+    // console.log("categroups: ", categroups.length);
+    if (products.length >= categroups.length || isFetchingProducts) return;
+    setIsFetchingProducts(true);
+    try {
+      const response = await axios.get(
+        `${ngrok}/api/danhmuc/${categroups[products.length].id}`
+      );
+      const data = response.data;
+      setProducts([...products, data.data]);
+    } catch (e) {
+      console.log(e);
+      // Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+      setProducts([...products, dummyProduct]);
+    } finally {
+      setIsFetchingProducts(false);
+    }
+  };
+
   return (
     <View className="mb-4 bg-transparent">
-      {categoryGroups.map((categoryGroup) => (
-        <HomeProductBlock
-          categoryGroupId={categoryGroup.id}
-          categoryGroupName={categoryGroup.name}
-          key={categoryGroup.id}
+      {isFetchingCateGroups ? (
+        <ProductBlockSkeleton />
+      ) : (
+        <FlatList
+          scrollEnabled={false}
+          data={products}
+          renderItem={({
+            item,
+            index,
+          }: {
+            item: productHomeInterface[];
+            index: number;
+          }) => {
+            return (
+              <HomeProductBlock
+                categoryGroupId={categoryGroups[index].id}
+                categoryGroupName={categoryGroups[index].name}
+                products={item}
+              />
+            );
+          }}
+          keyExtractor={(item, index) => categoryGroups[index].id.toString()}
+          ListFooterComponent={
+            isFetchingProducts ? (
+              <View className="m-2">
+                <ActivityIndicator size={"large"} color={Colors.primary} />
+              </View>
+            ) : null
+          }
+          onEndReachedThreshold={0.5}
+          onEndReached={() => loadProductBlock(categoryGroups)}
         />
-      ))}
+      )}
     </View>
   );
 }

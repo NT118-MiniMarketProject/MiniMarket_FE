@@ -24,6 +24,7 @@ import {
   GradientButtonTextContainer,
   toastConfig,
   Icon,
+  ErrorText,
 } from "../../../components/styles";
 import { StatusBar } from "expo-status-bar";
 import { Formik, FormikProps } from "formik";
@@ -47,9 +48,30 @@ import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import * as Yup from "yup";
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
+
+const loginValidationSchema = Yup.object().shape({
+  email: Yup.string()
+    .matches(
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Sai định dạng email"
+    )
+    .test("is-lowercase", "Email không chứa chữ in hoa", (value) =>
+      value ? value === value.toLowerCase() : true
+    )
+    .required("Email bắt buộc nhập"),
+  password: Yup.string()
+    .min(8, "Mật khẩu tối thiểu 8 và tối đa 32 kí tự")
+    .max(32, "Mật khẩu tối thiểu 8 và tối đa 32 kí tự")
+    .matches(
+      /^[A-Za-z0-9@$!%*?&]+$/,
+      "Mật khẩu chỉ chứa chữ thường, in hoa, số và các kí tự @ $ ! % * ? &"
+    )
+    .required("Mật khẩu bắt buộc nhập"),
+});
 
 const LoginScreen = ({ navigation, route }: any) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -177,6 +199,7 @@ const LoginScreen = ({ navigation, route }: any) => {
                 handleLogin(values);
               }}
               innerRef={formikRef}
+              validationSchema={loginValidationSchema}
             >
               {({
                 handleChange,
@@ -184,6 +207,8 @@ const LoginScreen = ({ navigation, route }: any) => {
                 handleSubmit,
                 values,
                 setFieldValue,
+                errors,
+                touched,
               }) => {
                 useEffect(() => {
                   // update loginBtnDisabled whenever values.email or values.password changes
@@ -204,7 +229,9 @@ const LoginScreen = ({ navigation, route }: any) => {
                   <>
                     <View>
                       <ScrollView keyboardShouldPersistTaps="always">
-                        <TextInputContainer>
+                        <TextInputContainer
+                          error={errors.email && touched.email ? true : false}
+                        >
                           <MyTextInput
                             name="email"
                             headIcons={[ICON.user]}
@@ -214,9 +241,19 @@ const LoginScreen = ({ navigation, route }: any) => {
                             value={values.email}
                             keyboardType="email-address"
                             setFieldValue={setFieldValue}
+                            error={errors.email && touched.email ? true : false}
                           />
                         </TextInputContainer>
-                        <TextInputContainer>
+                        <ErrorText
+                          error={errors.email && touched.email ? true : false}
+                        >
+                          {errors.email?.toString()}
+                        </ErrorText>
+                        <TextInputContainer
+                          error={
+                            errors.password && touched.password ? true : false
+                          }
+                        >
                           <MyTextInput
                             name="password"
                             headIcons={[ICON.password]}
@@ -232,12 +269,22 @@ const LoginScreen = ({ navigation, route }: any) => {
                             value={values.password}
                             secureTextEntry={!passwordVisible}
                             setFieldValue={setFieldValue}
+                            error={
+                              errors.password && touched.password ? true : false
+                            }
                           />
                           <InputVerticalSeparator />
                           <TouchableOpacity>
                             <TextLink>Quên?</TextLink>
                           </TouchableOpacity>
                         </TextInputContainer>
+                        <ErrorText
+                          error={
+                            errors.password && touched.password ? true : false
+                          }
+                        >
+                          {errors.password?.toString()}
+                        </ErrorText>
                       </ScrollView>
                     </View>
                     <StyledButton

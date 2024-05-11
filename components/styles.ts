@@ -1,9 +1,9 @@
+import { error } from 'console';
 import { LinearGradient } from 'expo-linear-gradient';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
-import { FlexAlignType } from 'react-native';
 
 export const Colors = {
     primary: "#33B87C",
@@ -15,6 +15,7 @@ export const Colors = {
     yellow: "#F6EC72",
     disabledBtn: '#ccc',
     disabledText: '#8e8e8e',
+    error: '#cc0000',
     
 };
 
@@ -36,8 +37,8 @@ export const InnerContainer = styled.View`
     background-color: ${Colors.white};
     align-items: center;
     border-radius: 10px;
-    padding-top: 35px;
-    padding-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 15px;
     padding-horizontal: 3px;
 `;
 
@@ -49,7 +50,7 @@ export const PageLogo = styled.Image`
 export const PageTitle = styled.Text`
     font-size: ${titleSize}px;
     color: ${Colors.black};
-    padding: 10px;
+    padding: 5px;
     letter-spacing: 1px;
 `;
 
@@ -65,13 +66,17 @@ export const FormContainer = styled.View`
     flex: 1;
 `;
 
-export const TextInputContainer = styled.View`
+interface TextInputContainerProps {
+    error?: boolean;
+};
+export const TextInputContainer = styled.View<TextInputContainerProps>`
     flex-direction: row;
     align-items: center;
     padding: 8px 5px;
     margin: 5px 0;
     border-bottom-width: 0.4px;
     border-bottom-color: ${Colors.placeholder};
+    ${props => props.error && `border-bottom-color: ${Colors.error};`}
 `;
 
 export const StyledTextInput = styled.TextInput`
@@ -192,3 +197,14 @@ export const toastConfig = {
         alignItems: "center",
     }
 }
+
+interface ErrorTextProps {
+    error?: boolean;
+}
+
+export const ErrorText = styled.Text<ErrorTextProps>`
+    color: ${Colors.error};
+    opacity: 0;
+    font-size: 11px;
+    ${props => props.error && `opacity: 1;`}
+`
