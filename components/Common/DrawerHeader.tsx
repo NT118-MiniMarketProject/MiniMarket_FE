@@ -32,6 +32,7 @@ const DrawerHeader = () => {
           className="px-2 py-1 rounded-sm flex-column items-center"
           onPress={() => {
             navigation.navigate("Tabs", {screen: "HomeStackScreen"});
+            // navigation.navigate("HomeStackScreen");
           }}
         >
           <Entypo name="home" size={21} color="white" />

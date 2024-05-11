@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "950590133752",
+    "project_id": "minimarket-c10ae",
+    "storage_bucket": "minimarket-c10ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950590133752:android:a8f8ec0ec79dc44c33320d",
+        "android_client_info": {
+          "package_name": "com.minimarket.marketapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950590133752-610rv13vbof66456b797oqvoqqkf5mek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimarket.marketapp",
+            "certificate_hash": "fde55893a3cc9c93b39b72859537e08c3a95186a"
+          }
+        },
+        {
+          "client_id": "950590133752-jg5susmqc6nef5le6q1jikl5uvg2ctov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-6vp5hPWU0G0L-KrmaIgxZ1RSVBkqlsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950590133752-jg5susmqc6nef5le6q1jikl5uvg2ctov.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "950590133752-l4nckikkuk6mn68ldldscsgg7pj4hi7c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.minimarket.marketapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
