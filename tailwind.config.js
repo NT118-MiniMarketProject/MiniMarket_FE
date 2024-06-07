@@ -22,6 +22,7 @@ module.exports = {
         txtgray: "#515764", // màu chữ xám dùng cho header
         txtblue: "#0095FD",
         txtyellow: "#FFF066",
+        txtwhite: "#ffffff",
         white: "#EFFFFB", //chỉ là màu trắng
         black: "#5C595B", //chỉ là màu đen
         error: '#cc0000', //màu đỏ của error

@@ -17,8 +17,12 @@ import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import "react-native-reanimated";
 import "react-native-gesture-handler";
+import ProductListScreen from "./screens/ProductListScreen";
+import { RootStackParamList } from "./utils/types";
+import Header from "./components/Common/Header";
+import { MenuProvider } from "react-native-popup-menu";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -80,23 +84,32 @@ export default function App() {
   return (
     <CredentialContext.Provider value={{ credential, setCredential }}>
       <RootSiblingParent>
-        <NavigationContainer>
-          <Provider store={store}>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Welcome" component={WelcomeScreen} />
-              <Stack.Screen name="Tabs" component={Tabs} />
-              <Stack.Screen
-                name="CategoriesScreen"
-                component={CategoriesScreen}
-                options={{
-                  headerShown: true,
-                  header: (props) => <DrawerHeader />,
-                }}
-              />
-              {/* <Stack.Screen name="Tabs" component={Tabs} /> */}
-            </Stack.Navigator>
-          </Provider>
-        </NavigationContainer>
+        <MenuProvider>
+          <NavigationContainer>
+            <Provider store={store}>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                <Stack.Screen name="Tabs" component={Tabs} />
+                <Stack.Screen
+                  name="CategoriesScreen"
+                  component={CategoriesScreen}
+                  options={{
+                    headerShown: true,
+                    header: (props) => <DrawerHeader />,
+                  }}
+                />
+                <Stack.Screen
+                  name="ProductListScreen"
+                  component={ProductListScreen}
+                  options={{
+                    headerShown: true,
+                    header: (props) => <Header />,
+                  }}
+                />
+              </Stack.Navigator>
+            </Provider>
+          </NavigationContainer>
+        </MenuProvider>
       </RootSiblingParent>
     </CredentialContext.Provider>
   );

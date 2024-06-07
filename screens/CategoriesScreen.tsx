@@ -4,6 +4,10 @@ import SafeView from '../components/Common/SafeView'
 import { useAppDispatch, useAppSelector } from '../store'
 import { fetchCategoryGroupDetail } from '../store/features/Collection/categoryGroupDetailSlice'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../utils/types'
+import { categoryInterface } from '../utils'
 
 const CategoriesScreen = () => {
   const categoryGroupDetail = useAppSelector((state) => state.categoryGroupDetail);
@@ -19,7 +23,7 @@ const CategoriesScreen = () => {
     }
   ).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     dispatch(fetchCategoryGroupDetail());
   },[])
@@ -77,48 +81,60 @@ const CategoriesScreen = () => {
         ))}
       </View>
       {/* Right bar FlatList */}
-      <FlatList
-        className="w-2/3 grow-0"
-        contentContainerStyle={{paddingBottom: 550}}
-        style={{
-          // height: 2000
-        }}
-        ref={flatRef}
-        data={categoryGroupDetail.data}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal={false}
-        showsVerticalScrollIndicator
-        renderItem={(item) => {
-          return (
-            <View className={`w-full flex-row flex-wrap mb-2 py-1 ${index===item.index ? "bg-lightgreen" : "bg-white"}`}>
-              {item.item.list.map(
-                (cate: { thumbnail: string; name: string }, index: number) => (
-                  <TouchableOpacity className="w-1/3 flex-column items-center py-2" key={index}>
-                    {/* Image */}
-                    <View className="overflow-hidden w-3/4 bg-transparent p-1">
-                      {/* image */}
-                      <ImageBackground
-                        source={{ uri: cate.thumbnail }}
-                        resizeMode="contain"
-                        style={{
-                          width: "100%",
-                          paddingTop: "100%",
-                        }}
-                      />
-                    </View>
-                    {/* Text */}
-                    <Text className="text-center text-12m text-txtgray">
-                      {cate.name}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              )}
-            </View>
-          );
-        }}
-        onViewableItemsChanged={viewableItemsChanged}
-        viewabilityConfig={viewConfig}
-      />
+      {categoryGroupDetail?.data && 
+      
+        <FlatList
+          className="w-2/3 grow-0"
+          contentContainerStyle={{paddingBottom: 550}}
+          style={{
+            // height: 2000
+          }}
+          ref={flatRef}
+          data={categoryGroupDetail.data}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={false}
+          showsVerticalScrollIndicator
+          renderItem={(item) => {
+            return (
+              <View className={`w-full flex-row flex-wrap mb-2 py-1 ${index===item.index ? "bg-lightgreen" : "bg-white"}`}>
+                {item.item.list.map(
+                  (cate: categoryInterface, index: number) => (
+                    <TouchableOpacity 
+                      className="w-1/3 flex-column items-center py-2" key={index}
+                      onPress={() => {
+                        navigation.navigate("ProductListScreen", {
+                          categoryId: cate.id,
+                          categoryName: cate.name,
+                          categroup: cate.categroup,
+                        });
+                      }}
+                    >
+                      {/* Image */}
+                      <View className="overflow-hidden w-3/4 bg-transparent p-1">
+                        <ImageBackground
+                          source={{ uri: cate.thumbnail }}
+                          resizeMode="contain"
+                          style={{
+                            width: "100%",
+                            paddingTop: "100%",
+                          }}
+                        />
+                      </View>
+                      {/* Text */}
+                      <Text className="text-center text-12m text-txtgray">
+                        {cate.name}
+                      </Text>
+                    </TouchableOpacity>
+                  )
+                )}
+              </View>
+            );
+          }}
+          onViewableItemsChanged={viewableItemsChanged}
+          viewabilityConfig={viewConfig}
+        />
+      
+      }
     </View>
   );
 }

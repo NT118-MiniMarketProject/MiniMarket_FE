@@ -57,6 +57,7 @@ const HomeProductBlock: React.FC<HomeProductBlockProps> = ({
         className="flex-row absolute justify-center items-center left-0 right-0"
         style={{ top: -20 }}
       >
+        {/* Left triangle */}
         <View
           style={{
             width: 0,
@@ -70,6 +71,7 @@ const HomeProductBlock: React.FC<HomeProductBlockProps> = ({
             borderTopColor: "transparent",
           }}
         />
+        {/* Name */}
         <Text
           className="py-1 px-3 rounded-b-lg text-lg text-white font-semibold"
           style={{
@@ -86,6 +88,7 @@ const HomeProductBlock: React.FC<HomeProductBlockProps> = ({
         >
           {categoryGroupName}
         </Text>
+        {/* Right triangle */}
         <View
           style={{
             width: 0,

@@ -1,9 +1,22 @@
 // Variables
-export const tenmien: string = "http://localhost:8000";
-export const tenmien1: string = "https://minimarket-be.onrender.com/api/v1";
+export const tenmien1: string = "http://localhost:8000";
+export const tenmien: string = "https://minimarket-be.onrender.com/api/v1";
+// export const tenmien: string = "localhost";
 export const ngrok: string = "https://b004-171-243-48-12.ngrok-free.app" //cai nay de chay cai php backend, url thay doi moi lan start ngrok
 
 // Intefaces
+
+
+export interface categoryGroupInterface {
+  id: number;
+  name: string;
+  thumbnail: string;
+}
+
+export interface categoryInterface extends categoryGroupInterface {
+  categroup: number
+}
+
 export interface productHomeInterface {
   // product xuat hien o home, khong can thong tin ve brand
   id: number;
@@ -18,32 +31,50 @@ export interface productHomeInterface {
   canonical?: string | null;
 }
 
-export interface categoryGroupInterface {
-  id: number;
-  name: string;
+export interface productHomeBEInterface {
+  product_id: string;
   thumbnail: string;
+  name: string;
+  reg_price: number;
+  discount_percent: number;
+  discount_price: number;
+  quantity: number;
+  unit: string;
+  canonical: string | null;
+  description: string;
+  created_at: string; // ISO date string
+  updated_at: string | null; // ISO date string or null
+  deleted: boolean;
+  rating: string;
+  c_id: string;
+  br_id: string;
+  event_percent: number;
+  event_price: number;
+  is_visible: string;
+  is_feature: string;
 }
 
+
+// export interface productHomeBEInterface extends productHomeInterface{
+
+// }
+
+// đây là interface dữ liệu json backend trả về, nó bị khác với base của mình
+export interface categoryBEInterface {
+  category_id: string;
+  thumbnail_category: string;
+  categroup: number;
+  category_name: string;
+}
+
+
 export interface productInfoInterface extends productHomeInterface {
-  canonical?: string;
-  quantity?: number;
-  category_id?: number;
-  description: string;
-  article: string;
   galleries: {
-    thumbnail: string;
-    sort: number;
-    product_id?: number;
-  }[];
-  brand: {
-    id: number;
-    name: string;
-    // thumbnail: string,
-  };
-  category: {
-    id: number;
-    name: string;
-  };
+    gallery_id: number, 
+    thumbnail_gallery: string,
+    prod_gall_id: string,
+    sort: number
+  }[]
 }
 
 // Functions

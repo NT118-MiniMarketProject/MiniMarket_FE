@@ -26,6 +26,7 @@ export default function HomeProducts() {
   useEffect(() => {
     const fetchCategoryGroups = async () => {
       try {
+        // fetching category groups
         const response = await axios.get(`${ngrok}/api/danhmuc`);
         setCategoryGroups(response.data);
         await loadProductBlock(response.data);
