@@ -1,7 +1,6 @@
-import { Text, View, Image, Pressable } from "react-native";
+import { Text, View, Image, Pressable , TouchableOpacity} from "react-native";
 import React from "react";
 import { priceFormatter, productHomeInterface } from "../../utils";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, Icon } from "../styles";
 import { LinearGradient } from "expo-linear-gradient";
 

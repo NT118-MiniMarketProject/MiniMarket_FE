@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { tenmien } from "../../../utils";
+import { categoryBEInterface, categoryInterface, tenmien } from "../../../utils";
 
 // import { createJsxSelfClosingElement } from "typescript";
 
@@ -16,7 +16,7 @@ interface categoryGroupDetailState {
     id: number;
     categoryGroupName: string;
     thumbnail: string;
-    list: categoryData[];
+    list: categoryInterface[];
   }[];
 }
 // Thunk functions
@@ -25,7 +25,7 @@ export const fetchCategoryGroupDetail = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(
-        tenmien + "/api/danhmuc/all"
+        tenmien + "/category/group/all"
       );
       return response.data;
     } catch (err) {
@@ -52,7 +52,25 @@ const categoryGroupDetailSlice = createSlice({
     });
     builder.addCase(fetchCategoryGroupDetail.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      let {categoryByGroup} = action.payload;
+      state.data = categoryByGroup.map(
+        (group: {
+          category_id: number;
+          categroup_name: string;
+          thumbnail: string;
+          lists: categoryBEInterface[];
+        }) => ({
+          id: group.category_id,
+          categoryGroupName: group.categroup_name,
+          thumbnail: group.thumbnail,
+          list: group.lists.map((cate: categoryBEInterface) => ({
+            id: cate.category_id,
+            name: cate.category_name,
+            thumbnail: cate.thumbnail_category,
+            categroup: cate.categroup,
+          })),
+        })
+      );
     });
     builder.addCase(fetchCategoryGroupDetail.rejected, (state, action) => {
       state.loading = false;
@@ -66,24 +84,28 @@ const categoryGroupDetailSlice = createSlice({
             {
               id: 1,
               name: "Thịt heo",
+              categroup: 4,
               thumbnail:
                 "https://zinfood.com/upload/images/mon-an-tu-thit-heo.jpg",
             },
             {
               id: 2,
               name: "Thịt bò",
+              categroup: 4,
               thumbnail:
                 "https://bactom.com/wp-content/uploads/2023/06/thitbo_TNJU.jpg",
             },
             {
               id: 3,
               name: "Trứng gà",
+              categroup: 4,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
             {
               id: 4,
               name: "Trứng gà",
+              categroup: 4,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
@@ -98,24 +120,28 @@ const categoryGroupDetailSlice = createSlice({
             {
               id: 1,
               name: "Rau củ làm sẵn",
+              categroup: 3,
               thumbnail:
                 "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_103x103/https://cdn.tgdd.vn/Products/Images/12439/bhx/rau-cu-lam-san-202308231530220239.png",
             },
             {
               id: 2,
               name: "Rau củ đông lạnh",
+              categroup: 3,
               thumbnail:
                 "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_103x103/https://cdn.tgdd.vn/Products/Images/7172/bhx/rau-cu-dong-lanh-202212051420219285.png",
             },
             {
               id: 3,
               name: "Trứng gà",
+              categroup: 3,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
             {
               id: 4,
               name: "Trứng gà",
+              categroup: 3,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
@@ -130,24 +156,28 @@ const categoryGroupDetailSlice = createSlice({
             {
               id: 1,
               name: "Bánh Chocopie",
+              categroup: 5,
               thumbnail:
                 "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_103x103/https://cdn.tgdd.vn/Products/Images/7622/bhx/banh-chocopie-202212051500226263.png",
             },
             {
               id: 2,
               name: "Thịt bò",
+              categroup: 5,
               thumbnail:
                 "https://bactom.com/wp-content/uploads/2023/06/thitbo_TNJU.jpg",
             },
             {
               id: 3,
               name: "Trứng gà",
+              categroup: 5,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
             {
               id: 4,
               name: "Trứng gà",
+              categroup: 5,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
@@ -162,24 +192,28 @@ const categoryGroupDetailSlice = createSlice({
             {
               id: 1,
               name: "Bia Tiger",
+              categroup: 1,
               thumbnail:
                 "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_346x346/https://cdn.tgdd.vn/Products/Images/2282/171020/bhx/6-lon-bia-tiger-bac-330ml-202308250851063935_300x300.jpg",
             },
             {
               id: 2,
               name: "Thịt bò",
+              categroup: 1,
               thumbnail:
                 "https://bactom.com/wp-content/uploads/2023/06/thitbo_TNJU.jpg",
             },
             {
               id: 3,
               name: "Trứng gà",
+              categroup: 1,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
             {
               id: 4,
               name: "Trứng gà",
+              categroup: 1,
               thumbnail:
                 "https://bizweb.dktcdn.net/100/457/224/products/eggs.jpg?v=1683190870110",
             },
