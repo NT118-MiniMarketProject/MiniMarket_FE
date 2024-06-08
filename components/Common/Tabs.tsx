@@ -5,24 +5,35 @@ import {
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
+import { TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Header from './Header';
 import HomeStackScreen from '../../screens/stacks/HomeStackScreen';
 import AccountStackScreen from '../../screens/stacks/AccountStackScreen';
 import { getTabBarVisibility } from '../../utils/functions';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
 import DealStackScreen from '../../screens/stacks/DealStackScreen';
 import CartStackScreen from '../../screens/stacks/CartStackScreen';
 import TestScreen from '../../screens/TestScreen';
+import ProductSearchScreen from '../../screens/ProductSearchScreen';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../utils/types';
+import { View } from 'moti';
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
+type ProductListScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "ProductSearchScreen"
+>;
+const MockScreen = () => <View></View>
 const Tabs = () => {
   const fontSize = 12;
   const iconSize = 22;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 return (
   <Tab.Navigator
     screenOptions={{
@@ -41,9 +52,9 @@ return (
   >
     <Tab.Screen
       name={"HomeStackScreen"}
-      options={({route}) => ({
+      options={({ route }) => ({
         title: "Trang chủ",
-        tabBarStyle: {display: getTabBarVisibility(route,"HomeScreen")},
+        tabBarStyle: { display: getTabBarVisibility(route, "HomeScreen") },
         tabBarIcon: ({ focused }) => (
           <AntDesign
             name="home"
@@ -56,8 +67,8 @@ return (
     />
 
     <Tab.Screen
-      name={"DealStackScreen"}
-      options={{
+      name={"ProductSearchScreen"}
+      options={() => ({
         title: "Khuyến mãi",
         tabBarIcon: ({ focused }) => (
           <MaterialCommunityIcons
@@ -66,8 +77,17 @@ return (
             color={focused ? "#007E42" : "#515764"}
           />
         ),
+      })}
+      listeners={{
+        tabPress:e => {
+          e.preventDefault();
+          navigation.navigate("ProductSearchScreen",{
+            isSale: true, 
+            search: ""
+          })
+        },
       }}
-      component={DealStackScreen}
+      component={MockScreen}
     />
 
     <Tab.Screen
@@ -84,27 +104,27 @@ return (
       }}
       component={CartStackScreen}
     />
-   
+
     <Tab.Screen
       name={"NotiStackScreen"}
-      options={{ 
+      options={{
         title: "Thông báo",
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name="notifications-outline"
-              size={iconSize}
-              color={focused ? "#007E42" : "#515764"}
-            />
-          )
+        tabBarIcon: ({ focused }) => (
+          <Ionicons
+            name="notifications-outline"
+            size={iconSize}
+            color={focused ? "#007E42" : "#515764"}
+          />
+        ),
       }}
       component={TestScreen}
     />
 
     <Tab.Screen
       name={"AccountStackScreen"}
-      options={({route}) => {
-        const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-        const arr = ['AccountLoginScreen', 'AccountSignUpScreen'];
+      options={({ route }) => {
+        const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+        const arr = ["AccountLoginScreen", "AccountSignUpScreen"];
         let tabBarVisible = arr.includes(routeName) ? "none" : "flex";
         let headerVisible = arr.includes(routeName) ? false : true;
         return {
@@ -115,7 +135,7 @@ return (
               color={focused ? "#007E42" : "#515764"}
             />
           ),
-          tabBarStyle: {display: tabBarVisible as "flex" | "none"},
+          tabBarStyle: { display: tabBarVisible as "flex" | "none" },
           headerShown: headerVisible,
           title: "Tài khoản",
         };

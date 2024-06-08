@@ -11,11 +11,17 @@ type RootStackParamList = {
   AccountLoginScreen: undefined;
   AccountSignUpScreen: undefined;
   CategoriesScreen: undefined;
+  SearchScreen: undefined;
   ProductListScreen: { 
     categoryId: number, 
     categoryName: string,
     categroup: number, 
   };
+  ProductSearchScreen: {
+    isSale: boolean,
+    search: string,
+  };
+
   // ProductListScreen: undefined;
 };
 
