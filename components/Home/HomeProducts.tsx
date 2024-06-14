@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import Product from "../Common/Product";
 import {
   categoryGroupInterface,
+  categoryGroupBEInterface,
   dummyCategoryGroup,
   dummyProduct,
   ngrok,
   productHomeInterface,
+  productHomeBEInterface,
   tenmien,
-  tenmien1,
 } from "../../utils";
 import axios from "axios";
 import HomeProductBlock from "./HomeProductBlock";
@@ -17,19 +18,23 @@ import { Colors } from "../styles";
 
 export default function HomeProducts() {
   const [categoryGroups, setCategoryGroups] = useState<
-    categoryGroupInterface[]
+    categoryGroupBEInterface[]
   >([]);
   const [isFetchingCateGroups, setIsFetchingCateGroup] = useState(true);
-  const [products, setProducts] = useState<productHomeInterface[][]>([]);
+  const [fetchedProducts, setFetchedProducts] = useState<
+    { products: productHomeBEInterface[]; totalProducts: number }[]
+  >([]);
   const [isFetchingProducts, setIsFetchingProducts] = useState(false);
 
   useEffect(() => {
     const fetchCategoryGroups = async () => {
       try {
         // fetching category groups
-        const response = await axios.get(`${ngrok}/api/danhmuc`);
-        setCategoryGroups(response.data);
-        await loadProductBlock(response.data);
+        // const response = await axios.get(`${ngrok}/api/danhmuc`);
+        const response = await axios.get(`${tenmien}/category/group`);
+        const data = response.data;
+        setCategoryGroups(data.categroup);
+        await loadProductBlock(data.categroup);
       } catch (e) {
         console.log(e);
         // Toast.show(defaultErrMsg, toastConfig as ToastOptions);
@@ -44,21 +49,31 @@ export default function HomeProducts() {
     fetchCategoryGroups();
   }, []);
 
-  const loadProductBlock = async (categroups: categoryGroupInterface[]) => {
+  const loadProductBlock = async (categroups: categoryGroupBEInterface[]) => {
     // console.log("products: ", products.length);
     // console.log("categroups: ", categroups.length);
-    if (products.length >= categroups.length || isFetchingProducts) return;
+    if (fetchedProducts.length >= categroups.length || isFetchingProducts)
+      return;
     setIsFetchingProducts(true);
     try {
+      // const response = await axios.get(
+      //   `${ngrok}/api/danhmuc/${categroups[products.length].id}`
+      // );
       const response = await axios.get(
-        `${ngrok}/api/danhmuc/${categroups[products.length].id}`
+        `${tenmien}/category/group/search/${
+          categroups[fetchedProducts.length].categroup_id
+        }}`
       );
       const data = response.data;
-      setProducts([...products, data.data]);
+      const { products, totalProducts } = data;
+      setFetchedProducts([...fetchedProducts, { products, totalProducts }]);
     } catch (e) {
       console.log(e);
       // Toast.show(defaultErrMsg, toastConfig as ToastOptions);
-      setProducts([...products, dummyProduct]);
+      setFetchedProducts([
+        ...fetchedProducts,
+        { products: dummyProduct, totalProducts: 0 },
+      ]);
     } finally {
       setIsFetchingProducts(false);
     }
@@ -71,23 +86,19 @@ export default function HomeProducts() {
       ) : (
         <FlatList
           scrollEnabled={false}
-          data={products}
-          renderItem={({
-            item,
-            index,
-          }: {
-            item: productHomeInterface[];
-            index: number;
-          }) => {
+          data={fetchedProducts}
+          renderItem={({ item, index }) => {
             return (
               <HomeProductBlock
-                categoryGroupId={categoryGroups[index].id}
-                categoryGroupName={categoryGroups[index].name}
-                products={item}
+                categoryGroupId={categoryGroups[index].categroup_id}
+                categoryGroupName={categoryGroups[index].categroup_name}
+                fetchedProducts={item}
               />
             );
           }}
-          keyExtractor={(item, index) => categoryGroups[index].id.toString()}
+          keyExtractor={(item, index) =>
+            categoryGroups[index].categroup_id.toString()
+          }
           ListFooterComponent={
             isFetchingProducts ? (
               <View className="m-2">

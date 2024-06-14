@@ -1,4 +1,4 @@
-import { Text, View, Image, Pressable , TouchableOpacity} from "react-native";
+import { Text, View, Image, Pressable, TouchableOpacity } from "react-native";
 import React from "react";
 import { priceFormatter, productHomeInterface } from "../../utils";
 import { Colors, Icon } from "../styles";
@@ -86,22 +86,17 @@ const Product = ({
             </View>
 
             {/* Số sao đánh giá */}
-            {rating && (
-              <View className="flex-row items-center mt-auto">
+            <View className="flex-row items-center mt-auto justify-between">
+              <View className="flex-row items-center">
                 <Text className="font-sans font-bold text-yellow-500 text-sm">
-                  {Math.round(rating).toFixed(1)}
+                  {Math.round(rating ?? 5).toFixed(1)}
                 </Text>
                 <Icon size={14} name="star" color="rgb(234 179 8)" />
-                {numOfRatings && (
-                  <Text
-                    className="font-sans text-txtgray"
-                    style={{ fontSize: 10 }}
-                  >
-                    ({numOfRatings} đánh giá)
-                  </Text>
-                )}
               </View>
-            )}
+              <Text className="font-sans text-txtgray" style={{ fontSize: 10 }}>
+                ({numOfRatings ?? 0} đánh giá)
+              </Text>
+            </View>
           </View>
         </TouchableOpacity>
       </View>

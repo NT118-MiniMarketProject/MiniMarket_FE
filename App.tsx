@@ -23,6 +23,7 @@ import Header from "./components/Common/Header";
 import { MenuProvider } from "react-native-popup-menu";
 import SearchScreen from "./screens/SearchScreen";
 import ProductSearchScreen from "./screens/ProductSearchScreen";
+import EmailVerificationScreen from "./screens/Account/Authen/EmailVerificationScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

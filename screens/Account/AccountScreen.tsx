@@ -122,6 +122,14 @@ const AccountScreen = () => {
           </TouchableOpacity>
         </View>
       )}
+      <View className="items-center justify-center">
+        <TouchableOpacity
+          className="px-5 py-2 rounded-md bg-yellow-400"
+          onPress={() => navigation.navigate("TestScreen")}
+        >
+          <Text className="text-slate-900">Test screen</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

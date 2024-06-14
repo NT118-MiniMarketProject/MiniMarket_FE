@@ -23,6 +23,7 @@ const MyTextInput = ({
   setFieldValue,
   name,
   error,
+  setParams,
   ...props
 }: {
   headIcons?: string[];
@@ -49,12 +50,18 @@ const MyTextInput = ({
 
       <StyledTextInput
         autoCapitalize="none"
+        autoCorrect={false}
         placeholderTextColor={Colors.placeholder}
         {...props}
       />
 
       {props.value?.length > 0 && (
-        <TouchableOpacity onPressIn={() => setFieldValue(name, "")}>
+        <TouchableOpacity
+          onPressIn={() => {
+            setFieldValue(name, "");
+            setParams({ name: undefined });
+          }}
+        >
           <Icon
             name={ICON.clearText}
             size={25}
