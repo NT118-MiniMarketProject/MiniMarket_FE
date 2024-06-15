@@ -22,6 +22,10 @@ type RootStackParamList = {
     search: string,
   };
   TestScreen: undefined
+  ProductDetailScreen: {
+    id: number
+  }
+
   // ProductListScreen: undefined;
 };
 

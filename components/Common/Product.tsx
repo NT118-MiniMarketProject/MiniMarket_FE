@@ -3,6 +3,12 @@ import React from "react";
 import { priceFormatter, productHomeInterface } from "../../utils";
 import { Colors, Icon } from "../styles";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../utils/types";
+
+
+
 
 const Product = ({
   id,
@@ -15,13 +21,17 @@ const Product = ({
   rating,
   numOfRatings,
 }: productHomeInterface) => {
+const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <View
       className="w-full bg-white border border-gray-300 p-0 rounded-md"
       style={{ height: 274 }}
     >
       <View className="flex-1">
-        <TouchableOpacity className="w-full h-full">
+        <TouchableOpacity className="w-full h-full" onPress={() => {
+          navigation.navigate("ProductDetailScreen", {id});
+        }}>
           {/* Thumbnail */}
           <Image
             source={{ uri: thumbnail }}

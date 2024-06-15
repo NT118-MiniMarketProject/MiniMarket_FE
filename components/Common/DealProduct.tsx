@@ -3,16 +3,23 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { LinearGradient } from 'expo-linear-gradient'
 import { priceFormatter, productHomeInterface } from '../../utils';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../utils/types';
+
 
 interface dealProductsProps{
-    dealproduct: productHomeInterface,
+  dealproduct: productHomeInterface,
   quantity: number;
   remaining: number;
 }
 const DealProduct = (props: dealProductsProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { dealproduct, quantity, remaining } = props;
   return (
-    <TouchableOpacity className="w-full">
+    <TouchableOpacity className="w-full" onPress={() => {
+      navigation.navigate("ProductDetailScreen", {id: dealproduct.id});
+    }}>
       <LinearGradient
         className="rounded-md flex-column relative"
         colors={["#5CA927", "#0A773D"]}

@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "./types";
+
 // Variables
 export const tenmien: string = "https://minimarket-be.onrender.com/api/v1";
 // export const tenmien: string = "localhost";
 export const ngrok: string = "https://b004-171-243-48-12.ngrok-free.app" //cai nay de chay cai php backend, url thay doi moi lan start ngrok
-
-// Intefaces
 
 
 export interface categoryGroupInterface {
