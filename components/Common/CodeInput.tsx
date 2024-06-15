@@ -17,6 +17,16 @@ const CodeInput = ({
 }) => {
   const textInputRef = useRef(null);
 
+  const CodeInputHandler = (newCode: string) => {
+    const inp = parseInt(newCode);
+    if (isNaN(inp) || inp < 0) {
+      setCode("");
+    } else {
+      const str = inp.toString();
+      setCode(str.substring(0, maxDigits));
+    }
+  };
+
   return (
     <View
       className="items-center justify-center self-stretch my-3"
@@ -50,11 +60,7 @@ const CodeInput = ({
         maxLength={maxDigits}
         ref={textInputRef}
         value={code}
-        onChangeText={(newCode) => {
-          if (newCode === "") setCode("");
-          let c = newCode[newCode.length - 1];
-          if (c >= "0" && c <= "9") setCode(newCode);
-        }}
+        onChangeText={CodeInputHandler}
         autoFocus={true}
         caretHidden={true}
         onSubmitEditing={() => {

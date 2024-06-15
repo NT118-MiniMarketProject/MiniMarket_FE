@@ -22,9 +22,7 @@ import {
   toastConfig,
 } from "../../../components/styles";
 import CodeInput from "../../../components/Common/CodeInput";
-import { number } from "yup";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { roundToNearestPixel } from "nativewind";
 import Toast, { ToastOptions } from "react-native-root-toast";
 
 const errorMsg = "Uiii, có lỗi rồi. Vui lòng thử lại sau";

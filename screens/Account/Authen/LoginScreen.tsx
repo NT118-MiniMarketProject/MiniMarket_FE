@@ -86,11 +86,9 @@ const LoginScreen = ({ navigation, route }: any) => {
   useFocusEffect(
     useCallback(() => {
       formikRef.current?.resetForm();
-      // console.log('sign up form is reset')
-    }, [])
+      formikRef.current?.setFieldValue("email", route.params?.email);
+    }, [formikRef, route.params?.email])
   );
-
-  console.log(">>> Login: " + route.params?.email);
 
   const setPasswordVisibleHandler = () => {
     setPasswordVisible(!passwordVisible);
@@ -187,7 +185,7 @@ const LoginScreen = ({ navigation, route }: any) => {
           <SubTitle>GreenMart mừng bạn trở lại!</SubTitle>
           <FormContainer>
             <Formik
-              initialValues={{ email: route.params?.email, password: "" }}
+              initialValues={{ email: "", password: "" }}
               onSubmit={(values, { setFieldValue }) => {
                 setSubmitting(true);
                 if (!values.email.trim() || !values.password.trim()) {
@@ -246,7 +244,6 @@ const LoginScreen = ({ navigation, route }: any) => {
                             keyboardType="email-address"
                             setFieldValue={setFieldValue}
                             error={errors.email && touched.email ? true : false}
-                            setParams={navigation.setParams}
                           />
                         </TextInputContainer>
                         <ErrorText

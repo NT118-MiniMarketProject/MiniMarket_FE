@@ -23,7 +23,6 @@ const MyTextInput = ({
   setFieldValue,
   name,
   error,
-  setParams,
   ...props
 }: {
   headIcons?: string[];
@@ -59,7 +58,6 @@ const MyTextInput = ({
         <TouchableOpacity
           onPressIn={() => {
             setFieldValue(name, "");
-            setParams({ name: undefined });
           }}
         >
           <Icon
