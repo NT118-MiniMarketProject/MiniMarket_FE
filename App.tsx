@@ -23,6 +23,7 @@ import Header from "./components/Common/Header";
 import { MenuProvider } from "react-native-popup-menu";
 import SearchScreen from "./screens/SearchScreen";
 import ProductSearchScreen from "./screens/ProductSearchScreen";
+import ProductDetailScreen from "./screens/ProductDetail/ProductDetailScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -90,7 +91,7 @@ export default function App() {
           <NavigationContainer>
             <Provider store={store}>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
                 <Stack.Screen name="Tabs" component={Tabs} />
                 <Stack.Screen
                   name="SearchScreen"
@@ -118,6 +119,14 @@ export default function App() {
                 <Stack.Screen
                   name="ProductSearchScreen"
                   component={ProductSearchScreen}
+                  options={{
+                    headerShown: true,
+                    header: (props) => <Header />,
+                  }}
+                />
+                <Stack.Screen
+                  name="ProductDetailScreen"
+                  component={ProductDetailScreen}
                   options={{
                     headerShown: true,
                     header: (props) => <Header />,

@@ -21,7 +21,7 @@ const ProductDetailScreen = () => {
 
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const handleSelectItem = (item) => {
+  const handleSelectItem = (item: any) => {
     setSelectedItem(item.id === selectedItem ? null : item.id);
   };
 
@@ -44,7 +44,6 @@ const ProductDetailScreen = () => {
             scrollAnimationDuration={1000}
             onSnapToItem={(index) => {
               setCurrentIndex(index);
-              console.log('current index:', index);
             }}
             renderItem={({ item }) => (
               <View style={styles.carouselItem}>
@@ -92,7 +91,7 @@ const ProductDetailScreen = () => {
           </View>
 
           <View className="flex items-center ml-4 border border-blue-500 rounded-lg bg-blue-100 bg-opacity-50 justify-center p-2">
-            <Text className="text-blue-500 font-semibold">>> Mời phản ánh chất lượng</Text>
+            <Text className="text-blue-500 font-semibold"> Mời phản ánh chất lượng</Text>
           </View>
         </View>
 
