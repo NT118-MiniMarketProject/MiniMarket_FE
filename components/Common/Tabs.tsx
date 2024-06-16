@@ -67,7 +67,7 @@ return (
     />
 
     <Tab.Screen
-      name={"ProductSearchScreen"}
+      name={"ProductSearchScreen1"}
       options={() => ({
         title: "Khuyến mãi",
         tabBarIcon: ({ focused }) => (
@@ -101,6 +101,9 @@ return (
             color={focused ? "#007E42" : "#515764"}
           />
         ),
+        tabBarStyle: {
+          display: "none",
+        }
       }}
       component={CartStackScreen}
     />

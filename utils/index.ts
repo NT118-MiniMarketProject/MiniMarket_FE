@@ -81,9 +81,12 @@ export interface productInfoInterface extends productHomeInterface {
 
 // Functions
 export function priceFormatter(price: number): string {
-  return price.toLocaleString("en-US", {
-    maximumFractionDigits: 0,
-  });
+  if (price){
+    return price.toLocaleString("en-US", {
+      maximumFractionDigits: 0,
+    });
+  }
+  return "0";
 }
 export function getNewSearchParamString(
   key: string,

@@ -44,3 +44,7 @@ export {
 };
 
 // const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+// <View className="m-2" style={{height: 300}} >
+//   <ActivityIndicator size={"large"} color={Colors.primary} />
+// </View>

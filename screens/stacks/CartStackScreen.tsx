@@ -17,8 +17,9 @@ const CartStackScreen: React.FC = () => {
       <CartStack.Screen
         name="CartScreen"
         component={CartScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: false}}
       />
+
     </CartStack.Navigator>
     // <View className="flex-1 items-center justify-center bg-white">
     //   <Text className="text-red-400 font-bold">

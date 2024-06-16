@@ -6,6 +6,8 @@ import { priceFormatter, productHomeInterface } from '../../utils';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../utils/types';
+import { useAppDispatch } from '../../store';
+import { addToCart } from '../../store/features/Cart/cartSlice';
 
 
 interface dealProductsProps{
@@ -15,10 +17,23 @@ interface dealProductsProps{
 }
 const DealProduct = (props: dealProductsProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    const { dealproduct, quantity, remaining } = props;
+  const { dealproduct, quantity, remaining } = props;
+  const dispatch = useAppDispatch();
+  const handleAddToCart = () => {
+    dispatch(addToCart({productId: dealproduct.id.toString(), quantity: 1}))
+    .then((res) => {
+      if (res.payload){
+        alert("Thêm vào giỏ hàng thành công")
+      }
+      else{
+        alert("Thêm vào giỏ hàng thất bại ")
+      }
+    })
+  }
   return (
     <TouchableOpacity className="w-full" onPress={() => {
-      navigation.navigate("ProductDetailScreen", {id: dealproduct.id});
+      // navigation.navigate("ProductDetailScreen", {id: dealproduct.id});
+      handleAddToCart();
     }}>
       <LinearGradient
         className="rounded-md flex-column relative"
