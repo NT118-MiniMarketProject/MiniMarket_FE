@@ -1,25 +1,15 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity, Linking } from "react-native";
 import React from "react";
 import Panel from "../components/Account/Panel";
-
-const arr = [
-  "Hỗ trợ khách hàng",
-  "Tổng đài tư vấn",
-  "Góp ý / Liên hệ",
-  "Tìm kiếm siêu thị",
-  "Các chính sách khác",
-];
+import PanelItem from "../components/Account/PanelItem";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../utils/types";
 
 const TestScreen = () => {
   return (
     <View>
-      <Panel>
-        {arr.map((item, index) => (
-          <View key={index}>
-            <Text>{item}</Text>
-          </View>
-        ))}
-      </Panel>
+      <Text>Test screen</Text>
     </View>
   );
 };

@@ -10,6 +10,8 @@ import { CredentialContext } from "../../contexts/CredentialContext";
 import ForgotPasswordScreen from "../Account/Authen/ForgotPasswordScreen";
 import EmailVerificationScreen from "../Account/Authen/EmailVerificationScreen";
 import NewPasswordScreen from "../Account/Authen/NewPasswordScreen";
+import FeedbackFormScreen from "../Account/FeedbackFormScreen";
+import AccountScreenAfterLogin from "../Account/AccountScreenAfterLogin";
 
 const AccountStack = createStackNavigator();
 
@@ -33,51 +35,56 @@ const AccountStackScreen: React.FC = () => {
     ),
   };
 
-  return (
+  return credential ? (
+    // Đã đăng nhập
+    <AccountStack.Navigator initialRouteName="AccountScreenAfterLogin">
+      <AccountStack.Screen
+        name="AccountScreenAfterLogin"
+        component={AccountScreenAfterLogin}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="AccountInfo"
+        component={AccountInfoScreen}
+        options={{ presentation: "modal" }}
+      />
+    </AccountStack.Navigator>
+  ) : (
+    // Chưa đăng nhập
     <AccountStack.Navigator initialRouteName="AccountScreen">
       <AccountStack.Screen
         name="AccountScreen"
         component={AccountScreen}
         options={{ headerShown: false }}
       />
-      {credential ? (
-        <AccountStack.Screen
-          name="AccountInfo"
-          component={AccountInfoScreen}
-          options={{ presentation: "modal" }}
-        />
-      ) : (
-        <>
-          <AccountStack.Screen
-            name="AccountLoginScreen"
-            component={LoginScreen}
-            options={{ presentation: "modal", ...authenHeaderOptions }}
-          />
-          <AccountStack.Screen
-            name="AccountSignUpScreen"
-            component={SignUpScreen}
-            options={{ presentation: "modal", ...authenHeaderOptions }}
-          />
-          <AccountStack.Screen
-            name="AccountForgotPasswordScreen"
-            component={ForgotPasswordScreen}
-            options={{ presentation: "modal", ...authenHeaderOptions }}
-          />
-          <AccountStack.Screen
-            name="AccountEmailVerificationScreen"
-            component={EmailVerificationScreen}
-            options={{ presentation: "modal", ...authenHeaderOptions }}
-          />
-          <AccountStack.Screen
-            name="AccountNewPasswordScreen"
-            component={NewPasswordScreen}
-            options={{ presentation: "modal", ...authenHeaderOptions }}
-          />
-        </>
-      )}
       <AccountStack.Screen
-        name="TestScreen"
+        name="FeedbackFormScreen"
+        component={FeedbackFormScreen}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="AccountLoginScreen"
+        component={LoginScreen}
+        options={{ presentation: "modal", ...authenHeaderOptions }}
+      />
+      <AccountStack.Screen
+        name="AccountSignUpScreen"
+        component={SignUpScreen}
+        options={{ presentation: "modal", ...authenHeaderOptions }}
+      />
+      <AccountStack.Screen
+        name="AccountForgotPasswordScreen"
+        component={ForgotPasswordScreen}
+        options={{ presentation: "modal", ...authenHeaderOptions }}
+      />
+      <AccountStack.Screen
+        name="AccountEmailVerificationScreen"
         component={EmailVerificationScreen}
+        options={{ presentation: "modal", ...authenHeaderOptions }}
+      />
+      <AccountStack.Screen
+        name="AccountNewPasswordScreen"
+        component={NewPasswordScreen}
         options={{ presentation: "modal", ...authenHeaderOptions }}
       />
     </AccountStack.Navigator>
@@ -85,3 +92,15 @@ const AccountStackScreen: React.FC = () => {
 };
 
 export default AccountStackScreen;
+
+{
+  /* <AccountStack.Screen
+        name="TestScreen"
+        component={FeedbackFormScreen}
+        // options={{ presentation: "modal", ...authenHeaderOptions }}
+        options={{
+          presentation: "modal",
+          headerShown: false,
+        }}
+      /> */
+}

@@ -21,10 +21,10 @@ type RootStackParamList = {
     isSale: boolean,
     search: string,
   };
-  TestScreen: undefined
+  TestScreen: undefined;
   ProductDetailScreen: {
     id: number
-  }
+  };
 
   // ProductListScreen: undefined;
 };
