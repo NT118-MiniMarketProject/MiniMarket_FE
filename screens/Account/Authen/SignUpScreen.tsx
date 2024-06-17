@@ -75,7 +75,7 @@ const SignUpScreen = ({ navigation }: any) => {
     useCallback(() => {
       formikRef.current?.resetForm();
       // console.log('sign up form is reset')
-    }, [])
+    }, [formikRef])
   );
 
   // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();

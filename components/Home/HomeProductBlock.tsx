@@ -4,6 +4,7 @@ import {
   categoryGroupInterface,
   dummyProduct,
   ngrok,
+  productHomeBEInterface,
   productHomeInterface,
   tenmien,
 } from "../../utils";
@@ -19,33 +20,43 @@ const defaultErrMsg = "Ops! There's something wrong, try again later";
 interface HomeProductBlockProps {
   categoryGroupId: categoryGroupInterface["id"];
   categoryGroupName: categoryGroupInterface["name"];
-  products?: productHomeInterface[];
+  fetchedProducts?: {
+    products: productHomeBEInterface[];
+    totalProducts: number;
+  };
 }
 
 const HomeProductBlock: React.FC<HomeProductBlockProps> = ({
   categoryGroupId,
   categoryGroupName,
-  products = [],
+  fetchedProducts = { products: [], totalProducts: 0 },
 }) => {
-  const [isLoading, setIsLoading] = useState(products.length ? false : true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true);
       try {
+        // const response = await axios.get(
+        //   `${ngrok}/api/danhmuc/${categoryGroupId}`
+        // );
         const response = await axios.get(
-          `${ngrok}/api/danhmuc/${categoryGroupId}`
+          `${tenmien}/category/group/search/${categoryGroupId}`
         );
         const data = response.data;
-        products = data.data;
+        fetchedProducts = {
+          products: data.products,
+          totalProducts: data.totalProducts,
+        };
       } catch (e) {
         console.log(e);
         // Toast.show(defaultErrMsg, toastConfig as ToastOptions);
-        products = dummyProduct;
+        fetchedProducts = { products: dummyProduct, totalProducts: 0 };
       } finally {
         setIsLoading(false);
       }
     };
-    if (products.length === 0) fetchProducts();
+    if (fetchedProducts.products.length === 0) fetchProducts();
   }, []);
 
   return (
@@ -110,40 +121,55 @@ const HomeProductBlock: React.FC<HomeProductBlockProps> = ({
           </View>
         ))
       ) : (
-        <FlatList
-          scrollEnabled={false}
-          numColumns={3}
-          columnWrapperStyle={{ flex: 1 }}
-          data={products}
-          renderItem={({
-            item,
-            index,
-          }: {
-            item: productHomeInterface;
-            index: number;
-          }) => {
-            if (index >= 15) return null;
-            return (
-              <View className="w-1/3 mb-1 px-0.5">
-                <Product {...item} />
-              </View>
-            );
-          }}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      )}
-
-      {/* Xem thêm */}
-      {!isLoading && (
-        <TouchableOpacity className="flex-row justify-center items-center bg-green-200 py-3 min-w-full mt-3">
-          <Text>Xem thêm </Text>
-          <Text className="font-semibold">{categoryGroupName}</Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={18}
-            style={{ marginLeft: 8 }}
+        <>
+          <FlatList
+            scrollEnabled={false}
+            numColumns={3}
+            columnWrapperStyle={{ flex: 1 }}
+            data={fetchedProducts.products}
+            renderItem={({
+              item,
+              index,
+            }: {
+              item: productHomeBEInterface;
+              index: number;
+            }) => {
+              if (index >= 15) return null;
+              const newItem: productHomeInterface = {
+                id: parseInt(item.product_id),
+                thumbnail: item.thumbnail,
+                name: item.name,
+                reg_price: item.reg_price,
+                discount_price: item.discount_price,
+                discount_percent: item.discount_percent,
+                canonical: item.canonical,
+                rating: parseInt(item.rating),
+              };
+              return (
+                <View className="w-1/3 mb-1 px-0.5">
+                  <Product {...newItem} />
+                </View>
+              );
+            }}
+            keyExtractor={(item) => item.product_id.toString()}
           />
-        </TouchableOpacity>
+
+          {/* Xem thêm */}
+          {fetchedProducts.totalProducts - fetchedProducts.products.length >
+          0 ? (
+            <TouchableOpacity className="flex-row justify-center items-center bg-green-200 py-3 min-w-full mt-3">
+              <Text className="text-xs">{`Xem thêm ${
+                fetchedProducts.totalProducts - fetchedProducts.products.length
+              } `}</Text>
+              <Text className="font-semibold text-xs">{categoryGroupName}</Text>
+              <Icon
+                name="chevron-forward-outline"
+                size={18}
+                style={{ marginLeft: 8 }}
+              />
+            </TouchableOpacity>
+          ) : null}
+        </>
       )}
     </View>
   );

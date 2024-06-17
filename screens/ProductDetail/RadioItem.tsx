@@ -1,18 +1,18 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
   },
   itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   image: {
     width: 40,
@@ -24,27 +24,35 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   priceText: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
   },
   radioIndicator: {
     marginRight: 8,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderWidth: 2,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     width: 8,
     height: 8,
     borderRadius: 4,
   },
   radioIndicatorSelected: {
-    backgroundColor: 'blue',
+    backgroundColor: "blue",
   },
 });
 
-const RadioItem = ({ item, selected, onSelect }) => {
+const RadioItem = ({
+  item,
+  selected,
+  onSelect,
+}: {
+  item: any;
+  selected: any;
+  onSelect: any;
+}) => {
   return (
     <TouchableOpacity onPress={() => onSelect(item)} style={styles.container}>
       <View style={styles.itemContainer}>
@@ -54,7 +62,12 @@ const RadioItem = ({ item, selected, onSelect }) => {
           <Text style={styles.priceText}>{item.price}</Text>
         </View>
       </View>
-      <View style={[styles.radioIndicator, selected === item.id && styles.radioIndicatorSelected]} />
+      <View
+        style={[
+          styles.radioIndicator,
+          selected === item.id && styles.radioIndicatorSelected,
+        ]}
+      />
     </TouchableOpacity>
   );
 };

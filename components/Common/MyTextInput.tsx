@@ -49,12 +49,17 @@ const MyTextInput = ({
 
       <StyledTextInput
         autoCapitalize="none"
+        autoCorrect={false}
         placeholderTextColor={Colors.placeholder}
         {...props}
       />
 
       {props.value?.length > 0 && (
-        <TouchableOpacity onPressIn={() => setFieldValue(name, "")}>
+        <TouchableOpacity
+          onPressIn={() => {
+            setFieldValue(name, "");
+          }}
+        >
           <Icon
             name={ICON.clearText}
             size={25}

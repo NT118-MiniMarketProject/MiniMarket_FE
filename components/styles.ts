@@ -1,4 +1,3 @@
-import { error } from 'console';
 import { LinearGradient } from 'expo-linear-gradient';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
@@ -52,6 +51,7 @@ export const PageTitle = styled.Text`
     color: ${Colors.black};
     padding: 5px;
     letter-spacing: 1px;
+
 `;
 
 export const SubTitle = styled.Text`
@@ -101,6 +101,10 @@ export const InputVerticalSeparator = styled.View`
 export const TextLink = styled.Text`
     color: ${Colors.blue};
     font-size: ${linkTextSize}px;
+    ${props => props.disabled == true && `
+        color: #8e8e8e;
+    `}
+
 `;
 
 interface StyledButtonProps {
@@ -189,8 +193,8 @@ export const toastConfig = {
         fontSize: 14,
     },
     containerStyle: {
-        width: 250,
-        minHeight: 50,
+        width: 230,
+        minHeight: 75,
         paddingHorizontal: 3,
         paddingVertical: 5,
         justifyContent: "center",

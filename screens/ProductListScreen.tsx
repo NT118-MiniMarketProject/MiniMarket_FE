@@ -1,45 +1,82 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Modal, ActivityIndicator, FlatList} from 'react-native'
-import { RouteProp, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from 'react'
-import { RootStackParamList } from '../utils/types';
-import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Modal,
+  ActivityIndicator,
+  FlatList,
+} from "react-native";
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { RootStackParamList } from "../utils/types";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import { AntDesign } from "@expo/vector-icons";
-import { useAppDispatch, useAppSelector } from '../store';
-import { fetchCategory } from '../store/features/CategoryProducts/categorySlice';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
-import { fetchBrandCate } from '../store/features/CategoryProducts/brandSlice';
-import { productHomeBEInterface, productHomeInterface } from '../utils';
-import Product from '../components/Common/Product';
-import { clearData, fetchCategoryProducts } from '../store/features/Products/productListSlice';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-
+import { useAppDispatch, useAppSelector } from "../store";
+import { fetchCategory } from "../store/features/CategoryProducts/categorySlice";
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+} from "react-native-popup-menu";
+import { fetchBrandCate } from "../store/features/CategoryProducts/brandSlice";
+import { productHomeBEInterface, productHomeInterface } from "../utils";
+import Product from "../components/Common/Product";
+import {
+  clearData,
+  fetchCategoryProducts,
+} from "../store/features/Products/productListSlice";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 // type DetailsScreenRouteProp = RouteProp<RootStackParamList, "ProductList">;
 
 // type Props = {
 //   route: DetailsScreenRouteProp;
 // };
-type ProductListScreenProps = NativeStackScreenProps<RootStackParamList, "ProductListScreen">;
+type ProductListScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "ProductListScreen"
+>;
 
-const ProductListScreen= ({ route }:ProductListScreenProps ) => {
+const ProductListScreen = ({ route }: ProductListScreenProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  
+
   const categoryData = useAppSelector((state) => state.category);
   const brandData = useAppSelector((state) => state.brand);
   const productList = useAppSelector((state) => state.productList);
   const [page, setPage] = useState<number>(1);
-  const [fetchParams, setFetchParams] = useState<{categoryId: number; categoryName: string, categroup: number, brandId: string, sort: string}>({
-    categoryId:-1,
-    categoryName:"",
-    categroup:-1,
+  const [fetchParams, setFetchParams] = useState<{
+    categoryId: number;
+    categoryName: string;
+    categroup: number;
+    brandId: string;
+    sort: string;
+  }>({
+    categoryId: -1,
+    categoryName: "",
+    categroup: -1,
     brandId: "",
-    sort:"",
+    sort: "",
   });
-  const [tempParams, setTempParams] = useState<{ brandId: string, sort: string}>({
+  const [tempParams, setTempParams] = useState<{
+    brandId: string;
+    sort: string;
+  }>({
     brandId: "",
-    sort:""
-  })
+    sort: "",
+  });
   const [visiable, setVisible] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isFocusced = useIsFocused();
@@ -49,73 +86,75 @@ const ProductListScreen= ({ route }:ProductListScreenProps ) => {
       ...newParams,
     }));
   };
-  const sortList = [{
-    id: 1,
-    name: "Giá thấp tới cao",
-    query: "minTomax"
-  },
-  {
-    id: 2,
-    name: "Giá cao tới thấp",
-    query: "maxTomin"
-  },
-  {
-    id: 3,
-    name: "Tên A-Z",
-    query: "a-z"
-  },
-  {
-    id: 4,
-    name: "Tên Z-A",
-    query: "z-a"
-  }]
+  const sortList = [
+    {
+      id: 1,
+      name: "Giá thấp tới cao",
+      query: "minTomax",
+    },
+    {
+      id: 2,
+      name: "Giá cao tới thấp",
+      query: "maxTomin",
+    },
+    {
+      id: 3,
+      name: "Tên A-Z",
+      query: "a-z",
+    },
+    {
+      id: 4,
+      name: "Tên Z-A",
+      query: "z-a",
+    },
+  ];
   const openModal = () => {
-    setTempParams({brandId: fetchParams.brandId, sort: fetchParams.sort})
+    setTempParams({ brandId: fetchParams.brandId, sort: fetchParams.sort });
     setVisible(true);
-  }
+  };
   const applyModal = () => {
-    updateFetchParams({brandId: tempParams.brandId, sort: tempParams.sort})
+    updateFetchParams({ brandId: tempParams.brandId, sort: tempParams.sort });
     setVisible(false);
-  }
+  };
   const removeFilter = () => {
-    updateFetchParams({brandId: "", sort: ""})
+    updateFetchParams({ brandId: "", sort: "" });
     setVisible(false);
-  }
-  const fetchingProductList = (reset:boolean) => {
+  };
+  const fetchingProductList = (reset: boolean) => {
     if (reset) dispatch(clearData());
-    const query = `cid=${fetchParams.categoryId}&brid=${fetchParams.brandId}&sort=${fetchParams.sort}&page=${page}`
-    dispatch(fetchCategoryProducts(query))
-  }
+    const query = `cid=${fetchParams.categoryId}&brid=${fetchParams.brandId}&sort=${fetchParams.sort}&page=${page}`;
+    dispatch(fetchCategoryProducts(query));
+  };
   useEffect(() => {
-    if (isFocusced){
+    if (isFocusced) {
       const { categoryId, categoryName, categroup } = route.params;
       updateFetchParams({ categoryId, categoryName, categroup });
       dispatch(fetchCategory(categroup.toString()));
     }
-  }, [isFocusced])
+  }, [isFocusced]);
   // Fetching categories of the group
   // useEffect(() => {
   //   // dispatch(clearData());
-    
+
   //   }, [route.params.categoryId])
   useEffect(() => {
-    updateFetchParams({brandId: ""})
-    dispatch(fetchBrandCate(fetchParams.categoryId))
-  }, [fetchParams.categoryId])
+    updateFetchParams({ brandId: "" });
+    dispatch(fetchBrandCate(fetchParams.categoryId));
+  }, [fetchParams.categoryId]);
   useEffect(() => {
     setPage(1);
     fetchingProductList(true);
-  }, [fetchParams.categoryId, fetchParams.brandId, fetchParams.sort])
+  }, [fetchParams.categoryId, fetchParams.brandId, fetchParams.sort]);
   useEffect(() => {
-    if (page > 1 ){
+    if (page > 1) {
       fetchingProductList(false);
     }
-  }, [page])
+  }, [page]);
   // Fetching products of the category
 
   return (
     <>
-      <View className=''>
+      <View className="">
         {/* Breadcrumb */}
         <View className="flex-row bg-txtwhite items-center space-x-2 px-1 py-1.5 border-b border-gray-300 mb-1 ">
           <TouchableOpacity
@@ -136,12 +175,12 @@ const ProductListScreen= ({ route }:ProductListScreenProps ) => {
           showsHorizontalScrollIndicator={false}
           className="bg-txtwhite px-2 py-1 mb-1 w-full border-y-1"
           style={{
-            height: 120
+            height: 120,
           }}
           // contentContainerStyle={{paddingVertical: 20}}
         >
-          {categoryData.data.list.map((item) =>{
-            console.log(item.id, fetchParams.categoryId)
+          {categoryData.data.list.map((item) => {
+            console.log(item.id, fetchParams.categoryId);
             return (
               <TouchableOpacity
                 key={item.id}
@@ -282,20 +321,23 @@ const ProductListScreen= ({ route }:ProductListScreenProps ) => {
             }}
             keyExtractor={(item, index) => index.toString()}
             ListFooterComponent={
-              (productList.loading) ? (
-                <View className="m-2" style={{height: 300}} >
+              productList.loading ? (
+                <View className="m-2" style={{ height: 300 }}>
                   <ActivityIndicator size={"large"} color={Colors.primary} />
                 </View>
               ) : (
                 <View style={{ height: 300 }}>
-                  <Text className='text-center pt-2'>Không còn sản phẩm để hiển thị</Text>
+                  <Text className="text-center pt-2">
+                    Không còn sản phẩm để hiển thị
+                  </Text>
                 </View>
               )
             }
             // onEndReachedThreshold={0.5}
             onEndReached={() => {
               // stop fetching when reaching this
-              if (productList.data.currentPage<productList.data.numOfPages) setPage((prevPage) => prevPage + 1);
+              if (productList.data.currentPage < productList.data.numOfPages)
+                setPage((prevPage) => prevPage + 1);
             }}
           />
         )}
@@ -387,6 +429,6 @@ const ProductListScreen= ({ route }:ProductListScreenProps ) => {
   );
 };
 
-export default ProductListScreen
+export default ProductListScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
