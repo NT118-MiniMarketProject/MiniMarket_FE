@@ -101,6 +101,9 @@ return (
             color={focused ? "#007E42" : "#515764"}
           />
         ),
+        tabBarStyle: {
+          display: "none",
+        }
       }}
       component={CartStackScreen}
     />

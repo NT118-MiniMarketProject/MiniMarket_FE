@@ -37,7 +37,7 @@ const HomeCategories = () => {
               colorMode={"light"}
               radius="round"
               height={20}
-              width={"97%"}
+              width={30}
             />
           </View>
             
