@@ -195,6 +195,7 @@ const CartScreen = () => {
       </View>
     </View>
   );
+  
 }
 
-export default CartScreen
+export default CartScreen; 

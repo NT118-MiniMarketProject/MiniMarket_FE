@@ -1,8 +1,14 @@
-import { Text, View, Image, Pressable , TouchableOpacity} from "react-native";
+import { Text, View, Image, Pressable, TouchableOpacity } from "react-native";
 import React from "react";
 import { priceFormatter, productHomeInterface } from "../../utils";
 import { Colors, Icon } from "../styles";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../utils/types";
+
+
+
 
 const Product = ({
   id,
@@ -15,13 +21,17 @@ const Product = ({
   rating,
   numOfRatings,
 }: productHomeInterface) => {
+const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <View
       className="w-full bg-white border border-gray-300 p-0 rounded-md"
       style={{ height: 274 }}
     >
       <View className="flex-1">
-        <TouchableOpacity className="w-full h-full">
+        <TouchableOpacity className="w-full h-full" onPress={() => {
+          navigation.navigate("ProductDetailScreen", {id});
+        }}>
           {/* Thumbnail */}
           <Image
             source={{ uri: thumbnail }}
@@ -86,22 +96,17 @@ const Product = ({
             </View>
 
             {/* Số sao đánh giá */}
-            {rating && (
-              <View className="flex-row items-center mt-auto">
+            <View className="flex-row items-center mt-auto justify-between">
+              <View className="flex-row items-center">
                 <Text className="font-sans font-bold text-yellow-500 text-sm">
-                  {Math.round(rating).toFixed(1)}
+                  {Math.round(rating ?? 5).toFixed(1)}
                 </Text>
                 <Icon size={14} name="star" color="rgb(234 179 8)" />
-                {numOfRatings && (
-                  <Text
-                    className="font-sans text-txtgray"
-                    style={{ fontSize: 10 }}
-                  >
-                    ({numOfRatings} đánh giá)
-                  </Text>
-                )}
               </View>
-            )}
+              <Text className="font-sans text-txtgray" style={{ fontSize: 10 }}>
+                ({numOfRatings ?? 0} đánh giá)
+              </Text>
+            </View>
           </View>
         </TouchableOpacity>
       </View>

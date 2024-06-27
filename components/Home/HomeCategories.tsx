@@ -34,7 +34,7 @@ const HomeCategories = () => {
         ? Array(5).map((item) => (
           <View className='w-1/5'>
             <Skeleton
-              colorMode={"light"}
+              colorMode={"dark"}
               radius="round"
               height={20}
               width={30}

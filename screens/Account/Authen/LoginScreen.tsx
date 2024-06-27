@@ -82,11 +82,12 @@ const LoginScreen = ({ navigation, route }: any) => {
   const [isSigningInFacebook, setIsSigningInFacebook] = useState(false);
 
   const formikRef = useRef<FormikProps<any>>(null);
+
   useFocusEffect(
     useCallback(() => {
       formikRef.current?.resetForm();
-      // console.log('sign up form is reset')
-    }, [])
+      formikRef.current?.setFieldValue("email", route.params?.email);
+    }, [formikRef, route.params?.email])
   );
 
   const setPasswordVisibleHandler = () => {
@@ -151,8 +152,9 @@ const LoginScreen = ({ navigation, route }: any) => {
     // email="test@gmail.com"; password="test123456";
     try {
       const response = await axios.post(url, { email, password });
-      // console.log('>>> Response: ', response);
+      // console.log(">>> Response: ", { response });
       const user = response.data?.user;
+      // console.log(">>> USER: ", { user });
       if (user) {
         Toast.show("Login successfully!", toastConfig as ToastOptions);
         // navigation.navigate('AccountScreen'); không cần navigate manual v nx vì stack được tạo lại tự động nên sẽ mặc định vào trang này
@@ -183,7 +185,7 @@ const LoginScreen = ({ navigation, route }: any) => {
           <SubTitle>GreenMart mừng bạn trở lại!</SubTitle>
           <FormContainer>
             <Formik
-              initialValues={{ email: route.params?.email || "", password: "" }}
+              initialValues={{ email: "", password: "" }}
               onSubmit={(values, { setFieldValue }) => {
                 setSubmitting(true);
                 if (!values.email.trim() || !values.password.trim()) {
@@ -274,7 +276,14 @@ const LoginScreen = ({ navigation, route }: any) => {
                             }
                           />
                           <InputVerticalSeparator />
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate(
+                                "AccountForgotPasswordScreen",
+                                { email: values.email }
+                              )
+                            }
+                          >
                             <TextLink>Quên?</TextLink>
                           </TouchableOpacity>
                         </TextInputContainer>

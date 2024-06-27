@@ -8,7 +8,6 @@ import { useRoute } from "@react-navigation/native";
 import Tabs from "../../components/Common/Tabs";
 import DealScreen from "../Deal/DealScreen";
 import CartScreen from "../Cart/CartScreen";
-
 const CartStack = createStackNavigator();
 
 const CartStackScreen: React.FC = () => {

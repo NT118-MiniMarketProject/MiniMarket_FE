@@ -23,6 +23,7 @@ import Header from "./components/Common/Header";
 import { MenuProvider } from "react-native-popup-menu";
 import SearchScreen from "./screens/SearchScreen";
 import ProductSearchScreen from "./screens/ProductSearchScreen";
+import ProductDetailScreen from "./screens/ProductDetail/ProductDetailScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -84,6 +85,7 @@ export default function App() {
   }
 
   return (
+    // adding comment now or here 
     <CredentialContext.Provider value={{ credential, setCredential }}>
       <RootSiblingParent>
         <MenuProvider>
@@ -118,6 +120,14 @@ export default function App() {
                 <Stack.Screen
                   name="ProductSearchScreen"
                   component={ProductSearchScreen}
+                  options={{
+                    headerShown: true,
+                    header: (props) => <Header />,
+                  }}
+                />
+                <Stack.Screen
+                  name="ProductDetailScreen"
+                  component={ProductDetailScreen}
                   options={{
                     headerShown: true,
                     header: (props) => <Header />,
