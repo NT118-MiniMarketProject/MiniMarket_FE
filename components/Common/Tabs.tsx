@@ -95,20 +95,7 @@ const Tabs = () => {
         component={MockScreen}
       />
 
-      <Tab.Screen
-        name={"CartStackScreen"}
-        options={{
-          title: "Giỏ hàng",
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="shoppingcart"
-              size={iconSize} // decrease icon size a little bit
-              color={focused ? "#007E42" : "#515764"}
-            />
-          ),
-        }}
-        component={CartStackScreen}
-      />
+     
       <Tab.Screen
         name={"CartStackScreen"}
         options={{
