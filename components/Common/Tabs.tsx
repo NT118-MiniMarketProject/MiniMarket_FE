@@ -72,7 +72,7 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name={"ProductSearchScreen"}
+        name={"ProductSearchScreen1"}
         options={() => ({
           title: "Khuyến mãi",
           tabBarIcon: ({ focused }) => (

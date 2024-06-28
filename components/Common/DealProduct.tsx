@@ -2,23 +2,21 @@ import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { LinearGradient } from 'expo-linear-gradient'
-import { priceFormatter, productHomeInterface } from '../../utils';
+import { priceFormatter, productHomeBEInterface, productHomeInterface } from '../../utils';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../utils/types';
 
 
 interface dealProductsProps{
-  dealproduct: productHomeInterface,
-  quantity: number;
-  remaining: number;
+  dealproduct: productHomeBEInterface
 }
 const DealProduct = (props: dealProductsProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    const { dealproduct, quantity, remaining } = props;
+    const { dealproduct } = props;
   return (
     <TouchableOpacity className="w-full" onPress={() => {
-      navigation.navigate("ProductDetailScreen", {id: dealproduct.id});
+      navigation.navigate("ProductDetailScreen", {id: parseInt(dealproduct.product_id)});
     }}>
       <LinearGradient
         className="rounded-md flex-column relative"
@@ -70,9 +68,9 @@ const DealProduct = (props: dealProductsProps) => {
         {/* Slider */}
         <View className='h-4 bg-white mx-1 rounded-lg mt-1 relative overflow-hidden flex-row items-center justify-center'> 
           <View className=' h-full w-10 absolute bg-txtyellow left-0 top-0' style={{
-            width: `${(quantity-remaining)/quantity*100}%`
+            width: `100%`
           }}></View>
-          <Text className='text-11m text-center w-100'>Còn {remaining} sản phẩm</Text>
+          <Text className='text-11m text-center w-100'>Còn {dealproduct.quantity} sản phẩm</Text>
         </View>
 
         {/* Bottom*/}

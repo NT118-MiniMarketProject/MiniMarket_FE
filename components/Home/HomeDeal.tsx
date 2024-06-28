@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, useWindowDimensions, Animated} from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { fetchProductSales, productsSalesData } from '../../store/features/Sales/productsSalesSlice'
+import { fetchProductSales } from '../../store/features/Sales/productsSalesSlice'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import { AntDesign } from "@expo/vector-icons";
 import DealProduct from '../Common/DealProduct'
@@ -11,11 +11,12 @@ import ProductSkeleton from '../Common/ProductSkeleton'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../utils/types'
+import { productHomeBEInterface } from '../../utils'
 
 const HomeDeal = () => {
   const productSales = useAppSelector((state) => state.productsSales);
   const [productSalesGroup, setProductSalesGroup] = React.useState<
-    productsSalesData[][]
+    productHomeBEInterface[][]
   >([]);
   const [index, setIndex] = useState<number>(0);
   const { width } = useWindowDimensions();
@@ -39,9 +40,9 @@ const HomeDeal = () => {
   }, []);
   useEffect(() => {
     if (productSales.data) {
-      let temp: productsSalesData[][] = [];
+      let temp: productHomeBEInterface[][] = [];
       let count = 0;
-      let group: productsSalesData[] = [];
+      let group: productHomeBEInterface[] = [];
       productSales.data.forEach((productItem, index) => {
         if (count < 6) {
           group.push(productItem);
@@ -96,12 +97,7 @@ const HomeDeal = () => {
                     return (
                       <View className="w-1/3 mb-1 px-0.5" key={index}>
                         <DealProduct
-                          key={productItem.id}
                           dealproduct={productItem}
-                          quantity={productItem.quantity}
-                          remaining={
-                            productItem?.remaining || productItem.quantity
-                          }
                         />
                       </View>
                     );
