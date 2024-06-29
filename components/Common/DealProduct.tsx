@@ -6,6 +6,8 @@ import { priceFormatter, productHomeBEInterface, productHomeInterface } from '..
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../utils/types';
+import { useAppDispatch } from '../../store';
+import { addToCart } from '../../store/features/Cart/cartSlice';
 
 
 interface dealProductsProps{

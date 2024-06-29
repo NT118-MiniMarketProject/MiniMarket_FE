@@ -7,11 +7,9 @@ import { AntDesign } from "@expo/vector-icons";
 import DealProduct from '../Common/DealProduct'
 import { Dimensions } from 'react-native'
 import { ViewToken } from 'react-native'
-import ProductSkeleton from '../Common/ProductSkeleton'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../utils/types'
-import { productHomeBEInterface } from '../../utils'
 
 const HomeDeal = () => {
   const productSales = useAppSelector((state) => state.productsSales);
@@ -20,8 +18,8 @@ const HomeDeal = () => {
   >([]);
   const [index, setIndex] = useState<number>(0);
   const { width } = useWindowDimensions();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const scrollX = useRef(new Animated.Value(0)).current;
   const slideRef = useRef(null);
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
@@ -64,8 +62,8 @@ const HomeDeal = () => {
       <View className="flex-row items-center py-3 justify-between">
         <Text className="text-txtgray font-bold text-14m">KHUYẾN MÃI SỐC</Text>
         <TouchableOpacity className="flex-row space-x-1 items-center" onPress={() => {
-          navigation.navigate("ProductSearchScreen", {
-            isSale: true,
+          navigation.navigate("ProductSearchScreen",{
+            isSale: true, 
             search: ""
           })
         }}>
