@@ -32,7 +32,7 @@ const HomeCategories = () => {
     >
       {categoryHeader.loading
         ? Array.from({length: 6}).map((item, index) => (
-          <View className='my-1 mr-2 rounded-md overflow-hidden'>
+          <View className='my-1 mr-2 rounded-md overflow-hidden' key={index}>
             <Skeleton
               colorMode={"light"}
               radius="square"

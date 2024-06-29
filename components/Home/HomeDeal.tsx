@@ -10,6 +10,8 @@ import { ViewToken } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../utils/types'
+import { productHomeBEInterface } from '../../utils'
+import ProductSkeleton from '../Common/ProductSkeleton'
 
 const HomeDeal = () => {
   const productSales = useAppSelector((state) => state.productsSales);

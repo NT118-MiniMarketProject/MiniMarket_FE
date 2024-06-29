@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../utils/types";
 import { CredentialContext } from "../../contexts/CredentialContext";
+import LoadingModal from "../../components/Common/LoadingModal";
   
   // import { useIsFocused } from '@react-navigation/native';
   
@@ -90,94 +91,98 @@ import { CredentialContext } from "../../contexts/CredentialContext";
                 <Text className="text-12m text-primary">Xóa tất cả</Text>
               </TouchableOpacity> */}
             </View>
-            <View className="w-full">
-              {cartData.loading ? (
-                <View className="m-2" style={{ height: 300 }}>
-                  <ActivityIndicator size={"large"} color={Colors.primary} />
-                </View>
-              ) : cartData?.data && cartData.data.cartItems.length ? (
-                cartData.data.cartItems.map((item, index) => (
-                  <View
-                    className="flex-row relative items-center space-x-1 w-full mb-1"
-                    key={index}
-                  >
-                    {/* Image */}
-                    <View className="overflow-hidden relative bg-txtwhite p-1 w-20 h-20 rounded-sm border border-gray-100">
-                      {/* image */}
-                      <ImageBackground
-                        src={item.products.thumbnail}
-                        resizeMode="contain"
-                        style={{
-                          width: "100%",
-                          paddingTop: "100%",
-                        }}
-                      />
-                    </View>
-                    {/* Name */}
-                    <Text
-                      className="flex-1 text-12m text-gray-500"
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
+            <View className="w-full relative ">
+              {cartData.loading && <LoadingModal />}
+              {
+                // cartData.loading ? (
+                //   <View className="m-2" style={{ height: 300 }}>
+                //     <ActivityIndicator size={"large"} color={Colors.primary} />
+                //   </View>
+                // ) :
+                cartData?.data && cartData.data.cartItems.length ? (
+                  cartData.data.cartItems.map((item, index) => (
+                    <View
+                      className="flex-row relative items-center space-x-1 w-full mb-1"
+                      key={index}
                     >
-                      {item.products.name}
-                    </Text>
-                    {/* Price and quantity */}
-                    <View className="flex-col items-end">
-                      <Text className="font-bold text-14m">
-                        {priceFormatter(item.products.discount_price)}đ
-                      </Text>
-                      <Text className="text-12m line-through text-gray-400">
-                        {priceFormatter(item.products.reg_price)}đ
-                      </Text>
-                      {/* Quantity */}
-                      <View className="flex-row space-x-2 items-center">
-                        <TouchableOpacity
-                          className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                          onPress={() =>
-                            handleIncrement(
-                              false,
-                              item.quantity,
-                              item.cartItem.toString()
-                            )
-                          }
-                        >
-                          <AntDesign name="minus" size={17} color="black" />
-                        </TouchableOpacity>
-                        <Text className="text-13m text-gray-500">
-                          {item.quantity}
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleIncrement(
-                              true,
-                              item.quantity,
-                              item.cartItem.toString()
-                            )
-                          }
-                          className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                        >
-                          <AntDesign name="plus" size={17} color="black" />
-                        </TouchableOpacity>
+                      {/* Image */}
+                      <View className="overflow-hidden relative bg-txtwhite p-1 w-20 h-20 rounded-sm border border-gray-100">
+                        {/* image */}
+                        <ImageBackground
+                          src={item.products.thumbnail}
+                          resizeMode="contain"
+                          style={{
+                            width: "100%",
+                            paddingTop: "100%",
+                          }}
+                        />
                       </View>
+                      {/* Name */}
+                      <Text
+                        className="flex-1 text-12m text-gray-500"
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                      >
+                        {item.products.name}
+                      </Text>
+                      {/* Price and quantity */}
+                      <View className="flex-col items-end">
+                        <Text className="font-bold text-14m">
+                          {priceFormatter(item.products.discount_price)}đ
+                        </Text>
+                        <Text className="text-12m line-through text-gray-400">
+                          {priceFormatter(item.products.reg_price)}đ
+                        </Text>
+                        {/* Quantity */}
+                        <View className="flex-row space-x-2 items-center">
+                          <TouchableOpacity
+                            className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
+                            onPress={() =>
+                              handleIncrement(
+                                false,
+                                item.quantity,
+                                item.cartItem.toString()
+                              )
+                            }
+                          >
+                            <AntDesign name="minus" size={17} color="black" />
+                          </TouchableOpacity>
+                          <Text className="text-13m text-gray-500">
+                            {item.quantity}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleIncrement(
+                                true,
+                                item.quantity,
+                                item.cartItem.toString()
+                              )
+                            }
+                            className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
+                          >
+                            <AntDesign name="plus" size={17} color="black" />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* Delete items  */}
+                      <TouchableOpacity
+                        className="absolute w-6 h-6 flex-row items-center justify-center left-0 top-0 rounded-full bg-gray-200"
+                        onPress={() => {
+                          handleDelete(item.cartItem.toString());
+                        }}
+                      >
+                        <AntDesign name="close" size={17} color="black" />
+                      </TouchableOpacity>
                     </View>
-                    {/* Delete items  */}
-                    <TouchableOpacity
-                      className="absolute w-6 h-6 flex-row items-center justify-center left-0 top-0 rounded-full bg-gray-200"
-                      onPress={() => {
-                        handleDelete(item.cartItem.toString());
-                      }}
-                    >
-                      <AntDesign name="close" size={17} color="black" />
-                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <View className="w-full h-20 flex-row items-center justify-center">
+                    <Text className="text-13m text-gray-500 text-center">
+                      Không có sản phẩm nào trong giỏ hàng
+                    </Text>
                   </View>
-                ))
-              ) : (
-                <View className="w-full h-20 flex-row items-center justify-center">
-                  <Text className="text-13m text-gray-500 text-center">
-                    Không có sản phẩm nào trong giỏ hàng
-                  </Text>
-                </View>
-              )}
+                )
+              }
             </View>
           </View>
           {/* Thogn tin thanh toan */}
@@ -217,8 +222,11 @@ import { CredentialContext } from "../../contexts/CredentialContext";
             </Text>
           </View>
           <TouchableOpacity
-            disabled={cartData.loading || !cartData.data.cartItems}
-            className="bg-primary px-2 py-3 my-1 rounded-md items-center justify-center"
+            disabled={cartData.loading || !cartData.data.cartItems.length}
+            className={`${
+              cartData.loading || !cartData.data.cartItems.length
+              ? "bg-gray-300 text-black" : "bg-primary text-txtwhite"
+            } px-2 py-3 my-1 rounded-md items-center justify-center`}
           >
             <Text className="text-txtwhite font-bold">Đặt hàng</Text>
           </TouchableOpacity>
