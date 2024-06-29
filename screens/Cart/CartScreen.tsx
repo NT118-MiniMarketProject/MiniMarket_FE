@@ -245,7 +245,7 @@ import LoadingModal from "../../components/Common/LoadingModal";
             Vui lòng đăng nhập để xem giỏ hàng
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate("AccountLoginScreen")}
+            onPress={() => navigation.navigate("AccountStackScreen")}
             className="bg-primary px-2 py-1 ml-1 rounded-md"
           >
             <Text className="text-txtwhite">Đi tới trang đăng nhập</Text>

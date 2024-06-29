@@ -8,6 +8,7 @@ type RootStackParamList = {
   Tabs: undefined; // Tabs screen with no parameters
   AccountInfo: undefined;
   HomeStackScreen: undefined;
+  AccountStackScreen: undefined;
   AccountLoginScreen: undefined;
   AccountSignUpScreen: undefined;
   CategoriesScreen: undefined;
@@ -25,6 +26,7 @@ type RootStackParamList = {
   ProductDetailScreen: {
     id: number
   };
+  CartStackScreen: undefined;
 
   // ProductListScreen: undefined;
 };
