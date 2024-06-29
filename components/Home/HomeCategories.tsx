@@ -31,16 +31,15 @@ const HomeCategories = () => {
       className="bg-white px-2 py-1 my-1"
     >
       {categoryHeader.loading
-        ? Array(5).map((item) => (
-          <View className='w-1/5'>
+        ? Array.from({length: 6}).map((item, index) => (
+          <View className='my-1 mr-2 rounded-md overflow-hidden' key={index}>
             <Skeleton
               colorMode={"light"}
-              radius="round"
-              height={20}
-              width={"97%"}
+              radius="square"
+              height={60}
+              width={60}
             />
           </View>
-            
           ))
         : categoryHeader.data.map((item) => (
             <TouchableOpacity

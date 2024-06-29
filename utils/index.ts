@@ -7,7 +7,6 @@ export const tenmien: string = "https://minimarket-be.onrender.com/api/v1";
 // export const tenmien: string = "localhost";
 export const ngrok: string = "https://b004-171-243-48-12.ngrok-free.app" //cai nay de chay cai php backend, url thay doi moi lan start ngrok
 
-
 export interface categoryGroupInterface {
   id: number;
   name: string;
@@ -86,9 +85,12 @@ export interface productInfoInterface extends productHomeInterface {
 
 // Functions
 export function priceFormatter(price: number): string {
-  return price.toLocaleString("en-US", {
-    maximumFractionDigits: 0,
-  });
+  if (price){
+    return price.toLocaleString("en-US", {
+      maximumFractionDigits: 0,
+    });
+  }
+  return "0";
 }
 export function getNewSearchParamString(
   key: string,

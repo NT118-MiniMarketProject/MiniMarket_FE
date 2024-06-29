@@ -72,7 +72,7 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name={"ProductSearchScreen"}
+        name={"ProductSearchScreen1"}
         options={() => ({
           title: "Khuyến mãi",
           tabBarIcon: ({ focused }) => (
@@ -95,6 +95,7 @@ const Tabs = () => {
         component={MockScreen}
       />
 
+     
       <Tab.Screen
         name={"CartStackScreen"}
         options={{
@@ -106,6 +107,9 @@ const Tabs = () => {
               color={focused ? "#007E42" : "#515764"}
             />
           ),
+          tabBarStyle: {
+            display: "none",
+          },
         }}
         component={CartStackScreen}
       />

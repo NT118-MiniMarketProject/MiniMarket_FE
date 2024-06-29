@@ -180,7 +180,6 @@ const ProductListScreen = ({ route }: ProductListScreenProps) => {
           // contentContainerStyle={{paddingVertical: 20}}
         >
           {categoryData.data.list.map((item) => {
-            console.log(item.id, fetchParams.categoryId);
             return (
               <TouchableOpacity
                 key={item.id}

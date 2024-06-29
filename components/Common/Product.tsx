@@ -6,6 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../utils/types";
+import { addToCart } from "../../store/features/Cart/cartSlice";
+import { useAppDispatch } from "../../store";
 
 
 
@@ -21,8 +23,8 @@ const Product = ({
   rating,
   numOfRatings,
 }: productHomeInterface) => {
-const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const dispatch = useAppDispatch();
   return (
     <View
       className="w-full bg-white border border-gray-300 p-0 rounded-md"
@@ -31,6 +33,13 @@ const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>(
       <View className="flex-1">
         <TouchableOpacity className="w-full h-full" onPress={() => {
           navigation.navigate("ProductDetailScreen", {id});
+          // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
+          //   console.log(res);
+          //   if (res.payload){
+          //     alert("Them thanh cong ")
+          //   }
+          //   else alert("Them that bai")
+          // });
         }}>
           {/* Thumbnail */}
           <Image

@@ -8,7 +8,6 @@ import { useRoute } from "@react-navigation/native";
 import Tabs from "../../components/Common/Tabs";
 import DealScreen from "../Deal/DealScreen";
 import CartScreen from "../Cart/CartScreen";
-
 const CartStack = createStackNavigator();
 
 const CartStackScreen: React.FC = () => {
@@ -17,8 +16,9 @@ const CartStackScreen: React.FC = () => {
       <CartStack.Screen
         name="CartScreen"
         component={CartScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: false}}
       />
+
     </CartStack.Navigator>
     // <View className="flex-1 items-center justify-center bg-white">
     //   <Text className="text-red-400 font-bold">
