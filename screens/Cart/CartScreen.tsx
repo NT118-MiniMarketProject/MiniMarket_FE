@@ -7,18 +7,25 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { AntDesign } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from '../../store';
 import { fetchCart, updateQuantityCart } from '../../store/features/Cart/cartSlice';
 import {  priceFormatter } from '../../utils';
+import { CredentialContext } from "../../contexts/CredentialContext";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../utils/types";
 
 // import { useIsFocused } from '@react-navigation/native';
 
 const CartScreen = () => {
   // const isFocused = useIsFocused();
+  const {credential} = useContext(CredentialContext);
   const noteRef = useRef<TextInput>(null); 
   const dispatch = useAppDispatch();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const cartData = useAppSelector(state => state.cart);
   function handleIncrement(
     isUp: boolean,
@@ -40,17 +47,21 @@ const CartScreen = () => {
       dispatch(fetchCart("sd"))
     
   },[])
-  return (
+  return credential ? (
     <View className="bg-gray-200 relative pt-12 pb-24">
       {/* Header */}
       <View className="bg-txtwhite flex-row space-x-2 z-10 items-center mb-1 px-2 py-3 absolute top-0 left-0 right-0">
-        <TouchableOpacity >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="caretleft" size={20} color="black" />
         </TouchableOpacity>
         <Text className=" font-bold">Giỏ hàng</Text>
       </View>
       {/* body */}
-      <ScrollView className='h-full' horizontal={false} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        className="h-full"
+        horizontal={false}
+        showsHorizontalScrollIndicator={false}
+      >
         {/* Dia chia */}
         <View className="bg-txtwhite px-2 mb-1 py-3">
           <Text className="font-bold text-13m">Giao đến</Text>
@@ -184,13 +195,35 @@ const CartScreen = () => {
       </ScrollView>
       {/* Footer */}
       <View className="absolute bottom-0 left-0 right-0 bg-txtwhite px-1 border-t border-primary">
-        <View className='flex-row items-center px-1 py-3 '>
+        <View className="flex-row items-center px-1 py-3 ">
           <AntDesign name="wallet" size={20} color="black" />
-          <Text className='text-12m ml-1'>Tiền mặt khi nhận hàng </Text>
-          <Text className='ml-auto rounded-md p-1 bg-gray-300 text-12m'>Chưa hỗ trợ hình thức thanh toán khác</Text>
+          <Text className="text-12m ml-1">Tiền mặt khi nhận hàng </Text>
+          <Text className="ml-auto rounded-md p-1 bg-gray-300 text-12m">
+            Chưa hỗ trợ hình thức thanh toán khác
+          </Text>
         </View>
-        <TouchableOpacity className='bg-primary px-2 py-3 my-1 rounded-md items-center justify-center'>
-          <Text className='text-txtwhite font-bold'>Đặt hàng</Text>
+        <TouchableOpacity className="bg-primary px-2 py-3 my-1 rounded-md items-center justify-center">
+          <Text className="text-txtwhite font-bold">Đặt hàng</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  ) : (
+    <View className="flex-col items-center">
+      <View className="bg-txtwhite flex-row space-x-2 z-10 items-center mb-1 px-2 py-3 absolute top-0 left-0 right-0">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="caretleft" size={20} color="black" />
+        </TouchableOpacity>
+        <Text className=" font-bold">Giỏ hàng</Text>
+      </View>
+      <View className="w-full h-20 flex-col items-center justify-center mt-16 space-y-4">
+        <Text className="text-13m text-gray-500 text-center">
+          Vui lòng đăng nhập để xem giỏ hàng
+        </Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AccountLoginScreen")}
+          className="bg-primary px-2 py-1 ml-1 rounded-md"
+        >
+          <Text className="text-txtwhite">Đi tới trang đăng nhập</Text>
         </TouchableOpacity>
       </View>
     </View>
