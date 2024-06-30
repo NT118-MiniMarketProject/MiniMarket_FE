@@ -24,6 +24,8 @@ import { MenuProvider } from "react-native-popup-menu";
 import SearchScreen from "./screens/SearchScreen";
 import ProductSearchScreen from "./screens/ProductSearchScreen";
 import ProductDetailScreen from "./screens/ProductDetail/ProductDetailScreen";
+import { View } from "moti";
+import ResultModal from "./components/Common/ResultModal";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -136,6 +138,8 @@ export default function App() {
               </Stack.Navigator>
             </Provider>
           </NavigationContainer>
+          {/* Modal */}
+          
         </MenuProvider>
       </RootSiblingParent>
     </CredentialContext.Provider>

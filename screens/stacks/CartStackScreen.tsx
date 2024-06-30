@@ -8,11 +8,17 @@ import { useRoute } from "@react-navigation/native";
 import Tabs from "../../components/Common/Tabs";
 import DealScreen from "../Deal/DealScreen";
 import CartScreen from "../Cart/CartScreen";
+import ResultScreen from "../Cart/ResultScreen";
 const CartStack = createStackNavigator();
 
 const CartStackScreen: React.FC = () => {
   return (
     <CartStack.Navigator>
+      <CartStack.Screen
+        name="ResultScreen"
+        component={ResultScreen}
+        options={{ headerShown: false}}
+      />
       <CartStack.Screen
         name="CartScreen"
         component={CartScreen}

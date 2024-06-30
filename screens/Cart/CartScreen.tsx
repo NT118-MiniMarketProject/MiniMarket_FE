@@ -19,12 +19,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../utils/types";
 import { CredentialContext } from "../../contexts/CredentialContext";
 import LoadingModal from "../../components/Common/LoadingModal";
+import ResultModal from "../../components/Common/ResultModal";
   
   // import { useIsFocused } from '@react-navigation/native';
   
   const CartScreen = () => {
     // const isFocused = useIsFocused();
-      const { credential } = useContext(CredentialContext);
+    const { credential } = useContext(CredentialContext);
     const noteRef = useRef<TextInput>(null); 
     const dispatch = useAppDispatch();
     const cartData = useAppSelector(state => state.cart);
@@ -225,7 +226,8 @@ import LoadingModal from "../../components/Common/LoadingModal";
             disabled={cartData.loading || !cartData.data.cartItems.length}
             className={`${
               cartData.loading || !cartData.data.cartItems.length
-              ? "bg-gray-300 text-black" : "bg-primary text-txtwhite"
+                ? "bg-gray-300 text-black"
+                : "bg-primary text-txtwhite"
             } px-2 py-3 my-1 rounded-md items-center justify-center`}
           >
             <Text className="text-txtwhite font-bold">Đặt hàng</Text>
