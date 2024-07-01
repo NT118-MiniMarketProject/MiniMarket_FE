@@ -1,35 +1,36 @@
+import "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import auth from "@react-native-firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Tabs from "./components/Common/Tabs";
-import WelcomeScreen from "./screens/WelcomeScreen";
-import { Provider } from "react-redux";
-import { store } from "./store";
-import CategoriesScreen from "./screens/CategoriesScreen";
-import DrawerHeader from "./components/Common/DrawerHeader";
-import { RootSiblingParent } from "react-native-root-siblings";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
+import "react-native-gesture-handler";
+import { MenuProvider } from "react-native-popup-menu";
+import "react-native-reanimated";
+import { RootSiblingParent } from "react-native-root-siblings";
+import { Provider } from "react-redux";
+import DrawerHeader from "./components/Common/DrawerHeader";
+import Header from "./components/Common/Header";
+import Tabs from "./components/Common/Tabs";
 import {
   CredentialContext,
   CredentialType,
 } from "./contexts/CredentialContext";
-import auth from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import "react-native-reanimated";
-import "react-native-gesture-handler";
-import ProductListScreen from "./screens/ProductListScreen";
-import { RootStackParamList } from "./utils/types";
-import Header from "./components/Common/Header";
-import { MenuProvider } from "react-native-popup-menu";
-import SearchScreen from "./screens/SearchScreen";
-import ProductSearchScreen from "./screens/ProductSearchScreen";
+import CategoriesScreen from "./screens/CategoriesScreen";
 import ProductDetailScreen from "./screens/ProductDetail/ProductDetailScreen";
-import { View } from "moti";
-import ResultModal from "./components/Common/ResultModal";
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+import ProductListScreen from "./screens/ProductListScreen";
+import ProductSearchScreen from "./screens/ProductSearchScreen";
+import SearchScreen from "./screens/SearchScreen";
+import { store } from "./store";
+import { RootStackParamList } from "./utils/types";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AdminStackScreen from "./screens/stacks/AdminStackScreen";
 
 export default function App() {
+  const Stack = createNativeStackNavigator<RootStackParamList>();
+
   const [appIsReady, setAppIsReady] = useState(false);
   const [credential, setCredential] = useState<CredentialType | null>(null);
 
@@ -49,7 +50,8 @@ export default function App() {
         setAppIsReady(true);
       }
     };
-    checkCredential();
+    // checkCredential();
+    // console.log(">>> check credential run", { credential });
   }, []);
 
   //Thiết lập kết nối đến firebase auth
@@ -61,10 +63,14 @@ export default function App() {
   // Handle user state changes
   function onAuthStateChanged(user: any) {
     // console.log(">>> USER STATE CHANGE: ", user);
-    user
-      ? setCredential({ provider: "firebase", user: user })
-      : setCredential(null);
+    if (credential?.provider === "firebase") {
+      user
+        ? setCredential({ provider: "firebase", user: user })
+        : setCredential(null);
+    }
+
     if (initializing) setInitializing(false);
+    // console.log(">>> onAuthStateChanged run", { credential });
   }
 
   //Lưu credential vào AsyncStorage mỗi khi credential được cập nhật
@@ -87,61 +93,71 @@ export default function App() {
   }
 
   return (
-    // adding comment now or here 
-    <CredentialContext.Provider value={{ credential, setCredential }}>
-      <RootSiblingParent>
-        <MenuProvider>
-          <NavigationContainer>
-            <Provider store={store}>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
-                <Stack.Screen name="Tabs" component={Tabs} />
-                <Stack.Screen
-                  name="SearchScreen"
-                  component={SearchScreen}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="CategoriesScreen"
-                  component={CategoriesScreen}
-                  options={{
-                    headerShown: true,
-                    header: (props) => <DrawerHeader />,
-                  }}
-                />
-                <Stack.Screen
-                  name="ProductListScreen"
-                  component={ProductListScreen}
-                  options={{
-                    headerShown: true,
-                    header: (props) => <Header />,
-                  }}
-                />
-                <Stack.Screen
-                  name="ProductSearchScreen"
-                  component={ProductSearchScreen}
-                  options={{
-                    headerShown: true,
-                    header: (props) => <Header />,
-                  }}
-                />
-                <Stack.Screen
-                  name="ProductDetailScreen"
-                  component={ProductDetailScreen}
-                  options={{
-                    headerShown: true,
-                    header: (props) => <Header />,
-                  }}
-                />
-              </Stack.Navigator>
-            </Provider>
-          </NavigationContainer>
-          {/* Modal */}
-          
-        </MenuProvider>
-      </RootSiblingParent>
-    </CredentialContext.Provider>
+    <Provider store={store}>
+      <CredentialContext.Provider value={{ credential, setCredential }}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheetModalProvider>
+            <RootSiblingParent>
+              <MenuProvider>
+                <NavigationContainer>
+                  <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+                    <Stack.Screen name="Tabs" component={Tabs} />
+                    <Stack.Screen
+                      name="SearchScreen"
+                      component={SearchScreen}
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="CategoriesScreen"
+                      component={CategoriesScreen}
+                      options={{
+                        headerShown: true,
+                        header: (props) => <DrawerHeader />,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="ProductListScreen"
+                      component={ProductListScreen}
+                      options={{
+                        headerShown: true,
+                        header: (props) => <Header />,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="ProductSearchScreen"
+                      component={ProductSearchScreen}
+                      options={{
+                        headerShown: true,
+                        header: (props) => <Header />,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="ProductDetailScreen"
+                      component={ProductDetailScreen}
+                      options={{
+                        headerShown: true,
+                        header: (props) => <Header />,
+                      }}
+                    />
+                    {/* Admin */}
+                    <Stack.Screen
+                      name="AdminStackScreen"
+                      component={AdminStackScreen}
+                      options={{
+                        headerShown: false,
+                        header: (props) => <Header />,
+                      }}
+                    />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </MenuProvider>
+            </RootSiblingParent>
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </CredentialContext.Provider>
+    </Provider>
   );
 }

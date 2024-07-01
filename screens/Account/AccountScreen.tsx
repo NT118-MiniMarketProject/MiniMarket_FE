@@ -1,24 +1,13 @@
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Linking,
-} from "react-native";
-import React, { useContext, useState } from "react";
+import React from "react";
+import { Linking, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../utils/types";
-import { CredentialContext } from "../../contexts/CredentialContext";
-import Toast, { ToastOptions } from "react-native-root-toast";
-import { Colors, toastConfig } from "../../components/styles";
 import Panel from "../../components/Account/Panel";
 import PanelItem from "../../components/Account/PanelItem";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 
 const AccountScreen = ({ navigation, route }: any) => {
-  // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation1 = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const phone = "0359924897";
 
@@ -66,6 +55,13 @@ const AccountScreen = ({ navigation, route }: any) => {
           onPress={() => console.log("Pressed!")}
         />
       </Panel>
+      {/* Temporary */}
+      <TouchableOpacity className="bg-primary text-txtwhite text-center mt-2 px-3 py-2" onPress={() => {
+        navigation.navigate("AdminStackScreen")
+        
+      }}>
+        <Text>Di chuyển tới trang admin</Text>
+      </TouchableOpacity>
     </View>
   );
 };

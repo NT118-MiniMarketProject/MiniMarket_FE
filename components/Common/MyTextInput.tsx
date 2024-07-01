@@ -1,10 +1,10 @@
 import React from "react";
-import { View, TouchableOpacity, Keyboard } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   Colors,
+  Icon,
   InputVerticalSeparator,
   StyledTextInput,
-  Icon,
 } from "../styles";
 
 export const ICON = {

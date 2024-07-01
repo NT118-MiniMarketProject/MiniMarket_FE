@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 
 const KeyboardAvoidingWrapper = ({
   children,

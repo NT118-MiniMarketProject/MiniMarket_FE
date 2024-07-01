@@ -28,6 +28,12 @@ type RootStackParamList = {
   };
   CartStackScreen: undefined;
 
+
+  // Admin
+  AdminStackScreen: undefined;
+  AddProductForm: undefined;
+  ListProductAdmin: undefined;
+
   // ProductListScreen: undefined;
 };
 

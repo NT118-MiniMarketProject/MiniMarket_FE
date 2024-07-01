@@ -1,20 +1,16 @@
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Product from "../Common/Product";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import {
-  categoryGroupInterface,
   categoryGroupBEInterface,
   dummyCategoryGroup,
   dummyProduct,
-  ngrok,
-  productHomeInterface,
   productHomeBEInterface,
   tenmien,
 } from "../../utils";
-import axios from "axios";
-import HomeProductBlock from "./HomeProductBlock";
 import ProductBlockSkeleton from "../Common/ProductBlockSkeleton";
 import { Colors } from "../styles";
+import HomeProductBlock from "./HomeProductBlock";
 
 export default function HomeProducts() {
   const [categoryGroups, setCategoryGroups] = useState<

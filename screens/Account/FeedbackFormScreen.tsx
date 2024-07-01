@@ -1,37 +1,29 @@
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
+import { Formik, FormikProps } from "formik";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
 } from "react-native";
-import React from "react";
-import Breadcrumb from "../../components/Common/Breadcrumb";
-import SafeView from "../../components/Common/SafeView";
-import { Formik, FormikProps } from "formik";
-import {
-  StyledButton,
-  GradientButtonTextContainer,
-  StyledButtonText,
-  Colors,
-  toastConfig,
-  ErrorText,
-  StyledTextInput,
-  TextInputContainer,
-} from "../../components/styles";
-import { ActivityIndicator } from "react-native";
-import { Keyboard } from "react-native";
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useFocusEffect } from "@react-navigation/native";
-import Toast, { ToastOptions } from "react-native-root-toast";
-import KeyboardAvoidingWrapper from "../../components/Common/KeyboardAvoidingWrapper";
 import { ScrollView } from "react-native-gesture-handler";
-import CustomInput from "../../components/Common/CustomInput";
+import Toast, { ToastOptions } from "react-native-root-toast";
 import * as Yup from "yup";
-import RadioItem from "../ProductDetail/RadioItem";
+import Breadcrumb from "../../components/Common/Breadcrumb";
+import CustomInput from "../../components/Common/CustomInput";
 import RadioButton from "../../components/Common/RadioButton";
-import axios from "axios";
+import {
+  Colors,
+  ErrorText,
+  GradientButtonTextContainer,
+  StyledButton,
+  StyledButtonText,
+  toastConfig,
+} from "../../components/styles";
 
 const errorMsg = "Uiii, có lỗi rồi. Vui lòng thử lại sau";
 
@@ -104,7 +96,7 @@ const FeedbackFormScreen = ({ navigation, route }: any) => {
         formikRef.current?.resetForm();
       })
       .catch((err) => {
-        console.log(err);
+        console.log(">>> FeedbackFormScreen ERR:", err);
         Toast.show(errorMsg, toastConfig as ToastOptions);
       })
       .finally(() => setSubmitting(false));
