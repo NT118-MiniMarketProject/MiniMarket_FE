@@ -1,19 +1,19 @@
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { tenmien } from "../../../utils";
+import { defaultAvt, logout } from "../../../utils/functions";
+import { Colors } from "../../../components/styles";
 
 
 interface userState {
   loading: boolean;
   error: string;
   data: {
-    id: number,
-    cartId:number,
+    address?: string,
+    avater?: string,
     email:string,
-    fullname: string,
+    name: string,
     phone: string,
-    address: string,
-    isLoggedIn: boolean
   }
 }
 
@@ -22,11 +22,11 @@ export const loginUser = createAsyncThunk(
   "userSlice/loginUser",
   async ({email, password} : {email:string, password:string}) => {
     try {
-      const response = await axios.post(`${tenmien}/api/dangnhap`, {
+      const response = await axios.post(`${tenmien}/auth/login`, {
         email,
         password,
       });
-      return response.data;
+      return response.data.user;
     } catch (err) {
       throw err;
     }
@@ -72,31 +72,34 @@ export const signupUser = createAsyncThunk("userSlice/signupUser", async ({email
 export const updateUser = createAsyncThunk(
   "userSlice/updateUser",
   async ({
-    id,
-    email,
-    phone,
-    fullname,
-    address
+    name,
+    address,
+    avater
   }: {
-    id:number,
-    email: string;
-    phone: string;
-    fullname: string;
-    address: string
+    name: string,
+    address?: string | null,
+    avater?: string | null,
   }) => {
     try {
-      const response = await axios.put(`${tenmien}/api/taikhoan/${id}/capnhat`, {
-        email,
-        phone,
-        fullname,
-        address
-      });
+      const response = 
+        await axios.post(`${tenmien}/user`, {name, address, avater})
+                  .then(res => res.data);
       return response.data;
     } catch (err) {
       throw err;
     }
   }
 );
+
+export const getUserInfo = createAsyncThunk("userSlice/getUserInfo", async () => {
+  try {
+    // {{URL}}/user/showMe
+    const res = await axios.get(`${tenmien}/user/showMe`).then(res => res.data);
+    return res.data;
+  }catch (err) {
+    throw err;
+  }
+})
 
 
 
@@ -121,21 +124,24 @@ const initialState: userState = {
   loading: false,
   error: "",
   data: {
-    id: 0,
-    cartId:0,
+    address: undefined,
+    avater: undefined,
     email: "",
-    fullname: "",
+    name: "",
     phone: "",
-    address: "",
-    isLoggedIn:false,
   },
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    clearState: (state, action) => {
+      state.data = initialState.data;
+    }
+  },
   extraReducers: (builder) => {
+
     // Login
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
@@ -144,12 +150,13 @@ const userSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
-      document.cookie = `userId=${action.payload?.id}`;
+      // document.cookie = `userId=${action.payload?.id}`;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
       state.error = "Sai tên tài khoản hoặc mật khẩu";
     });
+
     // Check Login
     builder.addCase(checkLogin.pending, (state) => {
       state.loading = true;
@@ -181,18 +188,38 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = "Lỗi đăng ký";
     });
-    // Update
+
+    // Update user info (*)
     builder.addCase(updateUser.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.data = {...state.data, ...action.payload};
+      if(!state.data.avater)
+        state.data.avater = defaultAvt(state.data.name);
     });
     builder.addCase(updateUser.rejected, (state, action) => {
       state.loading = false;
       state.error = "Cập nhật không thành công";
+    });
+
+    // Get user info (*)
+    builder.addCase(getUserInfo.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(getUserInfo.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+      if(!state.data.avater)
+        state.data.avater = defaultAvt(state.data.name);
+        
+    });
+    builder.addCase(getUserInfo.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Lấy thông tin người dùng thất bại!";
     });
   },
 });

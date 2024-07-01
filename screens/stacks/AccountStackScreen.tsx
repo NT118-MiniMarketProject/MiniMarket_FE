@@ -13,11 +13,9 @@ import NewPasswordScreen from "../Account/Authen/NewPasswordScreen";
 import FeedbackFormScreen from "../Account/FeedbackFormScreen";
 import AccountScreenAfterLogin from "../Account/AccountScreenAfterLogin";
 
-const AccountStack = createStackNavigator();
-
 const AccountStackScreen: React.FC = () => {
   const { credential } = useContext(CredentialContext);
-
+  const AccountStack = createStackNavigator();
   const authenHeaderOptions = {
     headerStyle: {
       backgroundColor: "transparent",
@@ -37,7 +35,10 @@ const AccountStackScreen: React.FC = () => {
 
   return credential ? (
     // Đã đăng nhập
-    <AccountStack.Navigator initialRouteName="AccountScreenAfterLogin">
+    <AccountStack.Navigator
+      initialRouteName="AccountScreenAfterLogin"
+      screenOptions={{ headerShown: false }}
+    >
       <AccountStack.Screen
         name="AccountScreenAfterLogin"
         component={AccountScreenAfterLogin}
@@ -47,6 +48,11 @@ const AccountStackScreen: React.FC = () => {
         name="AccountInfo"
         component={AccountInfoScreen}
         options={{ presentation: "modal" }}
+      />
+      <AccountStack.Screen
+        name="FeedbackFormScreen"
+        component={FeedbackFormScreen}
+        options={{ headerShown: false }}
       />
     </AccountStack.Navigator>
   ) : (

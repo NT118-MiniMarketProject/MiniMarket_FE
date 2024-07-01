@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Formik } from "formik";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Keyboard, View } from "react-native";
+import Toast, { ToastOptions } from "react-native-root-toast";
+import * as Yup from "yup";
+import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
+import MyTextInput, { ICON } from "../../../components/Common/MyTextInput";
 import {
+  Colors,
+  ErrorText,
   FormContainer,
+  GradientButtonTextContainer,
   InnerContainer,
   PageLogo,
   PageTitle,
-  StyledContainer,
-  TextInputContainer,
-  Colors,
   StyledButton,
   StyledButtonText,
-  GradientButtonTextContainer,
-  toastConfig,
-  ErrorText,
+  StyledContainer,
   SubTitle,
+  TextInputContainer,
+  toastConfig,
 } from "../../../components/styles";
-import { Formik, FormikProps } from "formik";
-import { View, Keyboard, ActivityIndicator } from "react-native";
-import MyTextInput, { ICON } from "../../../components/Common/MyTextInput";
-import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
-import axios from "axios";
-import Toast, { ToastOptions } from "react-native-root-toast";
-import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()

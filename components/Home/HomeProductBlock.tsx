@@ -1,19 +1,17 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
-import React, { ReactElement, useEffect, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   categoryGroupInterface,
   dummyProduct,
-  ngrok,
   productHomeBEInterface,
   productHomeInterface,
   tenmien,
 } from "../../utils";
-import axios from "axios";
-import Toast, { ToastOptions } from "react-native-root-toast";
-import { Icon, toastConfig } from "../styles";
 import Product from "../Common/Product";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import ProductSkeleton from "../Common/ProductSkeleton";
+import { Icon } from "../styles";
 
 const defaultErrMsg = "Ops! There's something wrong, try again later";
 

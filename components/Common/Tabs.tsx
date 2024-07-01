@@ -1,31 +1,28 @@
-import React from "react";
 import {
-  Feather,
   AntDesign,
-  MaterialCommunityIcons,
+  Feather,
   Ionicons,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Header from "./Header";
-import HomeStackScreen from "../../screens/stacks/HomeStackScreen";
-import AccountStackScreen from "../../screens/stacks/AccountStackScreen";
-import { getTabBarVisibility } from "../../utils/functions";
 import {
   getFocusedRouteNameFromRoute,
   useNavigation,
 } from "@react-navigation/native";
-import DealStackScreen from "../../screens/stacks/DealStackScreen";
-import CartStackScreen from "../../screens/stacks/CartStackScreen";
-import TestScreen from "../../screens/TestScreen";
-import ProductSearchScreen from "../../screens/ProductSearchScreen";
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../utils/types";
+import { createStackNavigator } from "@react-navigation/stack";
 import { View } from "moti";
+import React from "react";
+import TestScreen from "../../screens/TestScreen";
+import AccountStackScreen from "../../screens/stacks/AccountStackScreen";
+import CartStackScreen from "../../screens/stacks/CartStackScreen";
+import HomeStackScreen from "../../screens/stacks/HomeStackScreen";
+import { getTabBarVisibility } from "../../utils/functions";
+import { RootStackParamList } from "../../utils/types";
+import Header from "./Header";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
