@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -25,6 +26,7 @@ import { store } from "./store";
 import { RootStackParamList } from "./utils/types";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AdminStackScreen from "./screens/stacks/AdminStackScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -137,6 +139,15 @@ export default function App() {
                       component={ProductDetailScreen}
                       options={{
                         headerShown: true,
+                        header: (props) => <Header />,
+                      }}
+                    />
+                    {/* Admin */}
+                    <Stack.Screen
+                      name="AdminStackScreen"
+                      component={AdminStackScreen}
+                      options={{
+                        headerShown: false,
                         header: (props) => <Header />,
                       }}
                     />

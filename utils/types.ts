@@ -26,6 +26,12 @@ type RootStackParamList = {
     id: number
   };
 
+
+  // Admin
+  AdminStackScreen: undefined;
+  AddProductForm: undefined;
+  ListProductAdmin: undefined;
+
   // ProductListScreen: undefined;
 };
 
