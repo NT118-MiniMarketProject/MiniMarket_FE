@@ -27,7 +27,8 @@ module.exports = {
         black: "#5C595B", //chỉ là màu đen
         error: '#cc0000', //màu đỏ của error
         placeholder: "#adacad",
-        trieugreen: "#33B87C"
+        trieugreen: "#33B87C",
+        trieugreen2: "#46A679",
       },
       gradientColors: {
         primary: ["#0A773D", "#5CA927"],
