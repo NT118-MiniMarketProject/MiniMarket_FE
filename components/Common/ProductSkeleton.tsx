@@ -1,6 +1,6 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
 import { Skeleton } from "moti/skeleton";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 export default function ProductSkeleton() {
   const colorMode: "light" | "dark" = "light";

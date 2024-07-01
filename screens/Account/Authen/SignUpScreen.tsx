@@ -1,42 +1,39 @@
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
+import { Formik, FormikProps } from "formik";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
+  Keyboard,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Toast, { ToastOptions } from "react-native-root-toast";
+import * as Yup from "yup";
+import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
+import MyTextInput, { ICON } from "../../../components/Common/MyTextInput";
+import {
+  Colors,
+  ErrorText,
   FormContainer,
+  GradientButtonTextContainer,
   InnerContainer,
   PageLogo,
   PageTitle,
-  StyledContainer,
-  TextInputContainer,
-  TextLink,
-  Colors,
+  Redirect,
   StyledButton,
   StyledButtonText,
-  Redirect,
+  StyledContainer,
   SubTitle,
-  GradientButtonTextContainer,
+  TextInputContainer,
+  TextLink,
   toastConfig,
-  ErrorText,
 } from "../../../components/styles";
-import { StatusBar } from "expo-status-bar";
-import { Formik, FormikProps } from "formik";
-import {
-  TouchableOpacity,
-  Text,
-  ScrollView,
-  View,
-  Keyboard,
-  ActivityIndicator,
-} from "react-native";
-import MyTextInput, { ICON } from "../../../components/Common/MyTextInput";
-import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../utils/types";
-import axios from "axios";
-import Toast, { ToastOptions } from "react-native-root-toast";
-import * as Yup from "yup";
 
 const domain = "https://minimarket-be.onrender.com";
-const defaultErrMsg = "Ops! There's something wrong, try again later";
+const defaultErrMsg = "Đăng ký tài khoản không thành công";
 
 const signUpValidationSchema = Yup.object().shape({
   name: Yup.string().required("Tên người dùng bắt buộc nhập"),
@@ -102,8 +99,9 @@ const SignUpScreen = ({ navigation }: any) => {
       }
     } catch (err) {
       // console.error('>>> Error: ', err);
-      let msg = (err as any).response.data.msg ?? defaultErrMsg;
-      Toast.show(msg, toastConfig as ToastOptions);
+      let msg;
+      // msg = (err as any).response.data.msg;
+      Toast.show(msg ?? defaultErrMsg, toastConfig as ToastOptions);
     } finally {
       setSubmitting(false);
     }
@@ -200,6 +198,7 @@ const SignUpScreen = ({ navigation }: any) => {
                             value={values.name}
                             setFieldValue={setFieldValue}
                             error={errors.name && touched.name ? true : false}
+                            autoCapitalize="words"
                           />
                         </TextInputContainer>
                         <ErrorText

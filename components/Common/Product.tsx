@@ -1,16 +1,12 @@
-import { Text, View, Image, Pressable, TouchableOpacity } from "react-native";
-import React from "react";
-import { priceFormatter, productHomeInterface } from "../../utils";
-import { Colors, Icon } from "../styles";
-import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { priceFormatter, productHomeInterface } from "../../utils";
 import { RootStackParamList } from "../../utils/types";
 import { addToCart } from "../../store/features/Cart/cartSlice";
 import { useAppDispatch } from "../../store";
-
-
-
+import { Colors, Icon } from "../styles";
 
 const Product = ({
   id,
@@ -23,7 +19,8 @@ const Product = ({
   rating,
   numOfRatings,
 }: productHomeInterface) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
   return (
     <View
@@ -31,16 +28,19 @@ const Product = ({
       style={{ height: 274 }}
     >
       <View className="flex-1">
-        <TouchableOpacity className="w-full h-full" onPress={() => {
-          navigation.navigate("ProductDetailScreen", {id});
-          // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
-          //   console.log(res);
-          //   if (res.payload){
-          //     alert("Them thanh cong ")
-          //   }
-          //   else alert("Them that bai")
-          // });
-        }}>
+        <TouchableOpacity
+          className="w-full h-full"
+          onPress={() => {
+            navigation.navigate("ProductDetailScreen", { id });
+            // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
+            //   console.log(res);
+            //   if (res.payload){
+            //     alert("Them thanh cong ")
+            //   }
+            //   else alert("Them that bai")
+            // });
+          }}
+        >
           {/* Thumbnail */}
           <Image
             source={{ uri: thumbnail }}

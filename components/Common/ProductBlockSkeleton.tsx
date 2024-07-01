@@ -1,8 +1,8 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
 import { Skeleton } from "moti/skeleton";
-import ProductSkeleton from "./ProductSkeleton";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { Colors } from "../styles";
+import ProductSkeleton from "./ProductSkeleton";
 
 export default function ProductBlockSkeleton() {
   const colorMode: "light" | "dark" = "light";

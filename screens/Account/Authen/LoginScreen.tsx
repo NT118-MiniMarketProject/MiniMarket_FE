@@ -1,54 +1,55 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useContext,
-} from "react";
-import {
-  FormContainer,
-  InputVerticalSeparator,
-  InnerContainer,
-  PageLogo,
-  PageTitle,
-  StyledContainer,
-  TextInputContainer,
-  TextLink,
-  Colors,
-  StyledButton,
-  StyledButtonText,
-  ThirdPartyLogo,
-  ThirdPartyLogoContainer,
-  Redirect,
-  SubTitle,
-  GradientButtonTextContainer,
-  toastConfig,
-  Icon,
-  ErrorText,
-} from "../../../components/styles";
-import { StatusBar } from "expo-status-bar";
-import { Formik, FormikProps } from "formik";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  ScrollView,
-  Keyboard,
-  ActivityIndicator,
-} from "react-native";
-import Separator from "../../../components/Common/Separator";
-import MyTextInput, { ICON } from "../../../components/Common/MyTextInput";
-import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
-import axios from "axios";
-import Toast, { ToastOptions } from "react-native-root-toast";
-import { useFocusEffect } from "@react-navigation/native";
-import { CredentialContext } from "../../../contexts/CredentialContext";
 import auth from "@react-native-firebase/auth";
 import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
+import { Formik, FormikProps } from "formik";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  ActivityIndicator,
+  Keyboard,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Toast, { ToastOptions } from "react-native-root-toast";
 import * as Yup from "yup";
+import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
+import MyTextInput, { ICON } from "../../../components/Common/MyTextInput";
+import Separator from "../../../components/Common/Separator";
+import {
+  Colors,
+  ErrorText,
+  FormContainer,
+  GradientButtonTextContainer,
+  Icon,
+  InnerContainer,
+  InputVerticalSeparator,
+  PageLogo,
+  PageTitle,
+  Redirect,
+  StyledButton,
+  StyledButtonText,
+  StyledContainer,
+  SubTitle,
+  TextInputContainer,
+  TextLink,
+  ThirdPartyLogo,
+  ThirdPartyLogoContainer,
+  toastConfig,
+} from "../../../components/styles";
+import { CredentialContext } from "../../../contexts/CredentialContext";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { getUserInfo } from "../../../store/features/Auth/userSlice";
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
@@ -76,10 +77,12 @@ const loginValidationSchema = Yup.object().shape({
 const LoginScreen = ({ navigation, route }: any) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginBtnDisable, setLoginBtnDisable] = useState(true);
-  const { setCredential } = useContext(CredentialContext);
+  const { credential, setCredential } = useContext(CredentialContext);
   const [isSubmitting, setSubmitting] = useState(false);
   const [isSigningInGoogle, setIsSigningInGoogle] = useState(false);
   const [isSigningInFacebook, setIsSigningInFacebook] = useState(false);
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector((state) => state.user);
 
   const formikRef = useRef<FormikProps<any>>(null);
 
@@ -163,7 +166,7 @@ const LoginScreen = ({ navigation, route }: any) => {
         Toast.show(defaultErrMsg, toastConfig as ToastOptions);
       }
     } catch (err) {
-      console.warn(">>> Error: ", err);
+      // console.warn(">>> Error: ", err);
       let msg = (err as any).response?.data?.msg ?? defaultErrMsg;
       Toast.show(msg, toastConfig as ToastOptions);
     } finally {
@@ -171,6 +174,11 @@ const LoginScreen = ({ navigation, route }: any) => {
     }
   };
   // END email/password sign in
+
+  // useEffect(() => console.log(">>> UserState: ", userState), [userState]);
+  useEffect(() => {
+    if (credential) dispatch(getUserInfo());
+  }, [credential]);
 
   return (
     <KeyboardAvoidingWrapper>
