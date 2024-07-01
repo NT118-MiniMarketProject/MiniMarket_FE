@@ -3,18 +3,19 @@ import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Image 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dropdown } from 'react-native-element-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { RootStackParamList } from '../../utils/types';
-import { launchImageLibrary } from 'react-native-image-picker';
-type AddProductFormRouteProp = RouteProp<RootStackParamList, 'AddProductForm'>;
-type AddProductFormNavigationProp = StackNavigationProp<RootStackParamList, 'AddProductForm'>;
+import { ImageLibraryOptions, MediaType, launchImageLibrary } from 'react-native-image-picker';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-interface AddProductFormProps {
-  route: AddProductFormRouteProp;
-  navigation: AddProductFormNavigationProp;
-}
+// type AddProductFormRouteProp = RouteProp<RootStackParamList, 'AddProductForm'>;
+// type AddProductFormNavigationProp = StackNavigationProp<RootStackParamList, 'AddProductForm'>;
+
+// export interface AddProductFormProps {
+//   route: AddProductFormRouteProp;
+//   navigation: AddProductFormNavigationProp;
+// }
 
 interface Product {
   product_id: string;
@@ -31,70 +32,61 @@ interface Product {
   is_feature: boolean | null;
 }
 
-const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation }) => {
-
-
-
-
+const AddProductForm: React.FC = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const route = useRoute();
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState('');
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const selectImage = () => {
-    const options = {
-      mediaType: 'photo',
+    const options: ImageLibraryOptions = {
+      mediaType: "photo" as MediaType,
     };
     launchImageLibrary(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log("User cancelled image picker");
       } else if (response.errorMessage) {
-        console.log('ImagePicker Error: ', response.errorMessage);
+        console.log("ImagePicker Error: ", response.errorMessage);
       } else if (response.assets && response.assets.length > 0) {
-        setImageUri(response.assets[0].uri);
+        // setImageUri(response?.assets[0].uri);
       }
     });
+
+    const uploadImage = async () => {
+      if (!imageUri) {
+        return;
+      }
+      setUploading(true);
+      setUploadStatus("");
+
+      const formData = new FormData();
+      const file = {
+        uri: imageUri,
+        type: "image/jpeg",
+        name: "photo.jpg",
+      };
+      formData.append("image", file as any);
+
+      try {
+        const response = await axios.post("YOUR_SERVER_UPLOAD_URL", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        setUploadStatus("Upload successful!");
+      } catch (error) {
+        console.error(error);
+        setUploadStatus("Upload failed!");
+      } finally {
+        setUploading(false);
+      }
+    };
+
   };
 
-  const uploadImage = async () => {
-    if (!imageUri) {
-      return;
-    }
-    setUploading(true);
-    setUploadStatus('');
-
-    const formData = new FormData();
-    formData.append('image', {
-      uri: imageUri,
-      type: 'image/jpeg',
-      name: 'photo.jpg',
-    });
-
-    try {
-      const response = await axios.post('YOUR_SERVER_UPLOAD_URL', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setUploadStatus('Upload successful!');
-    } catch (error) {
-      console.error(error);
-      setUploadStatus('Upload failed!');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-
-
-
-
-
-
-
-
-
-  const { product } = route.params;
-
+  const { product } = route.params as any;
   const [product1, setProduct1] = useState<Product>({
     product_id: product.product_id,
     thumbnail: product.thumbnail,
@@ -109,17 +101,18 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
     is_visible: product.is_visible,
     is_feature: product.is_feature,
   });
-
   const [brands, setBrands] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await axios.get('https://minimarket-be.onrender.com/api/v1/brand');
+        const response = await axios.get(
+          "https://minimarket-be.onrender.com/api/v1/brand"
+        );
         setBrands(response.data.data);
       } catch (error) {
-        console.error('Error fetching brands:', error);
+        console.error("Error fetching brands:", error);
       }
     };
 
@@ -129,43 +122,50 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://minimarket-be.onrender.com/api/v1/category');
+        const response = await axios.get(
+          "https://minimarket-be.onrender.com/api/v1/category"
+        );
         setCategories(response.data.categories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       }
     };
 
     fetchCategories();
   }, []);
 
-  const handleChange = (field: keyof Product, value: string | number | boolean | null) => {
+  const handleChange = (
+    field: keyof Product,
+    value: string | number | boolean | null
+  ) => {
     setProduct1({ ...product1, [field]: value });
   };
 
   const updateProduct = async () => {
-    const accessToken = await AsyncStorage.getItem('accessToken');
+    const accessToken = await AsyncStorage.getItem("accessToken");
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     };
     try {
-      const response = await axios.put(`https://minimarket-be.onrender.com/api/v1/product/${product1.product_id}`, product1, config);
-      console.log('Product updated successfully:', response.data);
-    alert('Cập nhật sản phẩm thành công');
-    navigation.navigate('ListProductAdmin');
-
+      const response = await axios.put(
+        `https://minimarket-be.onrender.com/api/v1/product/${product1.product_id}`,
+        product1,
+        config
+      );
+      console.log("Product updated successfully:", response.data);
+      alert("Cập nhật sản phẩm thành công");
+      navigation.navigate("ListProductAdmin");
     } catch (error) {
-      console.error('Error updating product:', error);
-      alert('Cập nhật sản phẩm thất bại');
+      console.error("Error updating product:", error);
+      alert("Cập nhật sản phẩm thất bại");
     }
   };
 
   const handleSubmit = () => {
     updateProduct();
   };
-
   return (
     <View style={{ flex: 1 }} className="mt-10">
       <ScrollView style={styles.scrollView}>
@@ -173,13 +173,15 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
           <Text style={styles.header}>Thông tin sản phẩm</Text>
 
           <View style={styles.formContainer}>
-
-            <Image source={{ uri: product1.thumbnail }} className="w-16 h-16 mr-2" />
+            <Image
+              source={{ uri: product1.thumbnail }}
+              className="w-16 h-16 mr-2"
+            />
             <Text style={styles.formLabel}>Tên sản phẩm</Text>
             <TextInput
               style={styles.input}
               value={product1.name}
-              onChangeText={(text) => handleChange('name', text)}
+              onChangeText={(text) => handleChange("name", text)}
               placeholder="Tên sản phẩm"
             />
 
@@ -187,7 +189,9 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
             <TextInput
               style={styles.input}
               value={product1.reg_price.toString()}
-              onChangeText={(text) => handleChange('reg_price', parseInt(text) || 0)}
+              onChangeText={(text) =>
+                handleChange("reg_price", parseInt(text) || 0)
+              }
               placeholder="Giá sản phẩm"
               keyboardType="numeric"
             />
@@ -195,8 +199,10 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
             <Text style={styles.formLabel}>Số lượng</Text>
             <TextInput
               style={styles.input}
-              value={product1.quantity?.toString() || ''}
-              onChangeText={(text) => handleChange('quantity', parseInt(text) || 0)}
+              value={product1.quantity?.toString() || ""}
+              onChangeText={(text) =>
+                handleChange("quantity", parseInt(text) || 0)
+              }
               placeholder="Số lượng"
               keyboardType="numeric"
             />
@@ -204,8 +210,10 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
             <Text style={styles.formLabel}>Phần trăm giảm giá</Text>
             <TextInput
               style={styles.input}
-              value={product1.discount_percent?.toString() || ''}
-              onChangeText={(text) => handleChange('discount_percent', parseInt(text) || null)}
+              value={product1.discount_percent?.toString() || ""}
+              onChangeText={(text) =>
+                handleChange("discount_percent", parseInt(text) || null)
+              }
               placeholder="Phần trăm giảm giá"
               keyboardType="numeric"
             />
@@ -214,7 +222,7 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
             <TextInput
               style={styles.input}
               value={product1.unit}
-              onChangeText={(text) => handleChange('unit', text)}
+              onChangeText={(text) => handleChange("unit", text)}
               placeholder="Đơn vị"
             />
 
@@ -224,7 +232,7 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
               valueField="brand_id"
               data={brands}
               value={product1.br_id}
-              onChange={(item) => handleChange('br_id', item.brand_id)}
+              onChange={(item) => handleChange("br_id", item.brand_id)}
               style={styles.input}
               placeholder="Chọn thương hiệu"
             />
@@ -235,7 +243,7 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
               valueField="category_id"
               data={categories}
               value={product1.c_id}
-              onChange={(item) => handleChange('c_id', item.category_id)}
+              onChange={(item) => handleChange("c_id", item.category_id)}
               style={styles.input}
               placeholder="Chọn danh mục"
             />
@@ -243,41 +251,56 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
             <Text style={styles.formLabel}>Mô tả</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
-              value={product1.description || ''}
-              onChangeText={(text) => handleChange('description', text)}
+              value={product1.description || ""}
+              onChangeText={(text) => handleChange("description", text)}
               placeholder="Mô tả"
               multiline
               numberOfLines={4}
             />
 
-<View style={styles.checkboxContainer}>
+            <View style={styles.checkboxContainer}>
               <TouchableOpacity
                 style={styles.checkbox}
-                onPress={() => setProduct1(prevProduct1 => ({ ...prevProduct1, is_visible: !prevProduct1.is_visible }))}
+                onPress={() =>
+                  setProduct1((prevProduct1) => ({
+                    ...prevProduct1,
+                    is_visible: !prevProduct1.is_visible,
+                  }))
+                }
               >
                 <Icon
-                  name={product1.is_visible ? 'check-square' : 'square-o'}
+                  name={product1.is_visible ? "check-square" : "square-o"}
                   size={20}
-                  color={product1.is_visible ? 'green' : '#ccc'}
+                  color={product1.is_visible ? "green" : "#ccc"}
                 />
                 <Text style={styles.checkboxLabel}>Hiển thị</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.checkbox}
-                onPress={() => setProduct1(prevProduct1 => ({ ...prevProduct1, is_feature: !prevProduct1.is_feature }))}
+                onPress={() =>
+                  setProduct1((prevProduct1) => ({
+                    ...prevProduct1,
+                    is_feature: !prevProduct1.is_feature,
+                  }))
+                }
               >
                 <Icon
-                  name={product1.is_feature ? 'check-square' : 'square-o'}
+                  name={product1.is_feature ? "check-square" : "square-o"}
                   size={20}
-                  color={product1.is_feature ? 'blue' : '#ccc'}
+                  color={product1.is_feature ? "blue" : "#ccc"}
                 />
                 <Text style={styles.checkboxLabel}>Nổi bật</Text>
               </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
-              <Icon name="plus" size={20} color="white" style={styles.buttonIcon} />
+              <Icon
+                name="plus"
+                size={20}
+                color="white"
+                style={styles.buttonIcon}
+              />
               <Text style={styles.buttonText}>Chỉnh sửa sản phẩm</Text>
             </TouchableOpacity>
           </View>
@@ -286,6 +309,7 @@ const AddProductFormScreen: React.FC<AddProductFormProps> = ({ route, navigation
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -355,5 +379,4 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
-
-export default AddProductFormScreen;
+export default AddProductForm;

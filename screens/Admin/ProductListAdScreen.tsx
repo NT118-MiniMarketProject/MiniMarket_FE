@@ -37,7 +37,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 
 
-const ListProductAdminScreen:  React.FC<{ navigation: any }> = ({ navigation }) => {
+const ProductListAdScreen:  React.FC<{ navigation: any }> = ({ navigation }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -153,7 +153,7 @@ const ListProductAdminScreen:  React.FC<{ navigation: any }> = ({ navigation }) 
         </View>
 
         <TouchableOpacity className="bg-slate-300" style={styles.addButton} onPress={() => {/* Add navigation logic for adding product */}}>
-          <Icon name="pencil" size={20} color="green" style={styles.icon} />
+          <Icon name="pencil" size={20} color="green" style={styles.icon1} />
           <Text style={styles.buttonText}>Thêm sản phẩm</Text>
         </TouchableOpacity>
 
@@ -192,7 +192,7 @@ const ListProductAdminScreen:  React.FC<{ navigation: any }> = ({ navigation }) 
                 <View style={styles.container} className="mt-4">
                 <TouchableOpacity style={styles.actionButton} onPress={() => handleEditPress(product)}>
   <Icon name="pencil" size={20} color="green" style={styles.icon} />
-  <Text style={styles.text}>Chỉnh sửa sản phẩm</Text>
+  <Text style={styles.text1}>Chỉnh sửa sản phẩm</Text>
 </TouchableOpacity>
                 </View>
                 </View>
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-  text: {
+  text1: {
     fontSize: 14,
     color: '#808080',
   },
@@ -310,9 +310,9 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     color: '#808080',
   },
-  icon: {
+  icon1: {
         marginRight: 5, 
-      },
+  },
 });
 
-export default ListProductAdminScreen;
+export default ProductListAdScreen;

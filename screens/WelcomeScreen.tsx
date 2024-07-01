@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../utils/types';
+// import {useis}
 
 const WelcomeScreen: React.FC = () => {
   // StackNavigation<RootStack..> uses to specify the type of navigation obj,

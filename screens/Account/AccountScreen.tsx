@@ -16,9 +16,11 @@ import Toast, { ToastOptions } from "react-native-root-toast";
 import { Colors, toastConfig } from "../../components/styles";
 import Panel from "../../components/Account/Panel";
 import PanelItem from "../../components/Account/PanelItem";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 
 const AccountScreen = ({ navigation, route }: any) => {
-  // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation1 = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const phone = "0359924897";
 
@@ -66,6 +68,13 @@ const AccountScreen = ({ navigation, route }: any) => {
           onPress={() => console.log("Pressed!")}
         />
       </Panel>
+      {/* Temporary */}
+      <TouchableOpacity className="bg-primary text-txtwhite text-center mt-2 px-3 py-2" onPress={() => {
+        navigation.navigate("AdminStackScreen")
+        
+      }}>
+        <Text>Di chuyển tới trang admin</Text>
+      </TouchableOpacity>
     </View>
   );
 };

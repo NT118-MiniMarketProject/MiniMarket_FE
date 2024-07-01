@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tabs from "./components/Common/Tabs";
@@ -16,7 +17,6 @@ import {
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import "react-native-reanimated";
-import "react-native-gesture-handler";
 import ProductListScreen from "./screens/ProductListScreen";
 import { RootStackParamList } from "./utils/types";
 import Header from "./components/Common/Header";
@@ -24,6 +24,7 @@ import { MenuProvider } from "react-native-popup-menu";
 import SearchScreen from "./screens/SearchScreen";
 import ProductSearchScreen from "./screens/ProductSearchScreen";
 import ProductDetailScreen from "./screens/ProductDetail/ProductDetailScreen";
+import AdminStackScreen from "./screens/stacks/AdminStackScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -85,14 +86,14 @@ export default function App() {
   }
 
   return (
-    // adding comment now or here 
+    // adding comment now or here
     <CredentialContext.Provider value={{ credential, setCredential }}>
       <RootSiblingParent>
         <MenuProvider>
           <NavigationContainer>
             <Provider store={store}>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+                <Stack.Screen name="Welcome" component={WelcomeScreen} />
                 <Stack.Screen name="Tabs" component={Tabs} />
                 <Stack.Screen
                   name="SearchScreen"
@@ -130,6 +131,16 @@ export default function App() {
                   component={ProductDetailScreen}
                   options={{
                     headerShown: true,
+                    header: (props) => <Header />,
+                  }}
+                />
+
+                {/* Admin */}
+                <Stack.Screen
+                  name="AdminStackScreen"
+                  component={AdminStackScreen}
+                  options={{
+                    headerShown: false,
                     header: (props) => <Header />,
                   }}
                 />
