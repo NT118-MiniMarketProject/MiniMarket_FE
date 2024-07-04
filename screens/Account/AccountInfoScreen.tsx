@@ -10,7 +10,6 @@ import * as ImagePicker from "expo-image-picker";
 import { Formik } from "formik";
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -43,9 +42,8 @@ import {
   StyledButtonText,
   toastConfig,
 } from "../../components/styles";
-import { CredentialContext } from "../../contexts/CredentialContext";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { getUserInfo, updateUser } from "../../store/features/Auth/userSlice";
+import { updateUser } from "../../store/features/Auth/userSlice";
 import { tenmien } from "../../utils";
 import { defaultAvt } from "../../utils/functions";
 
@@ -96,7 +94,6 @@ const wardData = [
 // const FormData = global.FormData;
 
 const AccountInfoScreen = ({ navigation, route }: any) => {
-  const { credential } = useContext(CredentialContext);
   // const {
   //   name = "",
   //   userId = "",
@@ -124,10 +121,6 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const userState = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getUserInfo());
-  }, []);
 
   const userAddress =
     userState.data.address?.split(", ") ?? Array(4).fill(null);
@@ -333,18 +326,19 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
                             position: "absolute",
                             top: -165,
                             left: (panelWidth - 150) / 2,
+                            borderWidth: 2.5,
+                            borderColor: "#cbd5e1",
                           }}
+                          className="rounded-full"
                         >
                           <Image
                             source={{ uri: values.avater ?? placeholderAvt }}
                             style={{
                               width: 150,
                               height: 150,
-                              borderWidth: 2.5,
-                              borderColor: "#cbd5e1",
-                              borderRadius: 99,
                             }}
-                            resizeMode="contain"
+                            className="rounded-full"
+                            resizeMode="cover"
                           />
                           <View className="bg-gray-300 rounded-full absolute w-9 h-9 items-center justify-center border-2 border-slate-300 bottom-2 right-2 opacity-95">
                             <FontAwesome6

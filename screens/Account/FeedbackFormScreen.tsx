@@ -50,6 +50,8 @@ const FeedbackFormScreen = ({ navigation, route }: any) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const [isSubmitting, setSubmitting] = useState(false);
 
+  const { name, email, phone } = route.params;
+
   const formikRef = useRef<FormikProps<any>>(null);
   useFocusEffect(
     useCallback(() => {
@@ -108,9 +110,9 @@ const FeedbackFormScreen = ({ navigation, route }: any) => {
         initialValues={{
           feedback: "",
           gender: "Anh",
-          name: "",
-          phone: "",
-          email: "",
+          name: name,
+          phone: phone,
+          email: email,
         }}
         onSubmit={(values, { setFieldValue }) => {
           setSubmitting(true);

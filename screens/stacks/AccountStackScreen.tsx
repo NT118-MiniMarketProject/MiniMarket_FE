@@ -12,6 +12,8 @@ import EmailVerificationScreen from "../Account/Authen/EmailVerificationScreen";
 import NewPasswordScreen from "../Account/Authen/NewPasswordScreen";
 import FeedbackFormScreen from "../Account/FeedbackFormScreen";
 import AccountScreenAfterLogin from "../Account/AccountScreenAfterLogin";
+import OrderListScreen from "../Order/OrderListScreen";
+import OrderDetailScreen from "../Order/OrderDetailScreen";
 
 const AccountStackScreen: React.FC = () => {
   const { credential } = useContext(CredentialContext);
@@ -42,31 +44,43 @@ const AccountStackScreen: React.FC = () => {
       <AccountStack.Screen
         name="AccountScreenAfterLogin"
         component={AccountScreenAfterLogin}
-        options={{ headerShown: false }}
       />
       <AccountStack.Screen
-        name="AccountInfo"
+        name="AccountInfoScreen"
         component={AccountInfoScreen}
         options={{ presentation: "modal" }}
       />
       <AccountStack.Screen
         name="FeedbackFormScreen"
         component={FeedbackFormScreen}
-        options={{ headerShown: false }}
+        options={{ presentation: "modal" }}
+      />
+      <AccountStack.Screen
+        name="AccountNewPasswordScreen"
+        component={NewPasswordScreen}
+        options={{ presentation: "modal", ...authenHeaderOptions }}
+      />
+      <AccountStack.Screen
+        name="OrderListScreen"
+        component={OrderListScreen}
+        options={{ presentation: "modal" }}
+      />
+      <AccountStack.Screen
+        name="OrderDetailScreen"
+        component={OrderDetailScreen}
       />
     </AccountStack.Navigator>
   ) : (
     // Chưa đăng nhập
-    <AccountStack.Navigator initialRouteName="AccountScreen">
-      <AccountStack.Screen
-        name="AccountScreen"
-        component={AccountScreen}
-        options={{ headerShown: false }}
-      />
+    <AccountStack.Navigator
+      initialRouteName="AccountScreen"
+      screenOptions={{ headerShown: false }}
+    >
+      <AccountStack.Screen name="AccountScreen" component={AccountScreen} />
       <AccountStack.Screen
         name="FeedbackFormScreen"
         component={FeedbackFormScreen}
-        options={{ headerShown: false }}
+        options={{ presentation: "modal" }}
       />
       <AccountStack.Screen
         name="AccountLoginScreen"
@@ -81,17 +95,17 @@ const AccountStackScreen: React.FC = () => {
       <AccountStack.Screen
         name="AccountForgotPasswordScreen"
         component={ForgotPasswordScreen}
-        options={{ presentation: "modal", ...authenHeaderOptions }}
+        options={{ ...authenHeaderOptions }}
       />
       <AccountStack.Screen
         name="AccountEmailVerificationScreen"
         component={EmailVerificationScreen}
-        options={{ presentation: "modal", ...authenHeaderOptions }}
+        options={{ ...authenHeaderOptions }}
       />
       <AccountStack.Screen
         name="AccountNewPasswordScreen"
         component={NewPasswordScreen}
-        options={{ presentation: "modal", ...authenHeaderOptions }}
+        options={{ ...authenHeaderOptions }}
       />
     </AccountStack.Navigator>
   );

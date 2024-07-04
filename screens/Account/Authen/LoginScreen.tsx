@@ -50,6 +50,7 @@ import {
 import { CredentialContext } from "../../../contexts/CredentialContext";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { getUserInfo } from "../../../store/features/Auth/userSlice";
+import { getExpiredCredentialTime } from "../../../utils/functions";
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
@@ -161,7 +162,11 @@ const LoginScreen = ({ navigation, route }: any) => {
       if (user) {
         Toast.show("Login successfully!", toastConfig as ToastOptions);
         // navigation.navigate('AccountScreen'); không cần navigate manual v nx vì stack được tạo lại tự động nên sẽ mặc định vào trang này
-        setCredential({ provider: "password", user: user });
+        setCredential({
+          provider: "password",
+          user: user,
+          expiredTime: getExpiredCredentialTime(new Date().getTime()),
+        });
       } else {
         Toast.show(defaultErrMsg, toastConfig as ToastOptions);
       }
