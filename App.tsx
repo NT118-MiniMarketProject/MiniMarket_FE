@@ -27,6 +27,7 @@ import { RootStackParamList } from "./utils/types";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AdminStackScreen from "./screens/stacks/AdminStackScreen";
+import WelcomeScreen from "./screens/WelcomeScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -50,7 +51,7 @@ export default function App() {
         setAppIsReady(true);
       }
     };
-    // checkCredential();
+    checkCredential();
     // console.log(">>> check credential run", { credential });
   }, []);
 
@@ -101,7 +102,7 @@ export default function App() {
               <MenuProvider>
                 <NavigationContainer>
                   <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+                    <Stack.Screen name="Welcome" component={WelcomeScreen} />
                     <Stack.Screen name="Tabs" component={Tabs} />
                     <Stack.Screen
                       name="SearchScreen"
