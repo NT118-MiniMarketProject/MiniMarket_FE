@@ -1,25 +1,29 @@
-import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosResponse, AxiosError } from "axios";
-import { tenmien } from "../../../utils";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { orderInterface, tenmien } from "../../../utils";
 
-interface orderListData {
-  id: number,
-  status: string,
-  total: number,
-  date: string,
-  thumbnail: string,
-}
+// interface orderListData {
+//   id: number,
+//   status: string,
+//   total: number,
+//   date: string,
+//   thumbnail: string,
+// }
+
 interface orderListState {
   loading: boolean;
   error: string;
-  data: orderListData[];
+  data: orderInterface[];
 }
 
+// GetOrders
 export const fetchOrderList = createAsyncThunk(
   "orderListSlice/fetchOrderList",
-  async (userId: string) => {
+  async () => {
     try {
-      const response = await axios.get(tenmien + "/api/taikhoan/" + userId+"/donhang");
+      const response = await axios
+        .get(`${tenmien}/order`)
+        .then((res) => res.data);
       return response.data;
     } catch (err) {
       throw err;
@@ -27,19 +31,26 @@ export const fetchOrderList = createAsyncThunk(
   }
 );
 
-
 const initialState: orderListState = {
   loading: false,
   error: "",
   data: [],
+  // data: [dummyOrder as orderInterface,dummyOrder as orderInterface,dummyOrder as orderInterface,dummyOrder as orderInterface,dummyOrder as orderInterface,dummyOrder as orderInterface],
 };
 
 const orderListSlice = createSlice({
   name: "orderList",
   initialState,
-  reducers: {},
+  reducers: {
+    updateOrder: (state, action) => {
+      state.data = state.data.map((order) => {
+        if (order.order_id === action.payload.order_id) order = action.payload;
+        return order;
+      });
+    },
+  },
   extraReducers: (builder) => {
-    // Fetch Cart
+    // getOrders
     builder.addCase(fetchOrderList.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -52,7 +63,6 @@ const orderListSlice = createSlice({
       state.loading = false;
       state.error = action.error.message || "Some thing wrong";
     });
-    
   },
 });
 

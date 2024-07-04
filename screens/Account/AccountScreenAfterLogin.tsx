@@ -1,29 +1,25 @@
-import auth from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  Linking,
+  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  Linking,
 } from "react-native";
 import Toast, { ToastOptions } from "react-native-root-toast";
+import Panel from "../../components/Account/Panel";
+import PanelItem from "../../components/Account/PanelItem";
+import LoadingModal from "../../components/Common/LoadingModal";
 import { Colors, toastConfig } from "../../components/styles";
 import { CredentialContext } from "../../contexts/CredentialContext";
-import PanelItem from "../../components/Account/PanelItem";
-import Panel from "../../components/Account/Panel";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { getUserInfo, userActions } from "../../store/features/Auth/userSlice";
 import { tenmien } from "../../utils";
 import { logout } from "../../utils/functions";
-import { ScrollView } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { userActions } from "../../store/features/Auth/userSlice";
 
-const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
 
 const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
@@ -51,45 +47,42 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
     }
   };
 
-  // useEffect(
-  //   () => console.log(">>> UserState after login: ", userState),
-  //   [userState]
-  // );
-
-  const showMeOnPress = async () => {
-    // {{URL}}/user/showMe
-    const data = await axios
-      .get(`${tenmien}/user/showMe`)
-      .then((res) => res.data.data);
-    console.log(">>> Show me: ", data);
-  };
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
 
   return (
     <View className="flex-1">
+      {userState.loading && <LoadingModal />}
       <ScrollView>
         <Panel title="Thông tin cá nhân">
           <View className="flex-row p-2 items-center">
-            <View className="border-gray-300 border-1.2 rounded-full">
+            <View className="rounded-full border-gray-300 border-1.2">
               <Image
                 source={{ uri: user.avater ?? defaultAvt }}
                 resizeMode="cover"
-                style={{ width: 42, height: 42 }}
+                style={{ width: 60, height: 60 }}
+                className="rounded-full"
               />
             </View>
             <Text className="ml-2 text-black">Khách hàng </Text>
-            <Text className="font-semibold">{name}</Text>
+            <Text className="font-semibold text-base">{name}</Text>
           </View>
           <PanelItem
             value="Sửa thông tin cá nhân"
             icon="user"
             caret
-            onPress={() => navigation.navigate("AccountInfo")}
+            onPress={() => navigation.navigate("AccountInfoScreen")}
           />
           <PanelItem
             value="Thay đổi mật khẩu"
             icon="lock"
             caret
-            onPress={() => navigation.navigate("AccountInfo")}
+            onPress={() =>
+              navigation.navigate("AccountNewPasswordScreen", {
+                email: user.email,
+              })
+            }
           />
           <PanelItem
             value="Địa chỉ nhận hàng"
@@ -98,10 +91,10 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
             onPress={() => "Địa chỉ nhận hàng"}
           />
           <PanelItem
-            value="Đơn hàng từng mua"
+            value="Lịch sử đơn hàng"
             icon="shopping-bag"
             caret
-            onPress={() => console.log("đơn hàng từng mua")}
+            onPress={() => navigation.navigate("OrderListScreen")}
           />
         </Panel>
 
@@ -117,7 +110,13 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
             value="Góp ý / Liên hệ"
             icon="mail"
             caret
-            onPress={() => navigation.navigate("FeedbackFormScreen")}
+            onPress={() =>
+              navigation.navigate("FeedbackFormScreen", {
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+              })
+            }
           />
           <PanelItem
             value="Tìm kiếm siêu thị"
