@@ -31,6 +31,7 @@ import LoadingModal from "./components/Common/LoadingModal";
 import AccoutScreenAfterLogin from "./screens/Account/AccountScreenAfterLogin";
 import { Text, View } from "react-native";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import { ToastProvider } from "react-native-toast-notifications";
 
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -111,62 +112,64 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <BottomSheetModalProvider>
             <RootSiblingParent>
-              <MenuProvider>
-                <NavigationContainer>
-                  <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
-                    <Stack.Screen name="Tabs" component={Tabs} />
-                    <Stack.Screen
-                      name="SearchScreen"
-                      component={SearchScreen}
-                      options={{
-                        headerShown: false,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="CategoriesScreen"
-                      component={CategoriesScreen}
-                      options={{
-                        headerShown: true,
-                        header: (props) => <DrawerHeader />,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="ProductListScreen"
-                      component={ProductListScreen}
-                      options={{
-                        headerShown: true,
-                        header: (props) => <Header />,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="ProductSearchScreen"
-                      component={ProductSearchScreen}
-                      options={{
-                        headerShown: true,
-                        header: (props) => <Header />,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="ProductDetailScreen"
-                      component={ProductDetailScreen}
-                      options={{
-                        headerShown: true,
-                        header: (props) => <Header />,
-                      }}
-                    />
-                    {/* Admin */}
-                    <Stack.Screen
-                      name="AdminStackScreen"
-                      component={AdminStackScreen}
-                      options={{
-                        headerShown: false,
-                        header: (props) => <Header />,
-                      }}
-                    />
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </MenuProvider>
+              <ToastProvider>
+                <MenuProvider>
+                  <NavigationContainer>
+                    <Stack.Navigator screenOptions={{ headerShown: false }}>
+                      {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+                      <Stack.Screen name="Tabs" component={Tabs} />
+                      <Stack.Screen
+                        name="SearchScreen"
+                        component={SearchScreen}
+                        options={{
+                          headerShown: false,
+                        }}
+                      />
+                      <Stack.Screen
+                        name="CategoriesScreen"
+                        component={CategoriesScreen}
+                        options={{
+                          headerShown: true,
+                          header: (props) => <DrawerHeader />,
+                        }}
+                      />
+                      <Stack.Screen
+                        name="ProductListScreen"
+                        component={ProductListScreen}
+                        options={{
+                          headerShown: true,
+                          header: (props) => <Header />,
+                        }}
+                      />
+                      <Stack.Screen
+                        name="ProductSearchScreen"
+                        component={ProductSearchScreen}
+                        options={{
+                          headerShown: true,
+                          header: (props) => <Header />,
+                        }}
+                      />
+                      <Stack.Screen
+                        name="ProductDetailScreen"
+                        component={ProductDetailScreen}
+                        options={{
+                          headerShown: true,
+                          header: (props) => <Header />,
+                        }}
+                      />
+                      {/* Admin */}
+                      <Stack.Screen
+                        name="AdminStackScreen"
+                        component={AdminStackScreen}
+                        options={{
+                          headerShown: false,
+                          header: (props) => <Header />,
+                        }}
+                      />
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </MenuProvider>
+              </ToastProvider>
             </RootSiblingParent>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>

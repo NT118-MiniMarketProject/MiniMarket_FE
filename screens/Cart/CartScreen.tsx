@@ -176,13 +176,17 @@ import { addNewOrder } from "../../store/features/Orders/orderSlice";
                       />
                     </View>
                     {/* Name */}
-                    <Text
-                      className="flex-1 text-12m text-gray-500"
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                    >
-                      {item.products.name}
-                    </Text>
+                    <TouchableOpacity className="flex-1 flex-row items-center" onPress={() => {
+                      navigation.navigate("ProductDetailScreen", { id: item.products.product_id });
+                    }} >
+                      <Text
+                        className="flex-1 text-12m text-gray-500"
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                      >
+                        {item.products.name}
+                      </Text>
+                    </TouchableOpacity>
                     {/* Price and quantity */}
                     <View className="flex-col items-end">
                       <Text className="font-bold text-14m">
