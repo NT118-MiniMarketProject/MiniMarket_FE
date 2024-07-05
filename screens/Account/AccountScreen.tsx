@@ -4,7 +4,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Panel from "../../components/Account/Panel";
 import PanelItem from "../../components/Account/PanelItem";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../utils/types";
 
 const AccountScreen = ({ navigation, route }: any) => {
   const navigation1 = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -56,10 +58,12 @@ const AccountScreen = ({ navigation, route }: any) => {
         />
       </Panel>
       {/* Temporary */}
-      <TouchableOpacity className="bg-primary text-txtwhite text-center mt-2 px-3 py-2" onPress={() => {
-        navigation.navigate("AdminStackScreen")
-        
-      }}>
+      <TouchableOpacity
+        className="bg-primary text-txtwhite text-center mt-2 px-3 py-2"
+        onPress={() => {
+          navigation.navigate("AdminStackScreen");
+        }}
+      >
         <Text>Di chuyển tới trang admin</Text>
       </TouchableOpacity>
     </View>

@@ -31,14 +31,14 @@ const Product = ({
         <TouchableOpacity
           className="w-full h-full"
           onPress={() => {
-            navigation.navigate("ProductDetailScreen", { id });
-            // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
-            //   console.log(res);
-            //   if (res.payload){
-            //     alert("Them thanh cong ")
-            //   }
-            //   else alert("Them that bai")
-            // });
+            // navigation.navigate("ProductDetailScreen", { id });
+            dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
+              console.log(res);
+              if (res.payload){
+                alert("Them thanh cong ")
+              }
+              else alert("Them that bai")
+            });
           }}
         >
           {/* Thumbnail */}

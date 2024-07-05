@@ -16,7 +16,7 @@ const Header = () => {
     const [text, setText] = useState('');
     const isFocused = useIsFocused();
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    const cartNumber = useAppSelector(state => state.cart.data.cartItems.length)
+    const cartNumber = useAppSelector(state => state.cart.data?.cartItems.length) || 0;
     useEffect(() => {
         setText('');
     },[])

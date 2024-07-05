@@ -1,18 +1,21 @@
 import {
-    ImageBackground,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    TextInput,
-    ScrollView,
-    ActivityIndicator,
-  } from "react-native";
-  import React, { useContext, useEffect, useRef } from 'react'
-  import { AntDesign } from "@expo/vector-icons";
-  import { useAppDispatch, useAppSelector } from '../../store';
-  import { fetchCart, updateQuantityCart } from '../../store/features/Cart/cartSlice';
-  import {  priceFormatter } from '../../utils';
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
+import React, { useContext, useEffect, useRef } from "react";
+import { AntDesign } from "@expo/vector-icons";
+import { useAppDispatch, useAppSelector } from "../../store";
+import {
+  fetchCart,
+  updateQuantityCart,
+} from "../../store/features/Cart/cartSlice";
+import { priceFormatter } from "../../utils";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -20,6 +23,8 @@ import { RootStackParamList } from "../../utils/types";
 import { CredentialContext } from "../../contexts/CredentialContext";
 import LoadingModal from "../../components/Common/LoadingModal";
 import ResultModal from "../../components/Common/ResultModal";
+import LoadingModal2 from "../../components/Common/LoadingModal2";
+import { getUserInfo } from "../../store/features/Auth/userSlice";
   
   // import { useIsFocused } from '@react-navigation/native';
   
@@ -29,6 +34,7 @@ import ResultModal from "../../components/Common/ResultModal";
     const noteRef = useRef<TextInput>(null); 
     const dispatch = useAppDispatch();
     const cartData = useAppSelector(state => state.cart);
+    const userData = useAppSelector(state => state.user);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     function handleIncrement(
       isUp: boolean,
@@ -47,7 +53,12 @@ import ResultModal from "../../components/Common/ResultModal";
     useEffect(() => {
       // if (isFocused){
         if(noteRef.current) noteRef.current.clear();
-        dispatch(fetchCart());
+        dispatch(fetchCart()).then((res) => {
+          // console.log(res);
+        });
+        if (credential){
+          dispatch(getUserInfo());
+        }
     },[])
     return credential ? (
       <View className="bg-gray-200 relative pt-12 pb-24">
@@ -69,16 +80,21 @@ import ResultModal from "../../components/Common/ResultModal";
             <Text className="font-bold text-13m">Giao đến</Text>
             <View className="flex-row items-center space-x-1 w-full">
               <Text
-                className="flex-1 text-12m text-gray-500"
+                className={`flex-1 text-12m text-gray-500 ${
+                  !userData?.data?.address ? "text-red-500" : ""
+                }`}
                 numberOfLines={2}
                 ellipsizeMode="tail"
               >
-                Siêu thị Đường Ngueyn Van Linh, P.Long Thanh, thi xa Tan chau,
-                tinh An Giang, Canh the gioi di odong dau cho tan chau nen di
-                theo huogn nay de duoc nhanh
+                {userData.data?.address ? userData.data.address :
+                  "Chưa cập nhật địa chỉ, vui lòng cập nhật trong thông tin cá nhân"}
               </Text>
-              <TouchableOpacity className="bg-primary h-10 w-10 flex-row items-center justify-center rounded-md ">
-                <Text className="text-txtwhite">Đổi</Text>
+              <TouchableOpacity className="bg-primary h-10 w-10 flex-row items-center justify-center rounded-md " onPress={() => {
+                navigation.navigate("AccountStackScreen");
+              }}>
+                <Text className={`text-txtwhite`}>
+                  {userData?.data.address ? "Đổi" : "Cập nhật"}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -88,102 +104,95 @@ import ResultModal from "../../components/Common/ResultModal";
               <Text className="font-bold text-13m mb-1">
                 Danh sách sản phẩm
               </Text>
-              {/* <TouchableOpacity>
-                <Text className="text-12m text-primary">Xóa tất cả</Text>
-              </TouchableOpacity> */}
             </View>
             <View className="w-full relative ">
-              {cartData.loading && <LoadingModal />}
-              {
-                // cartData.loading ? (
-                //   <View className="m-2" style={{ height: 300 }}>
-                //     <ActivityIndicator size={"large"} color={Colors.primary} />
-                //   </View>
-                // ) :
-                cartData?.data && cartData.data.cartItems.length ? (
-                  cartData.data.cartItems.map((item, index) => (
-                    <View
-                      className="flex-row relative items-center space-x-1 w-full mb-1"
-                      key={index}
-                    >
-                      {/* Image */}
-                      <View className="overflow-hidden relative bg-txtwhite p-1 w-20 h-20 rounded-sm border border-gray-100">
-                        {/* image */}
-                        <ImageBackground
-                          src={item.products.thumbnail}
-                          resizeMode="contain"
-                          style={{
-                            width: "100%",
-                            paddingTop: "100%",
-                          }}
-                        />
-                      </View>
-                      {/* Name */}
-                      <Text
-                        className="flex-1 text-12m text-gray-500"
-                        numberOfLines={2}
-                        ellipsizeMode="tail"
-                      >
-                        {item.products.name}
-                      </Text>
-                      {/* Price and quantity */}
-                      <View className="flex-col items-end">
-                        <Text className="font-bold text-14m">
-                          {priceFormatter(item.products.discount_price)}đ
-                        </Text>
-                        <Text className="text-12m line-through text-gray-400">
-                          {priceFormatter(item.products.reg_price)}đ
-                        </Text>
-                        {/* Quantity */}
-                        <View className="flex-row space-x-2 items-center">
-                          <TouchableOpacity
-                            className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                            onPress={() =>
-                              handleIncrement(
-                                false,
-                                item.quantity,
-                                item.cartItem.toString()
-                              )
-                            }
-                          >
-                            <AntDesign name="minus" size={17} color="black" />
-                          </TouchableOpacity>
-                          <Text className="text-13m text-gray-500">
-                            {item.quantity}
-                          </Text>
-                          <TouchableOpacity
-                            onPress={() =>
-                              handleIncrement(
-                                true,
-                                item.quantity,
-                                item.cartItem.toString()
-                              )
-                            }
-                            className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                          >
-                            <AntDesign name="plus" size={17} color="black" />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                      {/* Delete items  */}
-                      <TouchableOpacity
-                        className="absolute w-6 h-6 flex-row items-center justify-center left-0 top-0 rounded-full bg-gray-200"
-                        onPress={() => {
-                          handleDelete(item.cartItem.toString());
+              {cartData.data && cartData.data.cartItems.length ? (
+                cartData.data.cartItems.map((item, index) => (
+                  <View
+                    className="flex-row relative items-center space-x-1 w-full mb-1"
+                    key={index}
+                  >
+                    {/* Image */}
+                    <View className="overflow-hidden relative bg-txtwhite p-1 w-20 h-20 rounded-sm border border-gray-100">
+                      {/* image */}
+                      <ImageBackground
+                        src={item.products.thumbnail}
+                        resizeMode="contain"
+                        style={{
+                          width: "100%",
+                          paddingTop: "100%",
                         }}
-                      >
-                        <AntDesign name="close" size={17} color="black" />
-                      </TouchableOpacity>
+                      />
                     </View>
-                  ))
-                ) : (
-                  <View className="w-full h-20 flex-row items-center justify-center">
-                    <Text className="text-13m text-gray-500 text-center">
-                      Không có sản phẩm nào trong giỏ hàng
+                    {/* Name */}
+                    <Text
+                      className="flex-1 text-12m text-gray-500"
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                    >
+                      {item.products.name}
                     </Text>
+                    {/* Price and quantity */}
+                    <View className="flex-col items-end">
+                      <Text className="font-bold text-14m">
+                        {priceFormatter(item.products.discount_price)}đ
+                      </Text>
+                      <Text className="text-12m line-through text-gray-400">
+                        {priceFormatter(item.products.reg_price)}đ
+                      </Text>
+                      {/* Quantity */}
+                      <View className="flex-row space-x-2 items-center">
+                        <TouchableOpacity
+                          className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
+                          onPress={() =>
+                            handleIncrement(
+                              false,
+                              item.quantity,
+                              item.cartItem.toString()
+                            )
+                          }
+                        >
+                          <AntDesign name="minus" size={17} color="black" />
+                        </TouchableOpacity>
+                        <Text className="text-13m text-gray-500">
+                          {item.quantity}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleIncrement(
+                              true,
+                              item.quantity,
+                              item.cartItem.toString()
+                            )
+                          }
+                          className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
+                        >
+                          <AntDesign name="plus" size={17} color="black" />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    {/* Delete items  */}
+                    <TouchableOpacity
+                      className="absolute w-6 h-6 flex-row items-center justify-center left-0 top-0 rounded-full bg-gray-200"
+                      onPress={() => {
+                        handleDelete(item.cartItem.toString());
+                      }}
+                    >
+                      <AntDesign name="close" size={17} color="black" />
+                    </TouchableOpacity>
                   </View>
-                )
-              }
+                ))
+              ) : (
+                <View className="w-full h-20 flex-col items-center justify-center">
+                  <Text className="text-13m text-gray-500 text-center">
+                    Không có sản phẩm nào trong giỏ hàng
+                  </Text>
+                  <TouchableOpacity className="border rounded-md bg-primary px-2 py-1 mt-2" onPress={() => navigation.navigate("HomeStackScreen")}>
+                    <Text className="text-center text-txtwhite font-bold">Mua sắm ngay</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {cartData.loading ? <LoadingModal2 /> : <></>}
             </View>
           </View>
           {/* Thogn tin thanh toan */}
@@ -223,9 +232,15 @@ import ResultModal from "../../components/Common/ResultModal";
             </Text>
           </View>
           <TouchableOpacity
-            disabled={cartData.loading || !cartData.data.cartItems.length}
+            disabled={
+              cartData.loading ||
+              !cartData.data?.cartItems?.length ||
+              !userData?.data.address
+            }
             className={`${
-              cartData.loading || !cartData.data.cartItems.length
+              (cartData.loading ||
+              (cartData.data && !cartData.data.cartItems.length) ||
+              !userData?.data.address)
                 ? "bg-gray-300 text-black"
                 : "bg-primary text-txtwhite"
             } px-2 py-3 my-1 rounded-md items-center justify-center`}

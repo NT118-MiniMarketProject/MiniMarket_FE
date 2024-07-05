@@ -1,4 +1,4 @@
-import "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
 import { RootSiblingParent } from "react-native-root-siblings";
@@ -22,11 +23,13 @@ import ProductDetailScreen from "./screens/ProductDetail/ProductDetailScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductSearchScreen from "./screens/ProductSearchScreen";
 import SearchScreen from "./screens/SearchScreen";
+import AdminStackScreen from "./screens/stacks/AdminStackScreen";
 import { store } from "./store";
 import { RootStackParamList } from "./utils/types";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import AdminStackScreen from "./screens/stacks/AdminStackScreen";
+import { getExpiredCredentialTime } from "./utils/functions";
+import LoadingModal from "./components/Common/LoadingModal";
+import AccoutScreenAfterLogin from "./screens/Account/AccountScreenAfterLogin";
+import { Text, View } from "react-native";
 import WelcomeScreen from "./screens/WelcomeScreen";
 
 export default function App() {
@@ -42,8 +45,12 @@ export default function App() {
   useEffect(() => {
     const checkCredential = async () => {
       try {
-        const value = await AsyncStorage.getItem("credential");
-        if (value) setCredential(JSON.parse(value));
+        const value = (await AsyncStorage.getItem("credential").then((data) => {
+          if (data !== null) return JSON.parse(data);
+          return null;
+        })) as CredentialType;
+        if (value && value.expiredTime > new Date().getTime())
+          setCredential(value);
       } catch (e) {
         console.warn(e);
       } finally {
@@ -66,8 +73,13 @@ export default function App() {
     // console.log(">>> USER STATE CHANGE: ", user);
     if (credential?.provider === "firebase") {
       user
-        ? setCredential({ provider: "firebase", user: user })
+        ? setCredential({
+            provider: "firebase",
+            user: user,
+            expiredTime: getExpiredCredentialTime(new Date().getTime()),
+          })
         : setCredential(null);
+      // user ? setCredential({provider: "firebase", user: })
     }
 
     if (initializing) setInitializing(false);
@@ -102,7 +114,7 @@ export default function App() {
               <MenuProvider>
                 <NavigationContainer>
                   <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                    {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
                     <Stack.Screen name="Tabs" component={Tabs} />
                     <Stack.Screen
                       name="SearchScreen"

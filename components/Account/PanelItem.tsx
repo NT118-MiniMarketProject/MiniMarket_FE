@@ -31,18 +31,18 @@ const PanelItem = ({
   disableBtn?: any;
 }) => {
   const item = (
-    <View className="p-2 flex-row justify-between">
+    <View className="px-2 py-3 flex-row justify-between">
       <View className="flex-row">
         {icon && (
           <View className="mr-3 justify-center">
             <Feather
               name={icon}
-              size={iconSize ?? 20}
+              size={iconSize ?? 22}
               color={iconColor ?? "#5C595B"}
             />
           </View>
         )}
-        <Text className="text-black text-sm" style={textStyle}>
+        <Text className="text-black text-base" style={textStyle}>
           {value}
         </Text>
         <View className="justify-center ml-1">{children}</View>

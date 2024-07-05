@@ -39,7 +39,7 @@ const NewPasswordScreen = ({ navigation, route }: any) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { email } = route.params;
-  console.log(">>> NewPassword: " + email);
+  // console.log(">>> NewPassword: " + email);
 
   const setPasswordVisibleHandler = () => {
     setPasswordVisible(!passwordVisible);
@@ -54,7 +54,12 @@ const NewPasswordScreen = ({ navigation, route }: any) => {
         "Mật khẩu đã được thiết lập lại thành công",
         toastConfig as ToastOptions
       );
-      navigation.navigate("AccountLoginScreen", { email });
+      const stackState = navigation.getState();
+      const isLogin = stackState.routes.some(
+        (route: any) => route.name === "AccountScreenAfterLogin"
+      );
+      if (isLogin) navigation.navigate("AccountScreenAfterLogin", { email });
+      else navigation.navigate("AccountLoginScreen", { email });
     } catch (error) {
       Toast.show(errorMsg, toastConfig as ToastOptions);
     } finally {

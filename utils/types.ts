@@ -31,6 +31,7 @@ type RootStackParamList = {
 
   // Admin
   AdminStackScreen: undefined;
+  AccountInfoScreen: undefined;
   AddProductForm: undefined;
   ListProductAdmin: undefined;
 

@@ -92,7 +92,6 @@ const Tabs = () => {
         component={MockScreen}
       />
 
-     
       <Tab.Screen
         name={"CartStackScreen"}
         options={{
@@ -130,7 +129,7 @@ const Tabs = () => {
         name={"AccountStackScreen"}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-          const arr = [
+          const authenScreens = [
             "AccountLoginScreen",
             "AccountSignUpScreen",
             "AccountForgotPasswordScreen",
@@ -138,8 +137,19 @@ const Tabs = () => {
             "TestScreen",
             "AccountNewPasswordScreen",
           ];
-          let tabBarVisible = arr.includes(routeName) ? "none" : "flex";
-          let headerVisible = arr.includes(routeName) ? false : true;
+          const noBottomTabScreens = [
+            "AccountInfoScreen",
+            "FeedbackFormScreen",
+            "OrderListScreen",
+            "OrderDetailScreen",
+          ];
+          let tabBarVisible =
+            authenScreens.includes(routeName) ||
+            noBottomTabScreens.includes(routeName)
+              ? "none"
+              : "flex";
+          let headerVisible = authenScreens.includes(routeName) ? false : true;
+
           return {
             tabBarIcon: ({ focused }) => (
               <Feather
