@@ -302,19 +302,19 @@ const ProductListScreen = ({ route }: ProductListScreenProps) => {
             // columnWrapperStyle={{ flex: 1 }}
             data={productList.data.products}
             renderItem={({ item, index }) => {
-              const newItem: productHomeInterface = {
-                id: parseInt(item.product_id),
-                thumbnail: item.thumbnail,
-                name: item.name,
-                reg_price: item.reg_price,
-                discount_price: item.discount_price,
-                discount_percent: item.discount_percent,
-                canonical: item.canonical,
-                rating: parseInt(item.rating),
-              };
+              // const newItem: productHomeInterface = {
+              //   id: parseInt(item.product_id),
+              //   thumbnail: item.thumbnail,
+              //   name: item.name,
+              //   reg_price: item.reg_price,
+              //   discount_price: item.discount_price,
+              //   discount_percent: item.discount_percent,
+              //   canonical: item.canonical,
+              //   rating: parseInt(item.rating),
+              // };
               return (
                 <View className="w-1/3 mb-1 px-0.5">
-                  <Product {...newItem} />
+                  <Product {...item} />
                 </View>
               );
             }}
@@ -361,9 +361,8 @@ const ProductListScreen = ({ route }: ProductListScreenProps) => {
             <Text className="font-bold mb-1">Chọn thương hiệu</Text>
             <View className="flex-row items-center space-x-1">
               {brandData.data.map((item) => (
-                <View className="w-1/5 h-12 px-1 mb-1">
+                <View className="w-1/5 h-12 px-1 mb-1" key={item.brand_id}>
                   <TouchableOpacity
-                    key={item.brand_id}
                     className={`w-full h-full border-none rounded-md border border-gray-200 ${
                       item.brand_id === tempParams.brandId
                         ? "border-primary border-2"
@@ -389,7 +388,7 @@ const ProductListScreen = ({ route }: ProductListScreenProps) => {
             <Text className="font-bold mb-1">Sắp xếp</Text>
             <View className="flex-row flex-wrap">
               {sortList.map((item) => (
-                <View className="w-1/2 mb-2 px-1">
+                <View className="w-1/2 mb-2 px-1" key={item.id}>
                   <TouchableOpacity
                     className={`h-12 border border-gray-200 rounded-sm flex-row items-center justify-center ${
                       item.query === tempParams.sort ? "border-primary" : ""

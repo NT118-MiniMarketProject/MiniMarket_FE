@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
 import React, { Children } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 const Panel = ({ title, children }: { title?: string; children: any }) => {
   const childrenCount = Children.count(children);

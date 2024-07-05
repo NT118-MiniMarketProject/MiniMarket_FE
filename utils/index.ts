@@ -74,13 +74,15 @@ export interface categoryGroupBEInterface {
   thumbnail: string;
 }
 
-export interface productInfoInterface extends productHomeInterface {
-  galleries: {
-    gallery_id: number;
-    thumbnail_gallery: string;
-    prod_gall_id: string;
-    sort: number;
-  }[];
+export interface productDetailInterface extends productHomeBEInterface {
+  galleries: productGalleryInterface[];
+}
+
+export interface productGalleryInterface {
+  gallery_id: number;
+  thumbnail_gallery: string;
+  prod_gall_id: string; //id của sản phẩm
+  sort: number;
 }
 
 export interface orderInterface {
@@ -118,6 +120,18 @@ interface productOrderInterface {
   name: string;
   reg_price: number;
   discount_price: number;
+}
+
+export interface productReviewInterface {
+  reviewId: number;
+  rating: string;
+  title: string;
+  comment: string | null;
+  created_at: string;
+  user_avater: string | null;
+  user_name: string;
+  userId: string;
+  productId: string;
 }
 
 // Functions
@@ -580,6 +594,228 @@ export const dummyProduct: productHomeBEInterface[] = [
     event_price: null,
     is_visible: "1",
     is_feature: "0",
+  },
+];
+
+export const dummyPoductDetail: productDetailInterface = {
+  product_id: "123",
+  thumbnail:
+    "https://cdn.tgdd.vn/Products/Images/8790/305707/bhx/sun-uc-ga-cp-500g-202304081432374341.jpg",
+  name: "Sụn ức gà C.P 500g",
+  reg_price: 59000,
+  discount_percent: 0,
+  discount_price: 59000,
+  quantity: 44,
+  unit: "khay",
+  canonical: "500g",
+  description:
+    "Sụn gà 500g được đóng gói và bảo quản theo những tiêu chuẩn nghiêm ngặt về vệ sinh và an toàn thực phẩm, đảm bảo về chất lượng, độ tươi và ngon của thực phẩm, xuất xứ rõ ràng. Sụn gà ăn có độ sựt, giòn còn thịt bám trên sụn thường dùng để chế biến món sụn gà lăn bột chiên giòn.",
+  created_at: "2023-11-28T06:58:24.000Z",
+  updated_at: "2024-07-03T09:41:15.436Z",
+  deleted: false,
+  rating: "5",
+  c_id: "3",
+  br_id: "2",
+  event_percent: null,
+  event_price: null,
+  is_visible: "1",
+  is_feature: "0",
+  galleries: [
+    {
+      gallery_id: 1143,
+      thumbnail_gallery:
+        "https://cdn.tgdd.vn/Products/Images/8790/305707/bhx/sun-uc-ga-cp-500g-202304081432374341.jpg",
+      prod_gall_id: "123",
+      sort: 1143,
+    },
+    {
+      gallery_id: 1144,
+      thumbnail_gallery:
+        "https://cdn.tgdd.vn/Products/Images/8790/305707/bhx/sun-uc-ga-cp-500g-202304081430448009.jpg",
+      prod_gall_id: "123",
+      sort: 1144,
+    },
+    {
+      gallery_id: 1145,
+      thumbnail_gallery:
+        "https://cdn.tgdd.vn/Products/Images/8790/305707/bhx/sun-uc-ga-cp-500g-202304081430453997.jpg",
+      prod_gall_id: "123",
+      sort: 1145,
+    },
+    {
+      gallery_id: 1146,
+      thumbnail_gallery:
+        "https://cdn.tgdd.vn/Products/Images/8790/305707/bhx/sun-uc-ga-cp-500g-202304081430469065.jpg",
+      prod_gall_id: "123",
+      sort: 1146,
+    },
+    {
+      gallery_id: 1147,
+      thumbnail_gallery:
+        "https://cdn.tgdd.vn/Products/Images/8790/305707/bhx/sun-uc-ga-cp-500g-202304081430471759.jpg",
+      prod_gall_id: "123",
+      sort: 1147,
+    },
+  ],
+};
+
+export const dummyProductRelevant: productHomeBEInterface[] = [
+  {
+    product_id: "103",
+    thumbnail:
+      "https://cdn.tgdd.vn/Products/Images/8790/314819/bhx/bo-cau-nguyen-con-235g-202309091633201427.jpg",
+    name: "Bồ câu nguyên con 235g",
+    reg_price: 99000,
+    discount_percent: 10,
+    discount_price: 89100,
+    quantity: 96,
+    unit: "con",
+    canonical: "235g",
+    description:
+      "Bồ câu nguyên con được làm sạch sẵn, khi mua về chỉ cần rửa sạch và mang đi chế biến thành nhiều món ăn ngon. Bồ câu là một trong những thực phẩm vô cùng dinh dưỡng, tốt cho sức khỏe,...",
+    created_at: "2023-11-28T05:59:36.000Z",
+    updated_at: "2023-12-23T08:23:54.000Z",
+    deleted: false,
+    rating: "5",
+    c_id: "3",
+    br_id: "1",
+    event_percent: null,
+    event_price: null,
+    is_visible: "1",
+    is_feature: "0",
+  },
+  {
+    product_id: "113",
+    thumbnail:
+      "https://cdn.tgdd.vn/Products/Images/8790/312248/bhx/ma-dui-ga-cp-500g-xuong-que-heo-nhap-khau-dong-lanh-500g-202308010932272542.jpg",
+    name: "Má đùi gà C.P 500g",
+    reg_price: 39500,
+    discount_percent: 0,
+    discount_price: 39500,
+    quantity: 75,
+    unit: "khay",
+    canonical: "500g",
+    description:
+      "Combo Má Đùi Gà CP 500G & xương que heo đông lạnh 500g là sản phẩm thích hợp cho mọi gia đình. Thịt gà, thịt heo là những nguyên liệu không thể thiếu trong mỗi bữa ăn, có thể chiên, kho, nấu súp,... giúp bữa ăn đa dạng và cung cấp đầy đủ dinh dưỡng cho cơ thể",
+    created_at: "2023-11-28T06:58:24.000Z",
+    updated_at: "2024-07-02T22:15:55.021Z",
+    deleted: false,
+    rating: "5",
+    c_id: "3",
+    br_id: "2",
+    event_percent: null,
+    event_price: null,
+    is_visible: "1",
+    is_feature: "0",
+  },
+  {
+    product_id: "115",
+    thumbnail:
+      "https://cdn.tgdd.vn/Products/Images/8790/312259/bhx/dui-toi-ga-cp-500g-xuong-que-heo-nhap-khau-dong-lanh-500g-202308011009319424.jpg",
+    name: "Đùi tỏi gà C.P 500g",
+    reg_price: 58000,
+    discount_percent: 0,
+    discount_price: 58000,
+    quantity: 70,
+    unit: "khay",
+    canonical: "500g",
+    description:
+      "Combo Đùi Tỏi Gà CP 500G & xương que heo đông lạnh 500g là nguyên liệu cần thiết cho mọi bữa ăn. Thịt gà, thịt heo cung cấp nhiều chất dinh dưỡng cho cơ thể. Có thể chế biến thịt theo nhiều cách như chiên, kho, nấu súp,.. giúp bữa ăn thêm đa dạng.",
+    created_at: "2023-11-28T06:58:24.000Z",
+    updated_at: "2024-07-03T09:45:57.555Z",
+    deleted: false,
+    rating: "5",
+    c_id: "3",
+    br_id: "2",
+    event_percent: null,
+    event_price: null,
+    is_visible: "1",
+    is_feature: "0",
+  },
+  {
+    product_id: "117",
+    thumbnail:
+      "https://cdn.tgdd.vn/Products/Images/8790/239602/bhx/long-ga-cp-500g-202309231804393522.jpg",
+    name: "Lòng gà C.P 500g",
+    reg_price: 42500,
+    discount_percent: 0,
+    discount_price: 42500,
+    quantity: 76,
+    unit: "khay",
+    canonical: "500g",
+    description:
+      "Lòng gà được sản xuất trên dây chuyền khép kín, an toàn vệ sinh thực phẩm. Lòng gà tươi sạch C.P khay 500g gồm gan, tim, mề là bộ phận ngon và nhiều chất dinh dưỡng của con gà. Sản phẩm có 2 mã QR để khách hàng có thể truy xuất nguồn gốc thịt, vô cùng an tâm",
+    created_at: "2023-11-28T06:58:24.000Z",
+    updated_at: "2023-12-23T08:23:54.000Z",
+    deleted: false,
+    rating: "5",
+    c_id: "3",
+    br_id: "2",
+    event_percent: null,
+    event_price: null,
+    is_visible: "1",
+    is_feature: "0",
+  },
+  {
+    product_id: "119",
+    thumbnail:
+      "https://cdn.tgdd.vn/Products/Images/8781/226835/bhx/chan-gio-heo-truoc-cp-khay-500g-1-3-mieng-202203251635367321.jpg",
+    name: "Chân gà C.P 500g",
+    reg_price: 38000,
+    discount_percent: 0,
+    discount_price: 38000,
+    quantity: 88,
+    unit: "khay",
+    canonical: "500g",
+    description:
+      "Chân giò heo trước CP đạt các tiêu chuẩn về an toàn toàn thực phẩm. Giò heo (có móng hoặc không) săn chắc, thịt có sự kết hợp với gân mỡ nên ăn béo ngậy và thơm, thích hợp để hầm canh, nấu các món nước,... Có thể dùng điện thoại quét mã QR trên tem sản phẩm để kiểm tra nguồn gốc.",
+    created_at: "2023-11-28T06:58:24.000Z",
+    updated_at: "2023-12-23T08:23:54.000Z",
+    deleted: false,
+    rating: "5",
+    c_id: "3",
+    br_id: "2",
+    event_percent: null,
+    event_price: null,
+    is_visible: "1",
+    is_feature: "0",
+  },
+];
+
+export const dummyProductReview: productReviewInterface[] = [
+  {
+    reviewId: 1,
+    rating: "5",
+    title: "Gà ngon",
+    comment: "Gà ăn rất ngon, thịt chắc",
+    created_at: "2024-05-17T03:21:42.700Z",
+
+    userId: "f5d843e6-7a78-454e-a825-f3f2e26f25e5",
+    productId: "999",
+    user_name: "Thanh Linh",
+    user_avater: null,
+  },
+  {
+    reviewId: 2,
+    rating: "4",
+    title: "Gà rất tươi",
+    comment: null,
+    created_at: "2024-05-17T03:21:42.700Z",
+    userId: "f5d843e6-7a78-454e-a825-f3f2e26f25e5",
+    productId: "999",
+    user_name: "Gia Kiệt",
+    user_avater: null,
+  },
+  {
+    reviewId: 3,
+    rating: "1",
+    title: "Gà hơi bé",
+    comment: "Gà nhỏ, ít thật, chỉ toàn xương",
+    created_at: "2024-05-17T03:21:42.700Z",
+    userId: "f5d843e6-7a78-454e-a825-f3f2e26f25e5",
+    productId: "999",
+    user_name: "Đăng Khoa",
+    user_avater: null,
   },
 ];
 

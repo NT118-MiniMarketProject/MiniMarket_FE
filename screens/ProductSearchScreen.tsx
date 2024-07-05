@@ -3,14 +3,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-
   ActivityIndicator,
   FlatList,
 } from "react-native";
-import {
-  useIsFocused,
-  useNavigation,
-} from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { RootStackParamList } from "../utils/types";
 import {
@@ -40,7 +36,6 @@ type ProductListScreenProps = NativeStackScreenProps<
 >;
 
 const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
-
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const categoryData = useAppSelector((state) => state.category);
@@ -49,8 +44,8 @@ const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
   const [flag, setFlag] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [fetchParams, setFetchParams] = useState<{
-    isSale: boolean,
-    search: string,
+    isSale: boolean;
+    search: string;
     sort: string;
   }>({
     isSale: false,
@@ -105,7 +100,9 @@ const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
       dispatch(clearData());
       currentPage = 1;
     }
-    let query = `search=${fetchParams.search.trim()}&sort=${fetchParams.sort}&page=${currentPage}`;
+    let query = `search=${fetchParams.search.trim()}&sort=${
+      fetchParams.sort
+    }&page=${currentPage}`;
     if (fetchParams.isSale) query += `keyword=sales`;
     console.log(query);
     dispatch(fetchCategoryProducts(query));
@@ -119,9 +116,9 @@ const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
   }, [isFocusced]);
 
   useEffect(() => {
-    if (flag){
-        setPage(1);
-        fetchingProductList(true);
+    if (flag) {
+      setPage(1);
+      fetchingProductList(true);
     }
   }, [fetchParams.isSale, fetchParams.search, fetchParams.sort]);
 
@@ -146,9 +143,9 @@ const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
             <AntDesign name="caretleft" size={20} color="#515764" />
           </TouchableOpacity>
           <Text className="font-bold ms-2 text-12m whitespace-nowrap">
-            {fetchParams.isSale ? "Khuyến mãi" : 
-            `Tìm thấy ${productList.data?.totalProducts} kết quả với "${fetchParams?.search}"`
-            }
+            {fetchParams.isSale
+              ? "Khuyến mãi"
+              : `Tìm thấy ${productList.data?.totalProducts} kết quả với "${fetchParams?.search}"`}
           </Text>
         </View>
 
@@ -199,19 +196,19 @@ const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
             // columnWrapperStyle={{ flex: 1 }}
             data={productList.data.products}
             renderItem={({ item, index }) => {
-              const newItem: productHomeInterface = {
-                id: parseInt(item.product_id),
-                thumbnail: item.thumbnail,
-                name: item.name,
-                reg_price: item.reg_price,
-                discount_price: item.discount_price,
-                discount_percent: item.discount_percent,
-                canonical: item.canonical,
-                rating: parseInt(item.rating),
-              };
+              // const newItem: productHomeInterface = {
+              //   id: parseInt(item.product_id),
+              //   thumbnail: item.thumbnail,
+              //   name: item.name,
+              //   reg_price: item.reg_price,
+              //   discount_price: item.discount_price,
+              //   discount_percent: item.discount_percent,
+              //   canonical: item.canonical,
+              //   rating: parseInt(item.rating),
+              // };
               return (
                 <View className="w-1/3 mb-1 px-0.5">
-                  <Product {...newItem} />
+                  <Product {...item} />
                 </View>
               );
             }}
