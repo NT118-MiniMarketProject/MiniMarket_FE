@@ -12,7 +12,11 @@ import { priceFormatter, productHomeBEInterface } from "../../utils";
 import { RootStackParamList } from "../../utils/types";
 import { Colors, Icon } from "../styles";
 
-const Product = ({
+interface ProductProps extends productHomeBEInterface {
+  onPress?: () => void;
+}
+
+const Product: React.FC<ProductProps> = ({
   product_id,
   thumbnail,
   name,
@@ -23,8 +27,8 @@ const Product = ({
   rating,
   event_percent,
   event_price,
-}: // numOfRatings,
-productHomeBEInterface) => {
+  onPress,
+}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const isSale = event_percent && event_price;
@@ -47,16 +51,19 @@ productHomeBEInterface) => {
       <View className="flex-1">
         <TouchableOpacity
           className="w-full h-full"
-          onPress={() => {
-            navigation.navigate("ProductDetailScreen", { id: product_id });
-            // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
-            //   console.log(res);
-            //   if (res.payload){
-            //     alert("Them thanh cong ")
-            //   }
-            //   else alert("Them that bai")
-            // });
-          }}
+          onPress={
+            onPress ??
+            (() => {
+              navigation.navigate("ProductDetailScreen", { id: product_id });
+              // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
+              //   console.log(res);
+              //   if (res.payload){
+              //     alert("Them thanh cong ")
+              //   }
+              //   else alert("Them that bai")
+              // });
+            })
+          }
         >
           <ImageBackground
             source={require("../../assets/images/product_placeholder.png")}

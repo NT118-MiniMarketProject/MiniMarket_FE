@@ -57,22 +57,27 @@ export const addProductReview = createAsyncThunk(
 );
 
 const initialState: productReviewState = {
-  loading: false,
+  loading: true,
   error: "",
-  // data: [],
-  data: dummyProductReview,
+  data: [],
+  // data: dummyProductReview,
 };
 const productReviewSlice = createSlice({
   name: "productReview",
   initialState,
-  reducers: {},
+  reducers: {
+    clearState: (state, action) => {
+      state.data = initialState.data;
+      state.loading = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProductReview.pending, (state) => {
-        state.loading = true;
-        state.error = "";
-        state.data = [];
-      })
+      // .addCase(fetchProductReview.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = "";
+      //   state.data = [];
+      // })
       .addCase(fetchProductReview.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
@@ -98,5 +103,5 @@ const productReviewSlice = createSlice({
   },
 });
 
-export const categoryGroupActions = productReviewSlice.actions;
+export const productReviewActions = productReviewSlice.actions;
 export default productReviewSlice;
