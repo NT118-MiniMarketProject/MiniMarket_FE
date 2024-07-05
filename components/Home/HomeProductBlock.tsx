@@ -133,19 +133,19 @@ const HomeProductBlock: React.FC<HomeProductBlockProps> = ({
               index: number;
             }) => {
               if (index >= 15) return null;
-              const newItem: productHomeInterface = {
-                id: parseInt(item.product_id),
-                thumbnail: item.thumbnail,
-                name: item.name,
-                reg_price: item.reg_price,
-                discount_price: item.discount_price,
-                discount_percent: item.discount_percent,
-                canonical: item.canonical,
-                rating: parseInt(item.rating),
-              };
+              // const newItem: productHomeInterface = {
+              //   id: parseInt(item.product_id),
+              //   thumbnail: item.thumbnail,
+              //   name: item.name,
+              //   reg_price: item.reg_price,
+              //   discount_price: item.discount_price,
+              //   discount_percent: item.discount_percent,
+              //   canonical: item.canonical,
+              //   rating: parseInt(item.rating),
+              // };
               return (
                 <View className="w-1/3 mb-1 px-0.5">
-                  <Product {...newItem} />
+                  <Product {...item} />
                 </View>
               );
             }}
