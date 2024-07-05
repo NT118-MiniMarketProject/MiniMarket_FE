@@ -90,8 +90,8 @@ const LoginScreen = ({ navigation, route }: any) => {
   useFocusEffect(
     useCallback(() => {
       formikRef.current?.resetForm();
-      formikRef.current?.setFieldValue("email", route.params?.email);
-    }, [formikRef, route.params?.email])
+      formikRef.current?.setFieldValue("email", route?.params.email || "");
+    }, [formikRef, route?.params.email])
   );
 
   const setPasswordVisibleHandler = () => {

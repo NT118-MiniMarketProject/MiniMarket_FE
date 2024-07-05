@@ -19,7 +19,7 @@ import { paymentMethodConvert, priceFormatter } from "../../utils";
 import { convertDateTime } from "../../utils/functions";
 
 const OrderDetailScreen = ({ navigation, route }: any) => {
-  const { order_id, maHD } = route.params;
+  const { order_id = "", maHD = "" } = route?.params ?? {};
 
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useAppDispatch();

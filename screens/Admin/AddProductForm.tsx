@@ -1,13 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Dropdown } from 'react-native-element-dropdown';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import axios from 'axios';
-import { RootStackParamList } from '../../utils/types';
-import { ImageLibraryOptions, MediaType, launchImageLibrary } from 'react-native-image-picker';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dropdown } from "react-native-element-dropdown";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import axios from "axios";
+import { RootStackParamList } from "../../utils/types";
+import {
+  ImageLibraryOptions,
+  MediaType,
+  launchImageLibrary,
+} from "react-native-image-picker";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 // type AddProductFormRouteProp = RouteProp<RootStackParamList, 'AddProductForm'>;
 // type AddProductFormNavigationProp = StackNavigationProp<RootStackParamList, 'AddProductForm'>;
@@ -83,10 +95,9 @@ const AddProductForm: React.FC = () => {
         setUploading(false);
       }
     };
-
   };
 
-  const { product } = route.params as any;
+  const { product } = (route?.params as any) ?? {};
   const [product1, setProduct1] = useState<Product>({
     product_id: product.product_id,
     thumbnail: product.thumbnail,
@@ -310,11 +321,10 @@ const AddProductForm: React.FC = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
   },
   container: {
     flex: 1,
@@ -322,23 +332,23 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   formContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
     padding: 15,
     marginBottom: 20,
   },
   formLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
@@ -346,32 +356,32 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 100,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   checkboxContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
   },
   checkbox: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   checkboxLabel: {
     marginLeft: 5,
     fontSize: 16,
   },
   addButton: {
-    backgroundColor: 'green',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "green",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     borderRadius: 5,
     marginTop: 20,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
     marginLeft: 10,
   },

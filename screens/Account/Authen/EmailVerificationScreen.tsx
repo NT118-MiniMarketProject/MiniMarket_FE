@@ -40,7 +40,7 @@ const EmailVerificationScreen = ({
   const [btnDisable, setBtnDisable] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resendCode, setResendCode] = useState(false);
-  const { email, maxDigits = 4 } = route.params;
+  const { email, maxDigits = 4 } = route?.params ?? {};
 
   const handleSubmit = async () => {
     setIsSubmitting(true);

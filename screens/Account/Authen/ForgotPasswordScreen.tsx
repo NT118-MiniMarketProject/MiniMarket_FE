@@ -62,7 +62,7 @@ const ForgotPasswordScreen = ({ navigation, route }: any) => {
           <PageTitle>Gửi lại mật khẩu</PageTitle>
           <FormContainer>
             <Formik
-              initialValues={{ email: route.params?.email || "" }}
+              initialValues={{ email: route?.params.email || "" }}
               onSubmit={(values, { setFieldValue }) => {
                 setSubmitting(true);
                 if (!values.email.trim()) {
