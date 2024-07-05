@@ -49,6 +49,7 @@ const Tabs = () => {
         tabBarLabelStyle: {
           fontSize: fontSize,
         },
+        // resetOnBlur: true,
         header: () => <Header />,
       }}
     >

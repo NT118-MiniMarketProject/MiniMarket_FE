@@ -27,7 +27,7 @@ type RootStackParamList = {
     id: number
   };
   CartStackScreen: undefined;
-
+  ResultScreen: undefined;
 
   // Admin
   AdminStackScreen: undefined;

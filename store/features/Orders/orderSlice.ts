@@ -43,22 +43,19 @@ export const fetchOrder = createAsyncThunk(
 export const addNewOrder = createAsyncThunk(
   "orderSlice/addNewOrder",
   async ({
-    userId,
     address,
     payment_method,
     note,
   }: {
-    userId: number;
     address: string;
     payment_method: string;
     note: string;
   }) => {
     try {
-      const response = await axios.post(tenmien + "/api/donhang/them", {
-        userId,
-        address,
+      const response = await axios.post(tenmien + "/order", {
+        address, 
         payment_method,
-        note,
+        note
       });
       return response.data;
     } catch (err) {
@@ -102,7 +99,7 @@ const orderSlice = createSlice({
       state.error = action.error.message || "Some thing wrong";
     });
 
-    // Add to Cart
+    // Add new order 
     builder
       .addCase(addNewOrder.pending, (state) => {
         state.loading = true;
@@ -110,6 +107,8 @@ const orderSlice = createSlice({
       })
       .addCase(addNewOrder.fulfilled, (state, action) => {
         state.loading = false;
+        const {data} = action.payload;
+        state.data = data.data;
       })
       .addCase(addNewOrder.rejected, (state, action) => {
         state.loading = false;

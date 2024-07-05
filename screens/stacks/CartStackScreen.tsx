@@ -4,25 +4,43 @@ import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../Home/HomeScreen";
 import DetailScreen from "../Home/DetailScreen";
-import { useRoute } from "@react-navigation/native";
+import { StackActions, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import Tabs from "../../components/Common/Tabs";
 import DealScreen from "../Deal/DealScreen";
 import CartScreen from "../Cart/CartScreen";
 import ResultScreen from "../Cart/ResultScreen";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../utils/types";
+
 const CartStack = createStackNavigator();
 
 const CartStackScreen: React.FC = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  // const currentScreen = useRoute().name;
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log(currentScreen);
+  //     if (currentScreen === "ResultScreen" && navigation.canGoBack()) {
+  //       navigation.dispatch(StackActions.popToTop());
+  //     }
+  //   }, [navigation])
+  // );
   return (
-    <CartStack.Navigator>
+    <CartStack.Navigator 
+      detachInactiveScreens={true}
+    >
       <CartStack.Screen
         name="CartScreen"
         component={CartScreen}
-        options={{ headerShown: false }}
+        
+        options={{ headerShown: false}}
       />
       <CartStack.Screen
         name="ResultScreen"
         component={ResultScreen}
         options={{ headerShown: false }}
+        
       />
     </CartStack.Navigator>
     // <View className="flex-1 items-center justify-center bg-white">

@@ -8,10 +8,11 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useDebugValue, useEffect, useRef, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "../../store";
 import {
+  cartActions,
   fetchCart,
   updateQuantityCart,
 } from "../../store/features/Cart/cartSlice";
@@ -25,6 +26,7 @@ import LoadingModal from "../../components/Common/LoadingModal";
 import ResultModal from "../../components/Common/ResultModal";
 import LoadingModal2 from "../../components/Common/LoadingModal2";
 import { getUserInfo } from "../../store/features/Auth/userSlice";
+import { addNewOrder } from "../../store/features/Orders/orderSlice";
   
   // import { useIsFocused } from '@react-navigation/native';
   
@@ -32,6 +34,9 @@ import { getUserInfo } from "../../store/features/Auth/userSlice";
     // const isFocused = useIsFocused();
     const { credential } = useContext(CredentialContext);
     const noteRef = useRef<TextInput>(null); 
+    const [note, setNote] = useState<string>("");
+    const [infoFilled, setInfoFilled] = useState<Boolean>(false);
+    const [isLoading, setIsLoading] = useState<Boolean>(false);
     const dispatch = useAppDispatch();
     const cartData = useAppSelector(state => state.cart);
     const userData = useAppSelector(state => state.user);
@@ -60,8 +65,33 @@ import { getUserInfo } from "../../store/features/Auth/userSlice";
           dispatch(getUserInfo());
         }
     },[])
+    useEffect(() => {
+      if (!userData.loading && userData?.data.name && userData?.data.address && userData?.data.phone){
+        setInfoFilled(true)
+      }
+    }, [userData.loading])
+    const handleOrder = async () => {
+      if (infoFilled){
+        setIsLoading(true);
+        dispatch(addNewOrder({
+          address: userData.data.address || "",
+          payment_method: "Cash",
+          note,
+        })).then((res) => {
+          setIsLoading(false);
+          if (res.payload){
+            dispatch(cartActions.clearCart());
+            navigation.navigate("ResultScreen");
+          }
+          else{
+            alert("Đặt hàng không thành công");
+          }
+        });
+      }
+    }
     return credential ? (
       <View className="bg-gray-200 relative pt-12 pb-24">
+        {isLoading ? <LoadingModal /> : <></>}
         {/* Header */}
         <View className="bg-txtwhite flex-row space-x-2 z-10 items-center mb-1 px-2 py-3 absolute top-0 left-0 right-0">
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -79,21 +109,42 @@ import { getUserInfo } from "../../store/features/Auth/userSlice";
           <View className="bg-txtwhite px-2 mb-1 py-3">
             <Text className="font-bold text-13m">Giao đến</Text>
             <View className="flex-row items-center space-x-1 w-full">
-              <Text
-                className={`flex-1 text-12m text-gray-500 ${
-                  !userData?.data?.address ? "text-red-500" : ""
-                }`}
-                numberOfLines={2}
-                ellipsizeMode="tail"
+              {infoFilled ? (
+                <View className="flex-1 flex-col">
+                  <Text
+                    className={`text-12m text-gray-600 font-bold`}
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    {userData.data.address}
+                  </Text>
+                  <View className="flex-row space-x-1">
+                    <Text className="text-12m text-gray-500">
+                      Khách hàng: {userData.data.name},
+                    </Text>
+                    <Text className="text-12m text-gray-500">
+                      SĐT: {userData.data.phone}
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <Text
+                  className={`flex-1 text-12m text-red-500`}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                >
+                  "Vui lòng cập nhật đủ thông tin địa chỉ và số điện thoại"
+                </Text>
+              )}
+
+              <TouchableOpacity
+                className="bg-primary h-10 w-10 flex-row items-center justify-center rounded-md "
+                onPress={() => {
+                  navigation.navigate("AccountStackScreen");
+                }}
               >
-                {userData.data?.address ? userData.data.address :
-                  "Chưa cập nhật địa chỉ, vui lòng cập nhật trong thông tin cá nhân"}
-              </Text>
-              <TouchableOpacity className="bg-primary h-10 w-10 flex-row items-center justify-center rounded-md " onPress={() => {
-                navigation.navigate("AccountStackScreen");
-              }}>
                 <Text className={`text-txtwhite`}>
-                  {userData?.data.address ? "Đổi" : "Cập nhật"}
+                  {infoFilled ? "Đổi" : "Cập nhật"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -187,8 +238,13 @@ import { getUserInfo } from "../../store/features/Auth/userSlice";
                   <Text className="text-13m text-gray-500 text-center">
                     Không có sản phẩm nào trong giỏ hàng
                   </Text>
-                  <TouchableOpacity className="border rounded-md bg-primary px-2 py-1 mt-2" onPress={() => navigation.navigate("HomeStackScreen")}>
-                    <Text className="text-center text-txtwhite font-bold">Mua sắm ngay</Text>
+                  <TouchableOpacity
+                    className="border rounded-md bg-primary px-2 py-1 mt-2"
+                    onPress={() => navigation.navigate("HomeStackScreen")}
+                  >
+                    <Text className="text-center text-txtwhite font-bold">
+                      Mua sắm ngay
+                    </Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -216,6 +272,8 @@ import { getUserInfo } from "../../store/features/Auth/userSlice";
             </View>
             {/* Notes */}
             <TextInput
+              value={note}
+              onChangeText={(text) => setNote(text)}
               ref={noteRef}
               className="mt-1 p-1 text-13m text-gray-500 rounded-sm border border-gray-200 w-full"
               placeholder="Nhập ghi chú (nếu có)"
@@ -235,15 +293,16 @@ import { getUserInfo } from "../../store/features/Auth/userSlice";
             disabled={
               cartData.loading ||
               !cartData.data?.cartItems?.length ||
-              !userData?.data.address
+              !userData?.data.name
             }
             className={`${
-              (cartData.loading ||
+              cartData.loading ||
               (cartData.data && !cartData.data.cartItems.length) ||
-              !userData?.data.address)
+              !userData?.data.address
                 ? "bg-gray-300 text-black"
                 : "bg-primary text-txtwhite"
             } px-2 py-3 my-1 rounded-md items-center justify-center`}
+            onPress={handleOrder}
           >
             <Text className="text-txtwhite font-bold">Đặt hàng</Text>
           </TouchableOpacity>

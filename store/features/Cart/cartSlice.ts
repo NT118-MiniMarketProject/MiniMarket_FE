@@ -110,7 +110,11 @@ const initialState: cartState = {
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCart: (state) => {
+      state.data = {...state.data, quantity: 0, total: 0, saved: 0, cartItems: []};
+    },
+  },
   extraReducers: (builder) => {
     // Fetch Cart
     builder.addCase(fetchCart.pending, (state) => {
