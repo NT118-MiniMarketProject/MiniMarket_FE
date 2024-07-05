@@ -127,7 +127,7 @@ const ProductListScreen = ({ route }: ProductListScreenProps) => {
   };
   useEffect(() => {
     if (isFocusced) {
-      const { categoryId, categoryName, categroup } = route.params;
+      const { categoryId, categoryName, categroup } = route?.params ?? {};
       updateFetchParams({ categoryId, categoryName, categroup });
       dispatch(fetchCategory(categroup.toString()));
     }

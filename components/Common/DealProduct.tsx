@@ -27,7 +27,6 @@ const DealProduct = (props: dealProductsProps) => {
         navigation.navigate("ProductDetailScreen", {
           id: dealproduct.product_id,
         });
-        console.log("ddfdfdfd");
       }}
     >
       <LinearGradient

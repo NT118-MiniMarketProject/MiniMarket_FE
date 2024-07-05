@@ -38,7 +38,7 @@ const NewPasswordScreen = ({ navigation, route }: any) => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [btnDisable, setBtnDisable] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const { email } = route.params;
+  const { email = "" } = route?.params ?? {};
   // console.log(">>> NewPassword: " + email);
 
   const setPasswordVisibleHandler = () => {
@@ -56,7 +56,7 @@ const NewPasswordScreen = ({ navigation, route }: any) => {
       );
       const stackState = navigation.getState();
       const isLogin = stackState.routes.some(
-        (route: any) => route.name === "AccountScreenAfterLogin"
+        (route: any) => route?.name === "AccountScreenAfterLogin"
       );
       if (isLogin) navigation.navigate("AccountScreenAfterLogin", { email });
       else navigation.navigate("AccountLoginScreen", { email });

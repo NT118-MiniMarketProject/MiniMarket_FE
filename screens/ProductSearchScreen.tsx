@@ -109,7 +109,7 @@ const ProductSearchScreen = ({ route }: ProductListScreenProps) => {
   };
   useEffect(() => {
     if (isFocusced) {
-      const { isSale, search } = route.params;
+      const { isSale, search } = route?.params ?? {};
       updateFetchParams({ isSale, search });
       setFlag(true);
     }
