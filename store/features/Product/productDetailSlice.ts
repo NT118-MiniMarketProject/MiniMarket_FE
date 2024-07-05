@@ -1,19 +1,22 @@
+import { dummyPoductDetail } from "./../../../utils/index";
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { tenmien } from "../../../utils";
-import { productInfoInterface } from "../../../utils";
+import { productDetailInterface } from "../../../utils";
 
 interface productDetailState {
   loading: boolean;
   error: string;
-  data: productInfoInterface
+  data: productDetailInterface;
 }
 // Thunk functions
 export const fetchProductDetail = createAsyncThunk(
   "productDetailSlice/fetchProductDetail",
   async (id: string) => {
     try {
-      const response = await axios.get(tenmien + "/api/sanpham/"+id);
+      const response = await axios
+        .get(`${tenmien}/product/${id}`)
+        .then((res) => res.data);
       return response.data;
     } catch (err) {
       throw err;
@@ -25,34 +28,37 @@ const initialState: productDetailState = {
   loading: false,
   error: "",
   data: {
-    id: 0,
+    product_id: "",
     thumbnail: "",
     name: "",
     reg_price: 0,
     discount_percent: 0,
     discount_price: 0,
-    canonical: "",
     quantity: 0,
-    rating: 0,
+    unit: "",
+    canonical: null,
     description: "",
-    article: "",
+    created_at: "", // ISO date string
+    updated_at: null, // ISO date string or null
+    deleted: false,
+    rating: "",
+    c_id: "",
+    br_id: "",
+    event_percent: null,
+    event_price: null,
+    is_visible: "",
+    is_feature: "",
     galleries: [],
-    brand: {
-      id: 0,
-      name: "",
-      // thumbnail: "",
-    },
-    category: {
-      id: 0,
-      name: ""
-    }
   },
+  // data: dummyPoductDetail,
 };
 const productDetailSlice = createSlice({
   name: "productDetail",
   initialState,
   reducers: {
-    
+    clearState: (state, action) => {
+      state.data = initialState.data;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProductDetail.pending, (state) => {
@@ -70,5 +76,5 @@ const productDetailSlice = createSlice({
   },
 });
 
-export const categoryGroupActions = productDetailSlice.actions;
+export const productDetailActions = productDetailSlice.actions;
 export default productDetailSlice;

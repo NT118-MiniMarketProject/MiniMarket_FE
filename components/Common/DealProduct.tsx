@@ -1,25 +1,34 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { LinearGradient } from 'expo-linear-gradient'
-import { priceFormatter, productHomeBEInterface, productHomeInterface } from '../../utils';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../utils/types';
-import { useAppDispatch } from '../../store';
-import { addToCart } from '../../store/features/Cart/cartSlice';
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  priceFormatter,
+  productHomeBEInterface,
+  productHomeInterface,
+} from "../../utils";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../utils/types";
+import { useAppDispatch } from "../../store";
+import { addToCart } from "../../store/features/Cart/cartSlice";
 
-
-interface dealProductsProps{
-  dealproduct: productHomeBEInterface
+interface dealProductsProps {
+  dealproduct: productHomeBEInterface;
 }
 const DealProduct = (props: dealProductsProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    const { dealproduct } = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { dealproduct } = props;
   return (
-    <TouchableOpacity className="w-full" onPress={() => {
-      navigation.navigate("ProductDetailScreen", {id: parseInt(dealproduct.product_id)});
-    }}>
+    <TouchableOpacity
+      className="w-full"
+      onPress={() => {
+        navigation.navigate("ProductDetailScreen", {
+          id: dealproduct.product_id,
+        });
+      }}
+    >
       <LinearGradient
         className="rounded-md flex-column relative"
         colors={["#5CA927", "#0A773D"]}
@@ -68,11 +77,16 @@ const DealProduct = (props: dealProductsProps) => {
         </View>
 
         {/* Slider */}
-        <View className='h-4 bg-white mx-1 rounded-lg mt-1 relative overflow-hidden flex-row items-center justify-center'> 
-          <View className=' h-full w-10 absolute bg-txtyellow left-0 top-0' style={{
-            width: `100%`
-          }}></View>
-          <Text className='text-11m text-center w-100'>Còn {dealproduct.quantity} sản phẩm</Text>
+        <View className="h-4 bg-white mx-1 rounded-lg mt-1 relative overflow-hidden flex-row items-center justify-center">
+          <View
+            className=" h-full w-10 absolute bg-txtyellow left-0 top-0"
+            style={{
+              width: `100%`,
+            }}
+          ></View>
+          <Text className="text-11m text-center w-100">
+            Còn {dealproduct.quantity} sản phẩm
+          </Text>
         </View>
 
         {/* Bottom*/}
@@ -104,15 +118,10 @@ const DealProduct = (props: dealProductsProps) => {
       </LinearGradient>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
-    imgbg: 
-    {
-        
+  imgbg: {},
+});
 
-    }
-})
-
-export default DealProduct
-
+export default DealProduct;

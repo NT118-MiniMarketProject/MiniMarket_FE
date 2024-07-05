@@ -1,25 +1,24 @@
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { tenmien } from "../../../utils";
+import {
+  dummyProductReview,
+  productReviewInterface,
+  tenmien,
+} from "../../../utils";
 
 interface productReviewState {
   loading: boolean;
   error: string;
-  data: {
-    id: number, 
-    fullname: string,
-    created_at: string,
-    rating: number,
-    title: string,
-    comment: string
-  }[];
+  data: productReviewInterface[];
 }
 // Thunk functions
 export const fetchProductReview = createAsyncThunk(
   "productReview/fetchProductReview",
-  async (id:string) => {
+  async (id: string) => {
     try {
-      const response = await axios.get(tenmien + "/api/sanpham/"+id+"/danhgia");
+      const response = await axios
+        .get(`${tenmien}/reviews/${id}`)
+        .then((res) => res.data);
       return response.data;
     } catch (err) {
       throw err;
@@ -48,7 +47,7 @@ export const addProductReview = createAsyncThunk(
         productId,
         rating,
         title,
-        comment
+        comment,
       });
       return response.data;
     } catch (err) {
@@ -57,11 +56,11 @@ export const addProductReview = createAsyncThunk(
   }
 );
 
-
 const initialState: productReviewState = {
   loading: false,
   error: "",
-  data: []
+  // data: [],
+  data: dummyProductReview,
 };
 const productReviewSlice = createSlice({
   name: "productReview",
@@ -69,19 +68,19 @@ const productReviewSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(fetchProductReview.pending, (state) => {
-      state.loading = true;
-      state.error = "";
-      state.data = [];
-    })
-    .addCase(fetchProductReview.fulfilled, (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
-    })
-    .addCase(fetchProductReview.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message || "Some thing wrong!";
-    });
+      .addCase(fetchProductReview.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+        state.data = [];
+      })
+      .addCase(fetchProductReview.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+      })
+      .addCase(fetchProductReview.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Some thing wrong!";
+      });
 
     builder
       .addCase(addProductReview.pending, (state) => {
@@ -96,8 +95,6 @@ const productReviewSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Some thing wrong!";
       });
-
-    
   },
 });
 

@@ -1,4 +1,4 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import categoryGroupSlice from "./features/Collection/categoryGroupSlice";
 import productDetailSlice from "./features/Product/productDetailSlice";
 import productListSlice from "./features/Products/productListSlice";
@@ -19,14 +19,14 @@ import productReviewSlice from "./features/Product/productReviewSlice";
 import wishlistSlice from "./features/Products/wishlistSlice";
 import categoryHeaderSlice from "./features/Collection/categoryHeaderSlice";
 import categoryGroupDetailSlice from "./features/Collection/categoryGroupDetailSlice";
-
+import productRelevantSlice from "./features/Product/productRelevantSlice";
 
 export const store = configureStore({
   reducer: {
     categoryGroup: categoryGroupSlice.reducer,
     category: categorySlice.reducer,
     productDetail: productDetailSlice.reducer,
-    productList: productListSlice.reducer,  
+    productList: productListSlice.reducer,
     cart: cartSlice.reducer,
     sales: salesSlice.reducer,
     productsSales: productsSalesSlice.reducer,
@@ -40,10 +40,13 @@ export const store = configureStore({
     orderList: orderListSlice.reducer,
     wishlist: wishlistSlice.reducer,
     categoryHeader: categoryHeaderSlice.reducer,
-    categoryGroupDetail: categoryGroupDetailSlice.reducer
+    categoryGroupDetail: categoryGroupDetailSlice.reducer,
+    productRelevant: productRelevantSlice.reducer,
   },
-  devTools: process.env.NODE_ENV==="development",
+  devTools: process.env.NODE_ENV === "development",
 });
 
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<ReturnType<typeof store.getState>> = useSelector;
+export const useAppSelector: TypedUseSelectorHook<
+  ReturnType<typeof store.getState>
+> = useSelector;

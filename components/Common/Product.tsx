@@ -1,37 +1,54 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { priceFormatter, productHomeInterface } from "../../utils";
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { priceFormatter, productHomeBEInterface } from "../../utils";
 import { RootStackParamList } from "../../utils/types";
-import { addToCart } from "../../store/features/Cart/cartSlice";
-import { useAppDispatch } from "../../store";
 import { Colors, Icon } from "../styles";
 
 const Product = ({
-  id,
+  product_id,
   thumbnail,
   name,
   reg_price,
-  discount_price,
   discount_percent,
+  discount_price,
   canonical,
   rating,
-  numOfRatings,
-}: productHomeInterface) => {
+  event_percent,
+  event_price,
+}: // numOfRatings,
+productHomeBEInterface) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const dispatch = useAppDispatch();
+  const isSale = event_percent && event_price;
+  const isDiscount = discount_percent && discount_price;
+  let current_price = reg_price,
+    current_percent = 0;
+  if (isSale) {
+    current_price = event_price;
+    current_percent = event_percent;
+  } else if (isDiscount) {
+    current_price = discount_price;
+    current_percent = discount_percent;
+  }
+  const numOfRatings = null;
   return (
     <View
-      className="w-full bg-white border border-gray-300 p-0 rounded-md"
+      className="w-full bg-white border border-gray-300 p-0 rounded-sm"
       style={{ height: 274 }}
     >
       <View className="flex-1">
         <TouchableOpacity
           className="w-full h-full"
           onPress={() => {
-            navigation.navigate("ProductDetailScreen", { id });
+            navigation.navigate("ProductDetailScreen", { id: product_id });
             // dispatch(addToCart({ productId: id.toString(), quantity: 1 })).then((res) => {
             //   console.log(res);
             //   if (res.payload){
@@ -41,12 +58,36 @@ const Product = ({
             // });
           }}
         >
-          {/* Thumbnail */}
-          <Image
-            source={{ uri: thumbnail }}
-            className="w-full h-28 rounded-t-md"
+          <ImageBackground
+            source={require("../../assets/images/product_placeholder.png")}
             resizeMode="cover"
-          />
+          >
+            {/* Thumbnail */}
+            <Image
+              source={{ uri: thumbnail }}
+              className="w-full h-28 rounded-t-sm"
+              resizeMode="cover"
+            />
+
+            {/* Có trong Sale Event */}
+            {isSale && (
+              <View
+                className="absolute -top-0.5 -left-0.5 py-0.5 px-1 bg-red-500 flex-row items-center rounded-tl-sm rounded-br-md"
+                style={{
+                  borderTopRightRadius: 1.5,
+                  borderBottomLeftRadius: 1.5,
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/sale_fire.png")}
+                  style={{ width: 20, height: 20 }}
+                />
+                <Text className="font-bold text-white" style={{ fontSize: 11 }}>
+                  SALE
+                </Text>
+              </View>
+            )}
+          </ImageBackground>
 
           {/* Chứa text */}
           <View className="p-1 flex-1">
@@ -57,14 +98,14 @@ const Product = ({
 
             {/* Giá */}
             <View className="overflow-hidden">
-              {discount_price && discount_price < reg_price ? (
+              {current_price < reg_price ? (
                 <>
                   <View className="flex-row">
                     <Text
                       className="font-sans text-base font-bold"
                       style={{ lineHeight: 16 }}
                     >
-                      {priceFormatter(discount_price)}đ
+                      {priceFormatter(current_price)}đ
                     </Text>
                     {canonical && (
                       <Text className="font-sans text-xs text-txtgray self-end pl-1">
@@ -78,11 +119,7 @@ const Product = ({
                     </Text>
                     <View className="bg-red-500 px-1 py-0.5 rounded-md ml-1">
                       <Text className="text-white font-bold text-center text-xs">
-                        -
-                        {Math.round(
-                          ((reg_price - discount_price) * 100) / reg_price
-                        )}
-                        %
+                        -{current_percent}%
                       </Text>
                     </View>
                   </View>
@@ -108,7 +145,7 @@ const Product = ({
             <View className="flex-row items-center mt-auto justify-between">
               <View className="flex-row items-center">
                 <Text className="font-sans font-bold text-yellow-500 text-sm">
-                  {Math.round(rating ?? 5).toFixed(1)}
+                  {(parseFloat(rating) ?? 5).toFixed(1)}
                 </Text>
                 <Icon size={14} name="star" color="rgb(234 179 8)" />
               </View>
@@ -122,7 +159,7 @@ const Product = ({
 
       {/* Nút MUA */}
       <TouchableOpacity
-        className="justify-center items-center rounded-b-md"
+        className="justify-center items-center rounded-b-sm"
         style={{ backgroundColor: Colors.primary }}
       >
         <Text className="text-white font-semibold text-base py-1">MUA</Text>
