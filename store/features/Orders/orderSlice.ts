@@ -67,23 +67,30 @@ export const addNewOrder = createAsyncThunk(
 const initialState: orderState = {
   loading: false,
   error: "",
-  // data: {
-  //   order_id: "",
-  //   address: "",
-  //   total: 0,
-  //   note: null,
-  //   status: "Pending",
-  //   payment_method: "",
-  //   created_at: "",
-  //   orderitems: []
-  // },
-  data: dummyOrder,
+  data: {
+    order_id: "",
+    address: "",
+    total: 0,
+    note: null,
+    status: "Pending",
+    payment_method: "",
+    created_at: "",
+    orderitems: [],
+  },
+  // data: dummyOrder,
 };
 
 const orderSlice = createSlice({
   name: "order",
   initialState,
-  reducers: {},
+  reducers: {
+    updatIsReview: (state, action) => {
+      state.data.orderitems = state.data.orderitems.map((item) => {
+        if (item.orderitem_id === action.payload) item.IsReview = true;
+        return item;
+      });
+    },
+  },
   extraReducers: (builder) => {
     // Fetch Order
     builder.addCase(fetchOrder.pending, (state) => {

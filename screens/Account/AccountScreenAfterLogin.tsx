@@ -84,12 +84,12 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
               })
             }
           />
-          <PanelItem
+          {/* <PanelItem
             value="Địa chỉ nhận hàng"
             icon="truck"
             caret
             onPress={() => "Địa chỉ nhận hàng"}
-          />
+          /> */}
           <PanelItem
             value="Lịch sử đơn hàng"
             icon="shopping-bag"
@@ -118,12 +118,12 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
               })
             }
           />
-          <PanelItem
+          {/* <PanelItem
             value="Tìm kiếm siêu thị"
             icon="map-pin"
             caret
             onPress={() => console.log("Pressed!")}
-          />
+          /> */}
         </Panel>
 
         <Panel>

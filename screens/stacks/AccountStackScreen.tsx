@@ -58,7 +58,11 @@ const AccountStackScreen: React.FC = () => {
       <AccountStack.Screen
         name="AccountNewPasswordScreen"
         component={NewPasswordScreen}
-        options={{ presentation: "modal", ...authenHeaderOptions }}
+        options={{
+          presentation: "modal",
+          ...authenHeaderOptions,
+          headerShown: true,
+        }}
       />
       <AccountStack.Screen
         name="OrderListScreen"
@@ -74,13 +78,17 @@ const AccountStackScreen: React.FC = () => {
     // Chưa đăng nhập
     <AccountStack.Navigator
       initialRouteName="AccountScreen"
-      screenOptions={{ headerShown: false }}
+      // screenOptions={{ headerShown: false }}
     >
-      <AccountStack.Screen name="AccountScreen" component={AccountScreen} />
+      <AccountStack.Screen
+        name="AccountScreen"
+        component={AccountScreen}
+        options={{ headerShown: false }}
+      />
       <AccountStack.Screen
         name="FeedbackFormScreen"
         component={FeedbackFormScreen}
-        options={{ presentation: "modal" }}
+        options={{ presentation: "modal", headerShown: false }}
       />
       <AccountStack.Screen
         name="AccountLoginScreen"

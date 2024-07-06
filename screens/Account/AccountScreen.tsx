@@ -50,12 +50,12 @@ const AccountScreen = ({ navigation, route }: any) => {
           caret
           onPress={() => navigation.navigate("FeedbackFormScreen")}
         />
-        <PanelItem
+        {/* <PanelItem
           value="Tìm kiếm siêu thị"
           icon="map-pin"
           caret
           onPress={() => console.log("Pressed!")}
-        />
+        /> */}
       </Panel>
       {/* Temporary */}
       <TouchableOpacity
