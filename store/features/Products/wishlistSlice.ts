@@ -2,24 +2,24 @@ import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { tenmien } from "../../../utils";
 
-interface wishListData {
-    id: number;
-    thumbnail: string;
-    name: string;
-    discount_price: number;
+interface WishListItem {
+  product_id: string;
+  thumbnail: string;
+  name: string;
+  discount_price: number;
 }
 interface wishListState {
   loading: boolean;
   error: string;
-  data: wishListData[];
+  data: WishListItem[];
 }
 
 // Thunk functions
 export const fetchWishList = createAsyncThunk(
   "wishlistSlice/fetchWishList",
-  async (userId: string) => {
+  async () => {
     try {
-      const response = await axios.get(tenmien + "/api/taikhoan/" + userId + "/yeuthich");
+      const response = await axios.get(tenmien + "/product/wishlist");
       return response.data;
     } catch (err) {
       throw err;
@@ -30,16 +30,13 @@ export const fetchWishList = createAsyncThunk(
 export const addToWishList = createAsyncThunk(
   "wishlistSlice/addToWishList",
   async ({
-    userId,
-    productId,
+    product_id,
   }: {
-    userId: number;
-    productId: number;
+    product_id: String;
   }) => {
     try {
-      const response = await axios.post(tenmien + "/api/sanpham/yeuthich", {
-        userId,
-        productId,
+      const response = await axios.post(tenmien + "/product/wishlist/add", {
+        product_id
       });
       return response.data;
     } catch (err) {
@@ -51,15 +48,11 @@ export const addToWishList = createAsyncThunk(
 
 export const deleteItemWishList = createAsyncThunk(
   "wishlistSlice/deleteItemWishList",
-  async ({ productId, userId }: { productId: number, userId: number }) => {
+  async ({ product_id }: { product_id: String }) => {
     try {
-      const response = await axios.post(
-        tenmien + "/api/sanpham/yeuthich/xoa",
-        {
-            productId, 
-            userId
-        }
-      );
+      const response = await axios.post(tenmien + "/product/wishlist/remove", {
+        product_id,
+      });
       return response.data;
     } catch (err) {
       throw err;
@@ -86,7 +79,8 @@ const wishlistSlice = createSlice({
     });
     builder.addCase(fetchWishList.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      let {Wishlist} = action.payload;
+      state.data = Wishlist;
     });
     builder.addCase(fetchWishList.rejected, (state, action) => {
       state.loading = false;
@@ -100,7 +94,8 @@ const wishlistSlice = createSlice({
       })
       .addCase(addToWishList.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        let { Wishlist } = action.payload;
+        state.data = Wishlist;
       })
       .addCase(addToWishList.rejected, (state, action) => {
         state.loading = false;
@@ -114,7 +109,8 @@ const wishlistSlice = createSlice({
       })
       .addCase(deleteItemWishList.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        let { Wishlist } = action.payload;
+        state.data = Wishlist;
       })
       .addCase(deleteItemWishList.rejected, (state, action) => {
         state.loading = false;

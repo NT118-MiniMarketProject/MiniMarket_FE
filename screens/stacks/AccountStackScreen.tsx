@@ -14,6 +14,7 @@ import FeedbackFormScreen from "../Account/FeedbackFormScreen";
 import AccountScreenAfterLogin from "../Account/AccountScreenAfterLogin";
 import OrderListScreen from "../Order/OrderListScreen";
 import OrderDetailScreen from "../Order/OrderDetailScreen";
+import WishListScreen from "../Wishlist/WishListScreen";
 
 const AccountStackScreen: React.FC = () => {
   const { credential } = useContext(CredentialContext);
@@ -68,6 +69,10 @@ const AccountStackScreen: React.FC = () => {
       <AccountStack.Screen
         name="OrderDetailScreen"
         component={OrderDetailScreen}
+      />
+      <AccountStack.Screen
+        name="WishListScreen"
+        component={WishListScreen}
       />
     </AccountStack.Navigator>
   ) : (

@@ -51,6 +51,7 @@ import { addToCart } from "../../store/features/Cart/cartSlice";
 import LoadingModal from "../../components/Common/LoadingModal";
 import { useToast } from "react-native-toast-notifications";
 import uuid from "react-native-uuid";
+import { addToWishList } from "../../store/features/Products/wishlistSlice";
 
 const IMAGE_WIDTH = SCREEN_WIDTH;
 const IMAGE_HEIGHT = (3 / 4) * SCREEN_WIDTH;
@@ -103,6 +104,20 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
       setIsLoading(false);
     });
   };
+
+   const addWishListHandler = async () => {
+     setIsLoading(true);
+     dispatch(
+       addToWishList({ product_id: product.product_id?.toString() })
+     ).then((res) => {
+       if (res.payload) {
+         toast.show("Thêm vào yêu thích thành công");
+       } else {
+         toast.show("Xảy ra sự cố! Vui lòng thử lại sau");
+       }
+       setIsLoading(false);
+     });
+   };
 
   useEffect(() => {
     // console.log("uuidRef trong useEffect", uuidRef.current);
@@ -277,7 +292,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
               </View>
 
               {!productState.loading ? (
-                <View className="flex-row">
+                <View className="flex-row items-center">
                   {/* Quantity */}
                   <View className="flex-col space-y-1 items-center justify-center mr-2">
                     <TouchableOpacity
@@ -297,13 +312,20 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                       <AntDesign name="minus" size={17} color="black" />
                     </TouchableOpacity>
                   </View>
-                  {/*  */}
+                  {/* Buy Button */}
                   <GradientButton
                     style={{ paddingHorizontal: 60, height: 57 }}
                     textStyle={{ fontWeight: "600", fontSize: 20 }}
                     title="MUA"
                     onPress={buyHandler}
                   />
+                  {/* Add to wisthlist   */}
+                  <TouchableOpacity
+                    className="ml-2"
+                    onPress={addWishListHandler}
+                  >
+                    <AntDesign name="hearto" size={24} color="black" />
+                  </TouchableOpacity>
                 </View>
               ) : (
                 <Skeleton
