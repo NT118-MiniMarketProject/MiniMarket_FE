@@ -50,7 +50,7 @@ const FeedbackFormScreen = ({ navigation, route }: any) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const { name, email, phone } = route.params;
+  const { name = "", email = "", phone = "" } = route?.params ?? {};
 
   const formikRef = useRef<FormikProps<any>>(null);
   useFocusEffect(
@@ -135,7 +135,7 @@ const FeedbackFormScreen = ({ navigation, route }: any) => {
           handleSubmit(values);
         }}
         validationSchema={validationSchema}
-        innerRef={formikRef}
+        // innerRef={formikRef}
       >
         {({
           handleChange,
@@ -151,7 +151,6 @@ const FeedbackFormScreen = ({ navigation, route }: any) => {
               !(values.feedback && values.name && values.phone) || isSubmitting
             );
           }, [values.feedback, values.name, values.phone, isSubmitting]);
-
           return (
             <KeyboardAvoidingView className="flex-1">
               <Breadcrumb navigation={navigation} title="Góp ý / Liên hệ" />

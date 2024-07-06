@@ -18,32 +18,45 @@ import Product from "../../components/Common/Product";
 import Start from "../../components/Common/Start";
 import { Colors } from "../../components/styles";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { SCREEN_WIDTH, formatDateTime, priceFormatter } from "../../utils";
+import {
+  SCREEN_WIDTH,
+  formatDateTime,
+  priceFormatter,
+  productDetailInterface,
+  productHomeBEInterface,
+  productReviewInterface,
+} from "../../utils";
 import LineSeparator from "../../components/Common/LineSeparator";
 import { defaultAvt } from "../../utils/functions";
 import productDetailSlice, {
-  fetchProductDetail,
+  addProductDetailItem,
   productDetailActions,
+  productDetailSelector,
+  refreshProductDetailItem,
 } from "../../store/features/Product/productDetailSlice";
 import {
-  fetchProductRelevant,
+  addProductRelevantItem,
   productRelevantActions,
+  productRelevantSelector,
 } from "../../store/features/Product/productRelevantSlice";
 import { Skeleton } from "moti/skeleton";
 import ProductSkeleton from "../../components/Common/ProductSkeleton";
 import {
-  fetchProductReview,
+  addProductReviewItem,
   productReviewActions,
+  productReviewSelector,
+  refreshProductReviewItem,
 } from "../../store/features/Product/productReviewSlice";
 import { addToCart } from "../../store/features/Cart/cartSlice";
 import LoadingModal from "../../components/Common/LoadingModal";
 import { useToast } from "react-native-toast-notifications";
+import uuid from "react-native-uuid";
 
 const IMAGE_WIDTH = SCREEN_WIDTH;
 const IMAGE_HEIGHT = (3 / 4) * SCREEN_WIDTH;
 
 const ProductDetailScreen = ({ navigation, route }: any) => {
-  const product_id = route.params.id;
+  const product_id = route?.params.id;
   const toast = useToast();
   // console.log(product_id);
 
@@ -52,14 +65,19 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const sliderRef = useRef<ICarouselInstance>(null);
+  const uuidRef = useRef<string>(uuid.v4() as string);
 
   const dispatch = useAppDispatch();
 
-  const productState = useAppSelector((state) => state.productDetail);
-  const relevantState = useAppSelector((state) => state.productRelevant);
-  const reviewState = useAppSelector((state) => state.productReview);
+  const productState = useAppSelector(productDetailSelector(uuidRef.current));
+  const relevantState = useAppSelector(
+    productRelevantSelector(uuidRef.current)
+  );
+  const reviewState = useAppSelector(productReviewSelector(uuidRef.current));
 
-  const product = productState.data;
+  // console.log({ productState, relevantState, reviewState });
+
+  const product = productState.data as productDetailInterface;
 
   const isSale = product.event_percent && product.event_price;
   const isDiscount = product.discount_percent && product.discount_price;
@@ -87,13 +105,14 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
   };
 
   useEffect(() => {
-    dispatch(fetchProductDetail(product_id));
-    dispatch(fetchProductRelevant(product_id));
-    dispatch(fetchProductReview(product_id));
+    // console.log("uuidRef trong useEffect", uuidRef.current);
+    dispatch(addProductDetailItem({ uid: uuidRef.current, product_id }));
+    dispatch(addProductRelevantItem({ uid: uuidRef.current, product_id }));
+    dispatch(addProductReviewItem({ uid: uuidRef.current, product_id }));
     return () => {
-      dispatch(productDetailActions.clearState(""));
-      dispatch(productRelevantActions.clearState(""));
-      dispatch(productReviewActions.clearState(""));
+      dispatch(productDetailActions.removeItem(uuidRef.current));
+      dispatch(productRelevantActions.removeItem(uuidRef.current));
+      dispatch(productReviewActions.removeItem(uuidRef.current));
       // console.log("hello");
     };
   }, []);
@@ -101,12 +120,8 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
   const refreshHandler = async () => {
     setIsRefreshing(true);
     await Promise.all([
-      dispatch(productDetailActions.clearState("")),
-      dispatch(productReviewActions.clearState("")),
-    ]);
-    await Promise.all([
-      dispatch(fetchProductDetail(product_id)),
-      dispatch(fetchProductReview(product_id)),
+      dispatch(refreshProductDetailItem({ uid: uuidRef.current, product_id })),
+      dispatch(refreshProductReviewItem({ uid: uuidRef.current, product_id })),
     ]);
     setIsRefreshing(false);
   };
@@ -218,6 +233,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                   colorMode="light"
                   width={"70%"}
                   height={28}
+                  boxHeight={32}
                   disableExitAnimation={true}
                 >
                   {!productState.loading ? (
@@ -241,6 +257,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                   width={"50%"}
                   height={28}
                   disableExitAnimation={true}
+                  boxHeight={32}
                 >
                   {!productState.loading &&
                   current_price < product.reg_price ? (
@@ -356,7 +373,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                     <ProductSkeleton />
                   </View>
                 ))
-              : relevantState.data.map((item) => (
+              : relevantState.data.map((item: productHomeBEInterface) => (
                   <View
                     key={item.product_id}
                     style={{
@@ -366,11 +383,11 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                   >
                     <Product
                       {...item}
-                      onPress={() =>
-                        navigation.replace("ProductDetailScreen", {
+                      onPress={() => {
+                        navigation.push("ProductDetailScreen", {
                           id: item.product_id,
-                        })
-                      }
+                        });
+                      }}
                     />
                   </View>
                 ))}
@@ -398,7 +415,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
           </View>
           <LineSeparator />
           <View>
-            {reviewState.data.map((review) => (
+            {reviewState.data.map((review: productReviewInterface) => (
               <View key={review.reviewId}>
                 <View className="flex-row px-3">
                   {/* Avater user */}
