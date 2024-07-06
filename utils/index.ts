@@ -111,6 +111,7 @@ export interface orderItemInterface {
   quantity: number;
   total: number;
   fromEvent: number;
+  IsReview: true | null;
   products: productOrderInterface;
 }
 
@@ -861,6 +862,7 @@ export const dummyOrder: orderInterface = {
       quantity: 2,
       total: 198000,
       fromEvent: 1,
+      IsReview: null,
       products: {
         product_id: "71",
         thumbnail:
@@ -876,6 +878,7 @@ export const dummyOrder: orderInterface = {
       quantity: 1,
       total: 58900,
       fromEvent: 0,
+      IsReview: null,
       products: {
         product_id: "45",
         thumbnail:
@@ -891,6 +894,7 @@ export const dummyOrder: orderInterface = {
       quantity: 3,
       total: 54000,
       fromEvent: 1,
+      IsReview: null,
       products: {
         product_id: "331",
         thumbnail:
@@ -906,6 +910,7 @@ export const dummyOrder: orderInterface = {
       quantity: 7,
       total: 819000,
       fromEvent: 0,
+      IsReview: null,
       products: {
         product_id: "90",
         thumbnail:
@@ -921,6 +926,7 @@ export const dummyOrder: orderInterface = {
       quantity: 1,
       total: 58000,
       fromEvent: 0,
+      IsReview: null,
       products: {
         product_id: "115",
         thumbnail:

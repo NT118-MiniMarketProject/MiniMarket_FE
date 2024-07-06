@@ -93,6 +93,9 @@ const wardData = [
 
 // const FormData = global.FormData;
 
+const PANEL_WIDTH = 364.8;
+const PANEL_HEIGHT = 626.5;
+
 const AccountInfoScreen = ({ navigation, route }: any) => {
   // const {
   //   name = "",
@@ -115,8 +118,8 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
   // auth().currentUser?.uid
   // auth().currentUser?.toJSON()
 
-  const [panelWidth, setPanelWidth] = useState(0);
-  const [panelHeight, setPanelHeight] = useState(0);
+  // const [panelWidth, setPanelWidth] = useState(0);
+  // const [panelHeight, setPanelHeight] = useState(0);
   const [btnDisable, setBtnDisable] = useState(true);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const userState = useAppSelector((state) => state.user);
@@ -302,7 +305,7 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
                         }}
                       />
                     </View>
-                    <View style={{ height: panelHeight }}>
+                    <View style={{ height: PANEL_HEIGHT }}>
                       {/* Panel */}
                       <View
                         className="bg-slate-50 rounded-xl absolute p-2 pb-3"
@@ -310,14 +313,14 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
                           width: 0.95 * SCREEN_WIDTH,
                           top: -50,
                           left: "50%",
-                          transform: [{ translateX: -0.5 * panelWidth }],
+                          transform: [{ translateX: -0.5 * PANEL_WIDTH }],
                           paddingTop: 85,
                           elevation: 6,
                         }}
-                        onLayout={(event) => {
-                          setPanelWidth(event.nativeEvent.layout.width);
-                          setPanelHeight(event.nativeEvent.layout.height);
-                        }}
+                        // onLayout={(event) => {
+                        //   setPanelWidth(event.nativeEvent.layout.width);
+                        //   setPanelHeight(event.nativeEvent.layout.height);
+                        // }}
                       >
                         {/* Avatar */}
                         <TouchableOpacity
@@ -325,7 +328,7 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
                           style={{
                             position: "absolute",
                             top: -165,
-                            left: (panelWidth - 150) / 2,
+                            left: (PANEL_WIDTH - 150) / 2,
                             borderWidth: 2.5,
                             borderColor: "#cbd5e1",
                           }}

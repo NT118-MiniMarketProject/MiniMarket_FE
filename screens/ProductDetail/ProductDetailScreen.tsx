@@ -1,4 +1,5 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
+import { Skeleton } from "moti/skeleton";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -14,21 +15,13 @@ import {
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import GradientButton from "../../components/Common/GradientButton";
+import LineSeparator from "../../components/Common/LineSeparator";
 import Product from "../../components/Common/Product";
+import ProductSkeleton from "../../components/Common/ProductSkeleton";
 import Start from "../../components/Common/Start";
 import { Colors } from "../../components/styles";
 import { useAppDispatch, useAppSelector } from "../../store";
 import {
-  SCREEN_WIDTH,
-  formatDateTime,
-  priceFormatter,
-  productDetailInterface,
-  productHomeBEInterface,
-  productReviewInterface,
-} from "../../utils";
-import LineSeparator from "../../components/Common/LineSeparator";
-import { defaultAvt } from "../../utils/functions";
-import productDetailSlice, {
   addProductDetailItem,
   productDetailActions,
   productDetailSelector,
@@ -39,8 +32,6 @@ import {
   productRelevantActions,
   productRelevantSelector,
 } from "../../store/features/Product/productRelevantSlice";
-import { Skeleton } from "moti/skeleton";
-import ProductSkeleton from "../../components/Common/ProductSkeleton";
 import {
   addProductReviewItem,
   productReviewActions,
@@ -51,6 +42,15 @@ import { addToCart } from "../../store/features/Cart/cartSlice";
 import LoadingModal from "../../components/Common/LoadingModal";
 import { useToast } from "react-native-toast-notifications";
 import uuid from "react-native-uuid";
+import {
+  SCREEN_WIDTH,
+  formatDateTime,
+  priceFormatter,
+  productDetailInterface,
+  productHomeBEInterface,
+  productReviewInterface,
+} from "../../utils";
+import { defaultAvt } from "../../utils/functions";
 
 const IMAGE_WIDTH = SCREEN_WIDTH;
 const IMAGE_HEIGHT = (3 / 4) * SCREEN_WIDTH;
@@ -93,12 +93,13 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
 
   const buyHandler = async () => {
     setIsLoading(true);
-    dispatch(addToCart({ productId: product.product_id?.toString(), quantity})).then((res) => {
-      if (res.payload){
+    dispatch(
+      addToCart({ productId: product.product_id?.toString(), quantity })
+    ).then((res) => {
+      if (res.payload) {
         toast.show("Thêm vào giỏ hàng thành công");
-      }
-      else{
-        toast.show("Xảy ra sự cố! Vui lòng thử lại sau")
+      } else {
+        toast.show("Xảy ra sự cố! Vui lòng thử lại sau");
       }
       setIsLoading(false);
     });
@@ -117,6 +118,16 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
     };
   }, []);
 
+  const product_rating =
+    reviewState.data.length === 0
+      ? "5"
+      : (
+          reviewState.data.reduce(
+            (sum: number, review: any) => sum + parseInt(review.rating),
+            0
+          ) / reviewState.data.length
+        ).toFixed(1);
+
   const refreshHandler = async () => {
     setIsRefreshing(true);
     await Promise.all([
@@ -129,7 +140,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
   return (
     <View className="flex-1">
       <Breadcrumb navigation={navigation} />
-      {isLoading ? <LoadingModal/> : null}
+      {isLoading ? <LoadingModal /> : null}
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -282,16 +293,13 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                   <View className="flex-col space-y-1 items-center justify-center mr-2">
                     <TouchableOpacity
                       className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                      onPress={() => setQuantity(prev => prev+1)
-                      }
+                      onPress={() => setQuantity((prev) => prev + 1)}
                     >
                       <AntDesign name="plus" size={17} color="black" />
                     </TouchableOpacity>
-                    <Text className="text-14m text-gray-500">
-                      {quantity}
-                    </Text>
+                    <Text className="text-14m text-gray-500">{quantity}</Text>
                     <TouchableOpacity
-                      onPress={() => setQuantity(prev => prev-1)}
+                      onPress={() => setQuantity((prev) => prev - 1)}
                       className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
                     >
                       <AntDesign name="minus" size={17} color="black" />
@@ -398,22 +406,20 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
         <View className="mt-2 bg-txtwhite py-5">
           <View className="px-3">
             <Text className="font-bold text-base">Đánh giá sản phẩm</Text>
-            {reviewState.loading && (
-              <View className="items-center p-3">
-                <ActivityIndicator
-                  size="large"
-                  color={Colors.greenBackground}
-                />
-              </View>
-            )}
+
             <View className="flex-row items-baseline">
               {/* Sao của SP */}
-              <Start rating={product.rating} />
-              <Text className="text-trieugreen text-base ml-3 font-bold">{`${product.rating}/5`}</Text>
+              <Start rating={product_rating} />
+              <Text className="text-trieugreen text-base ml-3 font-bold">{`${product_rating}/5`}</Text>
               <Text className="text-xs text-black ml-1">{`(${reviewState.data.length} đánh giá)`}</Text>
             </View>
           </View>
           <LineSeparator />
+          {reviewState.loading && (
+            <View className="items-center p-3">
+              <ActivityIndicator size="large" color={Colors.greenBackground} />
+            </View>
+          )}
           <View>
             {reviewState.data.map((review: productReviewInterface) => (
               <View key={review.reviewId}>
@@ -442,19 +448,34 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                     />
                     <View className="my-2.5">
                       {/* Title */}
-                      <View className="flex-row">
-                        <Text style={{ color: Colors.disabledText }}>
+                      <View className="flex-row item-baseline">
+                        {/* <Text style={{ color: Colors.disabledText }}>
                           Tiêu đề:{" "}
                         </Text>
-                        <Text>{review.title}</Text>
+                        <Text>{review.title}</Text> */}
+                        {/* <Text style={{ color: Colors.disabledText }}>
+                          Tiêu đề:{" "}
+                        </Text> */}
+                        <Text>
+                          <Text style={{ color: Colors.disabledText }}>
+                            Tiêu đề:{" "}
+                          </Text>
+                          {review.title}
+                        </Text>
                       </View>
                       {/* Comment */}
                       {review.comment && (
-                        <View className="flex-row">
-                          <Text style={{ color: Colors.disabledText }}>
+                        <View className="flex-row items-baseline">
+                          {/* <Text style={{ color: Colors.disabledText }}>
                             Nội dung:{" "}
                           </Text>
                           <Text className="leading-6 text-justify">
+                            {review.comment}
+                          </Text> */}
+                          <Text className="leading-6 text-justify">
+                            <Text style={{ color: Colors.disabledText }}>
+                              Nội dung:{" "}
+                            </Text>
                             {review.comment}
                           </Text>
                         </View>

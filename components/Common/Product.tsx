@@ -12,6 +12,8 @@ import { priceFormatter, productHomeBEInterface } from "../../utils";
 import { RootStackParamList } from "../../utils/types";
 import { Colors, Icon } from "../styles";
 
+export const PRODUCT_CARD_HEIGHT = 274;
+
 interface ProductProps extends productHomeBEInterface {
   onPress?: () => void;
 }
@@ -46,7 +48,7 @@ const Product: React.FC<ProductProps> = ({
   return (
     <View
       className="w-full bg-white border border-gray-300 p-0 rounded-sm"
-      style={{ height: 274 }}
+      style={{ height: PRODUCT_CARD_HEIGHT }}
     >
       <View className="flex-1">
         <TouchableOpacity
@@ -76,7 +78,7 @@ const Product: React.FC<ProductProps> = ({
               resizeMode="cover"
             />
 
-            {/* Có trong Sale Event */}
+            {/* Có trong Sale Event ? */}
             {isSale && (
               <View
                 className="absolute -top-0.5 -left-0.5 py-0.5 px-1 bg-red-500 flex-row items-center rounded-tl-sm rounded-br-md"
