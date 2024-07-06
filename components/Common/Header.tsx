@@ -1,5 +1,5 @@
 import { Text, View, TextInput, StyleSheet, StatusBar} from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { AntDesign, Feather, EvilIcons } from "@expo/vector-icons";
 import SafeView from './SafeView';
@@ -8,14 +8,18 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../utils/types';
 import { useIsFocused } from '@react-navigation/native';
+import { useAppSelector } from '../../store';
+import { CredentialContext } from '../../contexts/CredentialContext';
 
 const Header = () => {
+    const {credential} = useContext(CredentialContext);
     const [text, setText] = useState('');
     const isFocused = useIsFocused();
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const cartNumber = useAppSelector(state => state.cart.data?.cartItems.length) || 0;
     useEffect(() => {
         setText('');
-    })
+    },[])
   return (
     <LinearGradient
       className="rounded-xl"
@@ -42,13 +46,28 @@ const Header = () => {
             <Text className='text-txtgray'>Nhập sản phẩm</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        {/* Cart Icon */}
+        <TouchableOpacity className='relative' onPress={() => navigation.navigate("CartStackScreen")}>
+          {(cartNumber && credential) ?
+            <View className='bg-red-600 rounded-full w-4 h-4 z-10 flex-row items-center justify-center absolute' style={styles.absolutePositioned}>
+              <Text className='text-txtwhite' style={{fontSize: 10}}>{cartNumber}</Text>
+            </View>
+            : null
+          }
           <Feather name="shopping-cart" size={22} color="#0A773D" />
         </TouchableOpacity>
       </SafeView>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  absolutePositioned: {
+    position: "absolute",
+    top: -5,
+    right: -5,
+  },
+});
 
 export default Header
 

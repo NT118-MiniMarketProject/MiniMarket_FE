@@ -1,4 +1,4 @@
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -47,6 +47,9 @@ import {
   productReviewSelector,
   refreshProductReviewItem,
 } from "../../store/features/Product/productReviewSlice";
+import { addToCart } from "../../store/features/Cart/cartSlice";
+import LoadingModal from "../../components/Common/LoadingModal";
+import { useToast } from "react-native-toast-notifications";
 import uuid from "react-native-uuid";
 
 const IMAGE_WIDTH = SCREEN_WIDTH;
@@ -54,11 +57,13 @@ const IMAGE_HEIGHT = (3 / 4) * SCREEN_WIDTH;
 
 const ProductDetailScreen = ({ navigation, route }: any) => {
   const product_id = route?.params.id;
-
+  const toast = useToast();
   // console.log(product_id);
 
   const [currentIdx, setCurrIdx] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const sliderRef = useRef<ICarouselInstance>(null);
   const uuidRef = useRef<string>(uuid.v4() as string);
 
@@ -86,9 +91,18 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
     current_percent = product.discount_percent;
   }
 
-  const buyHandler = () => {};
-
-  // console.log(uuidRef.current);
+  const buyHandler = async () => {
+    setIsLoading(true);
+    dispatch(addToCart({ productId: product.product_id?.toString(), quantity})).then((res) => {
+      if (res.payload){
+        toast.show("Thêm vào giỏ hàng thành công");
+      }
+      else{
+        toast.show("Xảy ra sự cố! Vui lòng thử lại sau")
+      }
+      setIsLoading(false);
+    });
+  };
 
   useEffect(() => {
     // console.log("uuidRef trong useEffect", uuidRef.current);
@@ -115,6 +129,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
   return (
     <View className="flex-1">
       <Breadcrumb navigation={navigation} />
+      {isLoading ? <LoadingModal/> : null}
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -262,12 +277,34 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
               </View>
 
               {!productState.loading ? (
-                <GradientButton
-                  style={{ paddingHorizontal: 60, height: 57 }}
-                  textStyle={{ fontWeight: "600", fontSize: 20 }}
-                  title="MUA"
-                  onPress={buyHandler}
-                />
+                <View className="flex-row">
+                  {/* Quantity */}
+                  <View className="flex-col space-y-1 items-center justify-center mr-2">
+                    <TouchableOpacity
+                      className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
+                      onPress={() => setQuantity(prev => prev+1)
+                      }
+                    >
+                      <AntDesign name="plus" size={17} color="black" />
+                    </TouchableOpacity>
+                    <Text className="text-14m text-gray-500">
+                      {quantity}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => setQuantity(prev => prev-1)}
+                      className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
+                    >
+                      <AntDesign name="minus" size={17} color="black" />
+                    </TouchableOpacity>
+                  </View>
+                  {/*  */}
+                  <GradientButton
+                    style={{ paddingHorizontal: 60, height: 57 }}
+                    textStyle={{ fontWeight: "600", fontSize: 20 }}
+                    title="MUA"
+                    onPress={buyHandler}
+                  />
+                </View>
               ) : (
                 <Skeleton
                   colorMode="light"
