@@ -27,7 +27,13 @@ type RootStackParamList = {
     id: string;
   };
   CartStackScreen: undefined;
-  ResultScreen: undefined;
+  ResultScreen: {
+    payment: boolean
+  } ;
+  PayLoadScreen: {
+    order_id: string,
+    total: number
+  };
 
   // Admin
   AdminStackScreen: undefined;

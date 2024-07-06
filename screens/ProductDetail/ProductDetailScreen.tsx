@@ -104,6 +104,13 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
       setIsLoading(false);
     });
   };
+  const incrementQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
 
    const addWishListHandler = async () => {
      setIsLoading(true);
@@ -297,7 +304,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                   <View className="flex-col space-y-1 items-center justify-center mr-2">
                     <TouchableOpacity
                       className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                      onPress={() => setQuantity(prev => prev+1)
+                      onPress={incrementQuantity
                       }
                     >
                       <AntDesign name="plus" size={17} color="black" />
@@ -306,7 +313,7 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
                       {quantity}
                     </Text>
                     <TouchableOpacity
-                      onPress={() => setQuantity(prev => prev-1)}
+                      onPress={decrementQuantity}
                       className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
                     >
                       <AntDesign name="minus" size={17} color="black" />
