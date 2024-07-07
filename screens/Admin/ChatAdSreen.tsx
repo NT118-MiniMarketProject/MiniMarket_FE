@@ -1,34 +1,19 @@
 import {
-  KeyboardAvoidingView,
-  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Colors, Icon } from "../../components/styles";
 import { Bubble, GiftedChat, Send } from "react-native-gifted-chat";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "react-native";
-import { Colors, Icon } from "../components/styles";
 import { Ionicons } from "@expo/vector-icons";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { CredentialContext } from "../contexts/CredentialContext";
-import { useAppDispatch } from "../store";
-import { getUserInfo } from "../store/features/Auth/userSlice";
-import { tenmien } from "../utils";
+import { tenmien } from "../../utils";
 import { io } from "socket.io-client";
 
-const ChatScreen = ({ navigation, route }: { navigation: any; route: any }) => {
+const ChatAdSreen = ({ navigation }: { navigation: any }) => {
   const [messages, setMessages] = useState<any>([]);
-  //   const
 
   // useEffect(() => {
   //   setMessages([
@@ -39,7 +24,7 @@ const ChatScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   //       user: {
   //         _id: 2,
   //         name: "React Native",
-  //         avatar: require("../assets/images/user_placeholder.png"),
+  //         avatar: require("../../assets/images/user_placeholder.png"),
   //       },
   //     },
   //   ]);
@@ -76,12 +61,6 @@ const ChatScreen = ({ navigation, route }: { navigation: any; route: any }) => {
     },
     [socketRef.current]
   );
-
-  // const onSend = useCallback((messages = []) => {
-  //   setMessages((previousMessages: any) =>
-  //     GiftedChat.append(previousMessages, messages)
-  //   );
-  // }, []);
 
   const renderBubble = (props: any) => {
     return (
@@ -132,7 +111,7 @@ const ChatScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         messages={messages}
         onSend={(messages: any) => onSend(messages)}
         user={{
-          _id: 2,
+          _id: 1,
         }}
         renderBubble={renderBubble}
         alwaysShowSend
@@ -151,6 +130,6 @@ const ChatScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   );
 };
 
-export default ChatScreen;
+export default ChatAdSreen;
 
 const styles = StyleSheet.create({});

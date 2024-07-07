@@ -32,6 +32,7 @@ import AccoutScreenAfterLogin from "./screens/Account/AccountScreenAfterLogin";
 import { Text, View } from "react-native";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { ToastProvider } from "react-native-toast-notifications";
+import MessageListAdScreen from "./screens/Admin/MessageListAdScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -105,6 +106,8 @@ export default function App() {
   if (!appIsReady || initializing) {
     return null;
   }
+
+  // return <MessageListAdScreen />;
 
   return (
     <Provider store={store}>
