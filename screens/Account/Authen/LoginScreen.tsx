@@ -51,6 +51,7 @@ import { CredentialContext } from "../../../contexts/CredentialContext";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { getUserInfo } from "../../../store/features/Auth/userSlice";
 import { getExpiredCredentialTime } from "../../../utils/functions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
@@ -156,6 +157,26 @@ const LoginScreen = ({ navigation, route }: any) => {
     // email="test@gmail.com"; password="test123456";
     try {
       const response = await axios.post(url, { email, password });
+      const setCookieHeader: string | string[] | undefined =
+        response.headers["set-cookie"];
+      let accessToken: string | undefined;
+
+      if (Array.isArray(setCookieHeader)) {
+        accessToken = setCookieHeader.find(
+          (cookie) =>
+            typeof cookie === "string" && cookie.startsWith("accessToken=")
+        );
+        if (accessToken) {
+          accessToken = accessToken.split("=")[1].split(";")[0];
+          console.log("Access Token:", accessToken);
+          await AsyncStorage.setItem("accessToken", accessToken);
+          console.log("Access token saved to AsyncStorage");
+        }
+      } else if (typeof setCookieHeader === "string") {
+        accessToken = setCookieHeader.startsWith("accessToken=")
+          ? setCookieHeader.split("=")[1].split(";")[0]
+          : undefined;
+      }
       // console.log(">>> Response: ", { response });
       const user = response.data?.user;
       // console.log(">>> USER: ", { user });
@@ -201,8 +222,8 @@ const LoginScreen = ({ navigation, route }: any) => {
               initialValues={{ email: "", password: "" }}
               onSubmit={(values, { setFieldValue }) => {
                 setSubmitting(true);
-                if (!values.email.trim() || !values.password.trim()) {
-                  values.email.trim() || setFieldValue("email", "");
+                if (!values?.email.trim() || !values.password.trim()) {
+                  values?.email.trim() || setFieldValue("email", "");
                   values.password.trim() || setFieldValue("password", "");
                   Toast.show(
                     "Please fill all fields",
@@ -226,15 +247,15 @@ const LoginScreen = ({ navigation, route }: any) => {
                 touched,
               }) => {
                 useEffect(() => {
-                  // update loginBtnDisabled whenever values.email or values.password changes
+                  // update loginBtnDisabled whenever values?.email or values.password changes
                   setLoginBtnDisable(
-                    !(values.email && values.password) ||
+                    !(values?.email && values.password) ||
                       isSubmitting ||
                       isSigningInGoogle ||
                       isSigningInFacebook
                   );
                 }, [
-                  values.email,
+                  values?.email,
                   values.password,
                   isSubmitting,
                   isSigningInGoogle,
@@ -245,7 +266,7 @@ const LoginScreen = ({ navigation, route }: any) => {
                     <View>
                       <ScrollView keyboardShouldPersistTaps="always">
                         <TextInputContainer
-                          error={errors.email && touched.email ? true : false}
+                          error={errors?.email && touched?.email ? true : false}
                         >
                           <MyTextInput
                             name="email"
@@ -253,16 +274,16 @@ const LoginScreen = ({ navigation, route }: any) => {
                             placeholder="Email"
                             onChangeText={handleChange("email")}
                             onBlur={handleBlur("email")}
-                            value={values.email}
+                            value={values?.email}
                             keyboardType="email-address"
                             setFieldValue={setFieldValue}
-                            error={errors.email && touched.email ? true : false}
+                            error={errors?.email && touched?.email ? true : false}
                           />
                         </TextInputContainer>
                         <ErrorText
-                          error={errors.email && touched.email ? true : false}
+                          error={errors?.email && touched?.email ? true : false}
                         >
-                          {errors.email?.toString()}
+                          {errors?.email?.toString()}
                         </ErrorText>
                         <TextInputContainer
                           error={
@@ -293,7 +314,7 @@ const LoginScreen = ({ navigation, route }: any) => {
                             onPress={() =>
                               navigation.navigate(
                                 "AccountForgotPasswordScreen",
-                                { email: values.email }
+                                { email: values?.email }
                               )
                             }
                           >

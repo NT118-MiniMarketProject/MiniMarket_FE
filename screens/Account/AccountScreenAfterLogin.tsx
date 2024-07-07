@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { getUserInfo, userActions } from "../../store/features/Auth/userSlice";
 import { tenmien } from "../../utils";
 import { logout } from "../../utils/functions";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const defaultErrMsg = "Ops! There's something wrong, try again later";
 
@@ -96,6 +97,12 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
             caret
             onPress={() => navigation.navigate("OrderListScreen")}
           />
+          <PanelItem
+            value="Danh sách yêu thích"
+            icon="heart"
+            caret
+            onPress={() => navigation.navigate("WishListScreen")}
+          />
         </Panel>
 
         <Panel title="Hỗ trợ khách hàng">
@@ -141,6 +148,14 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
             )}
           </PanelItem>
         </Panel>
+
+        {/* Temporary */}
+        <TouchableOpacity
+          className="bg-primary w-20"
+          onPress={() => navigation.navigate("AdminStackScreen")}
+        >
+          <Text>Di chuyển tới trang admin</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
