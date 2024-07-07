@@ -1,5 +1,5 @@
 import { Dimensions } from "react-native";
-import { string } from "yup";
+import { io } from "socket.io-client";
 
 // Variables
 export const tenmien: string = "https://minimarket-be.onrender.com/api/v1";
@@ -8,6 +8,8 @@ export const ngrok: string = "https://b004-171-243-48-12.ngrok-free.app"; //cai 
 
 export const SCREEN_HEIGHT = Dimensions.get("window").height;
 export const SCREEN_WIDTH = Dimensions.get("window").width;
+
+export const socket = io(tenmien);
 
 export interface categoryGroupInterface {
   id: number;

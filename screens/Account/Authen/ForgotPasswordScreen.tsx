@@ -40,7 +40,7 @@ const ForgotPasswordScreen = ({ navigation, route }: any) => {
     setSubmitting(true);
     try {
       // call backend
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       navigation.navigate("AccountEmailVerificationScreen", {
         email,
       });

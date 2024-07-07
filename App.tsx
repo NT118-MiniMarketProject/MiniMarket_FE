@@ -72,16 +72,16 @@ export default function App() {
   // Handle user state changes
   function onAuthStateChanged(user: any) {
     // console.log(">>> USER STATE CHANGE: ", user);
-    if (credential?.provider === "firebase") {
-      user
-        ? setCredential({
-            provider: "firebase",
-            user: user,
-            expiredTime: getExpiredCredentialTime(new Date().getTime()),
-          })
-        : setCredential(null);
-      // user ? setCredential({provider: "firebase", user: })
-    }
+    // if (credential?.provider === "firebase") {
+    //   user
+    //     ? setCredential({
+    //         provider: "firebase",
+    //         user: user,
+    //         expiredTime: getExpiredCredentialTime(new Date().getTime()),
+    //       })
+    //     : setCredential(null);
+    //   // user ? setCredential({provider: "firebase", user: })
+    // }
 
     if (initializing) setInitializing(false);
     // console.log(">>> onAuthStateChanged run", { credential });

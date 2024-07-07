@@ -23,6 +23,7 @@ import HomeStackScreen from "../../screens/stacks/HomeStackScreen";
 import { getTabBarVisibility } from "../../utils/functions";
 import { RootStackParamList } from "../../utils/types";
 import Header from "./Header";
+import ChatScreen from "../../screens/ChatStackScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -112,18 +113,22 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name={"NotiStackScreen"}
+        name={"ChatScreen"}
         options={{
-          title: "Thông báo",
+          title: "Chat",
           tabBarIcon: ({ focused }) => (
             <Ionicons
-              name="notifications-outline"
+              name="chatbox-outline"
               size={iconSize}
               color={focused ? "#007E42" : "#515764"}
             />
           ),
+          headerShown: false,
+          // tabBarStyle: {
+          //   display: "none",
+          // },
         }}
-        component={TestScreen}
+        component={ChatScreen}
       />
 
       <Tab.Screen

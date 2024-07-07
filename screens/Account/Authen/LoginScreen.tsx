@@ -51,6 +51,7 @@ import { CredentialContext } from "../../../contexts/CredentialContext";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { getUserInfo } from "../../../store/features/Auth/userSlice";
 import { getExpiredCredentialTime } from "../../../utils/functions";
+import { tenmien } from "../../../utils";
 
 const domain = "https://minimarket-be.onrender.com";
 const defaultErrMsg = "Ops! There's something wrong, try again later";
@@ -129,13 +130,30 @@ const LoginScreen = ({ navigation, route }: any) => {
       const user = await handleGoogleSignIn();
       // setCredential({provider: "google", user: user.user}); // set trong onAuthStateChanged rồi
       // console.log(">>> USER ON PRESS: ", user);
+
+      // {{URL}}/auth/gglogin
+      const data = await axios
+        .post(`${tenmien}/auth/gglogin`, {
+          displayName: user.user.displayName,
+          email: user.user.email,
+          avatar: user.user.photoURL,
+        })
+        .then((res) => res.data);
+
+      setCredential({
+        provider: "firebase",
+        user: data.user,
+        expiredTime: getExpiredCredentialTime(new Date().getTime()),
+      });
+
       Toast.show("Sign in successfully!", toastConfig as ToastOptions);
     } catch (e: any) {
-      console.warn(e);
+      console.log("GG sigin Err:", e.message);
       if (e.code === statusCodes.SIGN_IN_CANCELLED) {
         Toast.show("Sign in was cancelled", toastConfig as ToastOptions);
       } else {
-        Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+        let msg = (e as any).response?.data?.msg ?? defaultErrMsg;
+        Toast.show(msg, toastConfig as ToastOptions);
       }
     } finally {
       setIsSigningInGoogle(false);
@@ -162,16 +180,20 @@ const LoginScreen = ({ navigation, route }: any) => {
       if (user) {
         Toast.show("Login successfully!", toastConfig as ToastOptions);
         // navigation.navigate('AccountScreen'); không cần navigate manual v nx vì stack được tạo lại tự động nên sẽ mặc định vào trang này
-        setCredential({
-          provider: "password",
-          user: user,
-          expiredTime: getExpiredCredentialTime(new Date().getTime()),
-        });
+        if (user.role === "customer") {
+          setCredential({
+            provider: "password",
+            user: user,
+            expiredTime: getExpiredCredentialTime(new Date().getTime()),
+          });
+        } else if (user.role === "admin") {
+          navigation.navigate("AdminStackScreen");
+        }
       } else {
         Toast.show(defaultErrMsg, toastConfig as ToastOptions);
       }
-    } catch (err) {
-      // console.warn(">>> Error: ", err);
+    } catch (err: any) {
+      console.log("sigin Err:", err.message);
       let msg = (err as any).response?.data?.msg ?? defaultErrMsg;
       Toast.show(msg, toastConfig as ToastOptions);
     } finally {
@@ -340,11 +362,11 @@ const LoginScreen = ({ navigation, route }: any) => {
                 );
               }}
             </Formik>
-            <View style={{ alignItems: "flex-end" }}>
+            {/* <View style={{ alignItems: "flex-end" }}>
               <TouchableOpacity>
                 <TextLink>Đăng nhập bằng SMS</TextLink>
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             <Separator label="HOẶC" />
 
@@ -384,7 +406,7 @@ const LoginScreen = ({ navigation, route }: any) => {
               )}
             </StyledButton>
 
-            <StyledButton
+            {/* <StyledButton
               thirdparty
               disabled={
                 isSigningInGoogle || isSigningInFacebook || isSubmitting
@@ -417,7 +439,7 @@ const LoginScreen = ({ navigation, route }: any) => {
                   className="absolute right-8"
                 />
               )}
-            </StyledButton>
+            </StyledButton> */}
 
             <Redirect>
               <Text style={{ marginRight: 5, color: Colors.black }}>

@@ -4,23 +4,22 @@ import { tenmien } from "../../../utils";
 import { defaultAvt, logout } from "../../../utils/functions";
 import { Colors } from "../../../components/styles";
 
-
 interface userState {
   loading: boolean;
   error: string;
   data: {
-    address?: string,
-    avater?: string,
-    email:string,
-    name: string,
-    phone: string,
-  }
+    address?: string;
+    avater?: string;
+    email: string;
+    name: string;
+    phone: string;
+  };
 }
 
 // Thunk functions
 export const loginUser = createAsyncThunk(
   "userSlice/loginUser",
-  async ({email, password} : {email:string, password:string}) => {
+  async ({ email, password }: { email: string; password: string }) => {
     try {
       const response = await axios.post(`${tenmien}/auth/login`, {
         email,
@@ -32,35 +31,44 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-export const checkLogin = createAsyncThunk(
-  "userSlice/checkLogin",
-  async () => {
-    try {
-      const userId = getUserIdFromCookie();
-      // if( userId==="-1") throw new Error();
-      const response = await axios.get(`${tenmien}/api/taikhoan/${userId}/thongtin`);
-      return response.data;
-      // return Promise.resolve({
-      //   id: 1,
-      //   cartId: 23,
-      //   email: "haidu@gmail.com",
-      //   fullname: "Nguyễn B",
-      //   phone: "02932854",
-      //   address: "Tran Hung Dao",
-      //   isLoggedIn: true,
-      // });
-    } catch (err) {
-      throw err;
-    }
+export const checkLogin = createAsyncThunk("userSlice/checkLogin", async () => {
+  try {
+    const userId = getUserIdFromCookie();
+    // if( userId==="-1") throw new Error();
+    const response = await axios.get(
+      `${tenmien}/api/taikhoan/${userId}/thongtin`
+    );
+    return response.data;
+    // return Promise.resolve({
+    //   id: 1,
+    //   cartId: 23,
+    //   email: "haidu@gmail.com",
+    //   fullname: "Nguyễn B",
+    //   phone: "02932854",
+    //   address: "Tran Hung Dao",
+    //   isLoggedIn: true,
+    // });
+  } catch (err) {
+    throw err;
   }
-);
+});
 
-export const signupUser = createAsyncThunk("userSlice/signupUser", async ({email, password,fullname} : {email:string, password:string, fullname:string}) => {
+export const signupUser = createAsyncThunk(
+  "userSlice/signupUser",
+  async ({
+    email,
+    password,
+    fullname,
+  }: {
+    email: string;
+    password: string;
+    fullname: string;
+  }) => {
     try {
       const response = await axios.post(`${tenmien}/api/dangky`, {
         email,
         password,
-        fullname
+        fullname,
       });
       return response.data;
     } catch (err) {
@@ -74,16 +82,21 @@ export const updateUser = createAsyncThunk(
   async ({
     name,
     address,
-    avater
+    avater,
+    phone,
   }: {
-    name: string,
-    address?: string | null,
-    avater?: string | null,
+    name: string;
+    address?: string | null;
+    avater?: string | null;
+    phone?: string;
   }) => {
     try {
-      const response = 
-        await axios.post(`${tenmien}/user`, {name, address, avater})
-                  .then(res => res.data);
+      const data = phone
+        ? { name, address, avater, phone }
+        : { name, address, avater };
+      const response = await axios
+        .post(`${tenmien}/user`, data)
+        .then((res) => res.data);
       return response.data;
     } catch (err) {
       throw err;
@@ -91,17 +104,20 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const getUserInfo = createAsyncThunk("userSlice/getUserInfo", async () => {
-  try {
-    // {{URL}}/user/showMe
-    const res = await axios.get(`${tenmien}/user/showMe`).then(res => res.data);
-    return res.data;
-  }catch (err) {
-    throw err;
+export const getUserInfo = createAsyncThunk(
+  "userSlice/getUserInfo",
+  async () => {
+    try {
+      // {{URL}}/user/showMe
+      const res = await axios
+        .get(`${tenmien}/user/showMe`)
+        .then((res) => res.data);
+      return res.data;
+    } catch (err) {
+      throw err;
+    }
   }
-})
-
-
+);
 
 // Functions
 
@@ -125,9 +141,9 @@ const initialState: userState = {
   error: "",
   data: {
     address: undefined,
-    avater: undefined,
+    avater: require("../../../assets/images/user_placeholder.png"),
     email: "",
-    name: "",
+    name: "Khách hàng",
     phone: "",
   },
 };
@@ -138,10 +154,9 @@ const userSlice = createSlice({
   reducers: {
     clearState: (state, action) => {
       state.data = initialState.data;
-    }
+    },
   },
   extraReducers: (builder) => {
-
     // Login
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
@@ -170,7 +185,7 @@ const userSlice = createSlice({
     builder.addCase(checkLogin.rejected, (state, action) => {
       state.loading = false;
       state.data = initialState.data;
-      state.error = "Vui lòng đăng nhập lại!"
+      state.error = "Vui lòng đăng nhập lại!";
       document.cookie =
         "userId" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     });
@@ -196,9 +211,8 @@ const userSlice = createSlice({
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = {...state.data, ...action.payload};
-      if(!state.data.avater)
-        state.data.avater = defaultAvt(state.data.name);
+      state.data = { ...state.data, ...action.payload };
+      if (!state.data.avater) state.data.avater = defaultAvt(state.data.name);
     });
     builder.addCase(updateUser.rejected, (state, action) => {
       state.loading = false;
@@ -213,9 +227,7 @@ const userSlice = createSlice({
     builder.addCase(getUserInfo.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
-      if(!state.data.avater)
-        state.data.avater = defaultAvt(state.data.name);
-        
+      if (!state.data.avater) state.data.avater = defaultAvt(state.data.name);
     });
     builder.addCase(getUserInfo.rejected, (state, action) => {
       state.loading = false;

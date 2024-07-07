@@ -58,14 +58,14 @@ const AccountScreen = ({ navigation, route }: any) => {
         /> */}
       </Panel>
       {/* Temporary */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         className="bg-primary text-txtwhite text-center mt-2 px-3 py-2"
         onPress={() => {
           navigation.navigate("AdminStackScreen");
         }}
       >
         <Text>Di chuyển tới trang admin</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

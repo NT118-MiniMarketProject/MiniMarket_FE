@@ -20,6 +20,8 @@ import {
   TextInputContainer,
   toastConfig,
 } from "../../../components/styles";
+import axios from "axios";
+import { tenmien } from "../../../utils";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -49,7 +51,11 @@ const NewPasswordScreen = ({ navigation, route }: any) => {
     setSubmitting(true);
     try {
       // call backend
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = axios.post(`${tenmien}/user/forgetPassword`, {
+        email,
+        newPass: password,
+      });
       Toast.show(
         "Mật khẩu đã được thiết lập lại thành công",
         toastConfig as ToastOptions
