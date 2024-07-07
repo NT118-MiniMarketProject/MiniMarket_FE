@@ -42,21 +42,29 @@ const EmailVerificationScreen = ({
   const [btnDisable, setBtnDisable] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resendCode, setResendCode] = useState(false);
-  const { email, maxDigits = 4, name, phone, password } = route?.params ?? {};
-  const otpRef = useRef<number | null>(null);
+  const {
+    email,
+    maxDigits = 4,
+    name,
+    phone,
+    password,
+    otp_user,
+  } = route?.params ?? {};
+  const otpRef = useRef<number | null>(otp_user ? otp_user : null);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       if (code === otpRef.current?.toString()) {
-        if (name && phone && password) {
+        if (name && phone && password && email && otp_user) {
           // Đăng ký
           const response = await axios.post(`${tenmien}/auth/register`, {
             name,
             email,
             phone,
             password,
+            otp_user: otpRef.current,
           });
           Toast.show("Sign up successfully", toastConfig as ToastOptions);
           navigation.navigate("AccountLoginScreen", { email });
@@ -88,7 +96,7 @@ const EmailVerificationScreen = ({
   }, [timer]);
 
   useEffect(() => {
-    sendOTP();
+    if (!otp_user) sendOTP();
   }, []);
 
   const sendOTP = async () => {
