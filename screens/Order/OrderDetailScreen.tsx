@@ -156,7 +156,7 @@ const OrderDetailScreen = ({ navigation, route }: any) => {
       />
       {isFetching ? (
         <View className="items-center mt-1">
-          <ActivityIndicator size="large" color={Colors.primary} />
+          <ActivityIndicator size="large" color={Colors?.primary} />
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -344,7 +344,7 @@ const OrderDetailScreen = ({ navigation, route }: any) => {
                                   </Text>
                                 </View>
                                 <Text
-                                  style={{ color: Colors.primary }}
+                                  style={{ color: Colors?.primary }}
                                 >{`${priceFormatter(item.total)}đ`}</Text>
                               </View>
                             </View>
@@ -383,7 +383,7 @@ const OrderDetailScreen = ({ navigation, route }: any) => {
               <View style={styles.row} className="mt-4">
                 <Text>Tổng đơn hàng</Text>
                 <Text
-                  style={{ color: Colors.primary, fontSize: 16 }}
+                  style={{ color: Colors?.primary, fontSize: 16 }}
                 >{`${priceFormatter(order.total)}đ`}</Text>
               </View>
             </View>

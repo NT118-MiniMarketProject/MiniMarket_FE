@@ -57,14 +57,14 @@ const OrderStatusTag = ({
   return (
     <View
       className="rounded-md p-1 border-1.2 flex-row items-center justify-center"
-      style={{ borderColor: status.primary, backgroundColor: status.secondary }}
+      style={{ borderColor: status?.primary, backgroundColor: status?.secondary }}
     >
-      <FontAwesome5 name={status.icon} size={iconSize} color={status.primary} />
+      <FontAwesome5 name={status?.icon} size={iconSize} color={status?.primary} />
       <Text
         className="ml-1"
-        style={{ color: status.primary, fontSize: fontSize }}
+        style={{ color: status?.primary, fontSize: fontSize }}
       >
-        {status.label}
+        {status?.label}
       </Text>
     </View>
   );
