@@ -141,7 +141,7 @@ const initialState: userState = {
   error: "",
   data: {
     address: undefined,
-    avater: require("../../../assets/images/user_placeholder.png"),
+    avater: undefined,
     email: "",
     name: "Khách hàng",
     phone: "",

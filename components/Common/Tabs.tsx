@@ -24,6 +24,7 @@ import { getTabBarVisibility } from "../../utils/functions";
 import { RootStackParamList } from "../../utils/types";
 import Header from "./Header";
 import ChatScreen from "../../screens/ChatStackScreen";
+import ChatStackScreen from "../../screens/ChatStackScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -113,7 +114,7 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name={"ChatScreen"}
+        name={"ChatStackScreen"}
         options={{
           title: "Chat",
           tabBarIcon: ({ focused }) => (
@@ -128,7 +129,7 @@ const Tabs = () => {
           //   display: "none",
           // },
         }}
-        component={ChatScreen}
+        component={ChatStackScreen}
       />
 
       <Tab.Screen

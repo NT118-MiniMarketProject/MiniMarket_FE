@@ -98,9 +98,28 @@ const EmailVerificationScreen = ({
         .post(`${tenmien}/auth/otp`, { email })
         .then((res) => res.data);
       otpRef.current = res.data;
-      Toast.show(`Mã OTP đã được gửi đến ${email}`);
+      Toast.show(
+        `Mã OTP đã được gửi đến ${email}`,
+        toastConfig as ToastOptions
+      );
     } catch (err: any) {
       console.log(">>> sendOTP Err:", err.message);
+    }
+  };
+
+  const resendOTP = async () => {
+    // url/auth/resendOTP
+    try {
+      const res = await axios
+        .post(`${tenmien}/auth/resendOTP`, { email })
+        .then((res) => res.data);
+      otpRef.current = res.data;
+      Toast.show(
+        `Mã OTP đã được gửi đến ${email}`,
+        toastConfig as ToastOptions
+      );
+    } catch (err: any) {
+      console.log(">>> resendOTP Err:", err.message);
     }
   };
 
@@ -112,7 +131,7 @@ const EmailVerificationScreen = ({
   const HandleResendCode = () => {
     TriggerTimer();
 
-    sendOTP();
+    resendOTP();
   };
 
   useEffect(() => TriggerTimer(), []);

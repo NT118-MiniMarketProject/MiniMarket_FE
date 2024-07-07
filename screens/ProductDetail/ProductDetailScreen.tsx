@@ -42,6 +42,7 @@ import { addToCart } from "../../store/features/Cart/cartSlice";
 import LoadingModal from "../../components/Common/LoadingModal";
 import { useToast } from "react-native-toast-notifications";
 import uuid from "react-native-uuid";
+import { addToWishList } from "../../store/features/Products/wishlistSlice";
 import {
   SCREEN_WIDTH,
   formatDateTime,
@@ -98,12 +99,34 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
     ).then((res) => {
       if (res.payload) {
         toast.show("Thêm vào giỏ hàng thành công");
-      } else {
-        toast.show("Xảy ra sự cố! Vui lòng thử lại sau");
+      }
+      else{
+        toast.show("Xảy ra sự cố! Vui lòng thử lại sau")
       }
       setIsLoading(false);
     });
   };
+  const incrementQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
+
+   const addWishListHandler = async () => {
+     setIsLoading(true);
+     dispatch(
+       addToWishList({ product_id: product.product_id?.toString() })
+     ).then((res) => {
+       if (res.payload) {
+         toast.show("Thêm vào yêu thích thành công");
+       } else {
+         toast.show("Xảy ra sự cố! Vui lòng thử lại sau");
+       }
+       setIsLoading(false);
+     });
+   };
 
   useEffect(() => {
     // console.log("uuidRef trong useEffect", uuidRef.current);
@@ -288,30 +311,38 @@ const ProductDetailScreen = ({ navigation, route }: any) => {
               </View>
 
               {!productState.loading ? (
-                <View className="flex-row">
+                <View className="flex-row items-center">
                   {/* Quantity */}
                   <View className="flex-col space-y-1 items-center justify-center mr-2">
                     <TouchableOpacity
                       className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
-                      onPress={() => setQuantity((prev) => prev + 1)}
+                      onPress={incrementQuantity
+                      }
                     >
                       <AntDesign name="plus" size={17} color="black" />
                     </TouchableOpacity>
                     <Text className="text-14m text-gray-500">{quantity}</Text>
                     <TouchableOpacity
-                      onPress={() => setQuantity((prev) => prev - 1)}
+                      onPress={decrementQuantity}
                       className="bg-gray-200 h-6 w-6 flex-row items-center justify-center rounded-full"
                     >
                       <AntDesign name="minus" size={17} color="black" />
                     </TouchableOpacity>
                   </View>
-                  {/*  */}
+                  {/* Buy Button */}
                   <GradientButton
                     style={{ paddingHorizontal: 60, height: 57 }}
                     textStyle={{ fontWeight: "600", fontSize: 20 }}
                     title="MUA"
                     onPress={buyHandler}
                   />
+                  {/* Add to wisthlist   */}
+                  <TouchableOpacity
+                    className="ml-2"
+                    onPress={addWishListHandler}
+                  >
+                    <AntDesign name="hearto" size={24} color="black" />
+                  </TouchableOpacity>
                 </View>
               ) : (
                 <Skeleton

@@ -167,7 +167,7 @@ const AddProductForm: React.FC = () => {
       );
       console.log("Product updated successfully:", response.data);
       alert("Cập nhật sản phẩm thành công");
-      navigation.navigate("ListProductAdmin");
+      navigation.navigate("ProductListAdScreen" as any);
     } catch (error) {
       console.error("Error updating product:", error);
       alert("Cập nhật sản phẩm thất bại");

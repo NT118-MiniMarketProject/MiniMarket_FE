@@ -11,6 +11,7 @@ import CartScreen from "../Cart/CartScreen";
 import ResultScreen from "../Cart/ResultScreen";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../utils/types";
+import PayLoadScreen from "../Cart/PayLoadScreen";
 
 const CartStack = createStackNavigator();
 
@@ -27,20 +28,21 @@ const CartStackScreen: React.FC = () => {
   //   }, [navigation])
   // );
   return (
-    <CartStack.Navigator 
-      detachInactiveScreens={true}
-    >
+    <CartStack.Navigator detachInactiveScreens={true}>
       <CartStack.Screen
         name="CartScreen"
         component={CartScreen}
-        
-        options={{ headerShown: false}}
+        options={{ headerShown: false }}
       />
       <CartStack.Screen
         name="ResultScreen"
         component={ResultScreen}
         options={{ headerShown: false }}
-        
+      />
+      <CartStack.Screen
+        name="PayLoadScreen"
+        component={PayLoadScreen}
+        options={{ headerShown: false }}
       />
     </CartStack.Navigator>
     // <View className="flex-1 items-center justify-center bg-white">
