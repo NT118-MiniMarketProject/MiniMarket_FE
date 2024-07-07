@@ -58,7 +58,7 @@ const PayLoadScreen = () => {
                 }
             }
         });
-      }, 15000);
+      }, 18000);
 
       return () => {
         clearInterval(interval);
