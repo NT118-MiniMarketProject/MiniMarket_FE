@@ -28,11 +28,9 @@ export const logout = async (credential: any, setCredential: any) => {
   // url: https://minimarket-be.onrender.com/api/v1/auth/logout
   const url = tenmien + "/auth/logout";
   try {
-    if (credential.provider === "password") {
-      const response = await axios.delete(url);
-      // console.log(response);
-      setCredential(null);
-    } else if (credential.provider === "firebase") {
+    const response = await axios.delete(url);
+    // console.log(response);
+    if (credential.provider === "firebase") {
       const providerId = auth().currentUser?.providerData[0].providerId;
       // console.log(providerId);
       // console.log(">>> Credential user: ", credential.user.providerData);
@@ -43,6 +41,7 @@ export const logout = async (credential: any, setCredential: any) => {
       } else if (providerId === "facebook.com") {
       }
     }
+    setCredential(null);
   } catch (err: any) {
     throw new Error(err.message);
   }

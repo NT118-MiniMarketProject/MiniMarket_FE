@@ -1,22 +1,55 @@
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image, Touchable, TouchableOpacity } from "react-native";
-import { Icon } from "../../components/styles";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Touchable,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { Icon, toastConfig } from "../../components/styles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../utils/types";
+import { logout } from "../../utils/functions";
+import axios from "axios";
+import { tenmien } from "../../utils";
+import Toast, { ToastOptions } from "react-native-root-toast";
+
+const defaultErrMsg = "Ops! There's something wrong, try again later";
 
 const IntroAdScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    useEffect(() => {
-      navigation.addListener("beforeRemove", (e) => {
-        // if (yourCondition) {
-        //   return;
-        // } else {
-        // }
-        e.preventDefault();
-      });
-    }, [navigation]);
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      // if (yourCondition) {
+      //   return;
+      // } else {
+      // }
+      e.preventDefault();
+    });
+  }, [navigation]);
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const logoutHandler = async () => {
+    setIsLoggingOut(true);
+    const url = tenmien + "/auth/logout";
+    try {
+      const response = await axios.delete(url);
+      Toast.show("Logout successfully!", toastConfig as ToastOptions);
+      navigation.navigate("AccountStackScreen");
+    } catch (err) {
+      console.log(err);
+      Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Giới Thiệu Giao Diện Quản Trị</Text>
@@ -73,10 +106,12 @@ const IntroAdScreen: React.FC = () => {
       </View>
       {/* Back button */}
       <TouchableOpacity
-        onPress={() => navigation.navigate("HomeStackScreen")}
-        className="mt-2 mx-2 px-5 py-3 bg-transparent border border-red-400 rounded-md"
+        onPress={logoutHandler}
+        className="flex-row gap-1 mt-2 mx-2 px-5 py-3 bg-transparent border border-red-400 rounded-md"
+        disabled={isLoggingOut}
       >
         <Text className="text-center text-red-400">Đăng xuất</Text>
+        {isLoggingOut && <ActivityIndicator size={"small"} color="#f87171" />}
       </TouchableOpacity>
     </ScrollView>
   );

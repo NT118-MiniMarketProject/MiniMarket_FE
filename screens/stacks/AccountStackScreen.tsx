@@ -66,6 +66,11 @@ const AccountStackScreen: React.FC = () => {
         }}
       />
       <AccountStack.Screen
+        name="AccountEmailVerificationScreen"
+        component={EmailVerificationScreen}
+        options={{ ...authenHeaderOptions }}
+      />
+      <AccountStack.Screen
         name="OrderListScreen"
         component={OrderListScreen}
         options={{ presentation: "modal" }}
@@ -74,10 +79,7 @@ const AccountStackScreen: React.FC = () => {
         name="OrderDetailScreen"
         component={OrderDetailScreen}
       />
-      <AccountStack.Screen
-        name="WishListScreen"
-        component={WishListScreen}
-      />
+      <AccountStack.Screen name="WishListScreen" component={WishListScreen} />
     </AccountStack.Navigator>
   ) : (
     // Chưa đăng nhập

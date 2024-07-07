@@ -80,7 +80,7 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
             icon="lock"
             caret
             onPress={() =>
-              navigation.navigate("AccountNewPasswordScreen", {
+              navigation.navigate("AccountEmailVerificationScreen", {
                 email: user.email,
               })
             }
@@ -150,12 +150,12 @@ const AccoutScreenAfterLogin = ({ navigation, route }: any) => {
         </Panel>
 
         {/* Temporary */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="bg-primary w-20"
           onPress={() => navigation.navigate("AdminStackScreen")}
         >
           <Text>Di chuyển tới trang admin</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );

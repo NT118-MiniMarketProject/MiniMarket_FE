@@ -6,7 +6,7 @@ import {
   Keyboard,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import KeyboardAvoidingWrapper from "../../../components/Common/KeyboardAvoidingWrapper";
 import {
   InnerContainer,
@@ -24,6 +24,8 @@ import {
 import CodeInput from "../../../components/Common/CodeInput";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Toast, { ToastOptions } from "react-native-root-toast";
+import axios from "axios";
+import { tenmien } from "../../../utils";
 
 const errorMsg = "Uiii, có lỗi rồi. Vui lòng thử lại sau";
 
@@ -40,19 +42,33 @@ const EmailVerificationScreen = ({
   const [btnDisable, setBtnDisable] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resendCode, setResendCode] = useState(false);
-  const { email, maxDigits = 4 } = route?.params ?? {};
+  const { email, maxDigits = 4, name, phone, password } = route?.params ?? {};
+  const otpRef = useRef<number | null>(null);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      if (true) {
-        navigation.replace("AccountNewPasswordScreen", { email });
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (code === otpRef.current?.toString()) {
+        if (name && phone && password) {
+          // Đăng ký
+          const response = await axios.post(`${tenmien}/auth/register`, {
+            name,
+            email,
+            phone,
+            password,
+          });
+          Toast.show("Sign up successfully", toastConfig as ToastOptions);
+          navigation.navigate("AccountLoginScreen", { email });
+        } else {
+          // Quên mật khẩu
+          navigation.replace("AccountNewPasswordScreen", { email });
+        }
       } else {
         Toast.show("Mã không hợp lệ", toastConfig as ToastOptions);
       }
-    } catch (err) {
-      Toast.show(errorMsg, toastConfig as ToastOptions);
+    } catch (err: any) {
+      Toast.show(err.message, toastConfig as ToastOptions);
     } finally {
       setIsSubmitting(false);
     }
@@ -71,6 +87,42 @@ const EmailVerificationScreen = ({
     }
   }, [timer]);
 
+  useEffect(() => {
+    sendOTP();
+  }, []);
+
+  const sendOTP = async () => {
+    // {{URL}}/auth/otp
+    try {
+      const res = await axios
+        .post(`${tenmien}/auth/otp`, { email })
+        .then((res) => res.data);
+      otpRef.current = res.data;
+      Toast.show(
+        `Mã OTP đã được gửi đến ${email}`,
+        toastConfig as ToastOptions
+      );
+    } catch (err: any) {
+      console.log(">>> sendOTP Err:", err.message);
+    }
+  };
+
+  const resendOTP = async () => {
+    // url/auth/resendOTP
+    try {
+      const res = await axios
+        .post(`${tenmien}/auth/resendOTP`, { email })
+        .then((res) => res.data);
+      otpRef.current = res.data;
+      Toast.show(
+        `Mã OTP đã được gửi đến ${email}`,
+        toastConfig as ToastOptions
+      );
+    } catch (err: any) {
+      console.log(">>> resendOTP Err:", err.message);
+    }
+  };
+
   const TriggerTimer = () => {
     setTimer(COUNT_DOWN);
     setResendCode(false);
@@ -79,7 +131,7 @@ const EmailVerificationScreen = ({
   const HandleResendCode = () => {
     TriggerTimer();
 
-    // call backend
+    resendOTP();
   };
 
   useEffect(() => TriggerTimer(), []);

@@ -51,6 +51,9 @@ const errorMsg = "Uiii, có lỗi rồi. Vui lòng thử lại sau";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Vui lòng nhập Họ và tên"),
+  phone: Yup.string()
+    .matches(/^(0\d{9})$/, "Sai định dạng SĐT")
+    .required("SĐT bắt buộc nhập"),
 });
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -135,6 +138,7 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
     ward,
     street,
     avater,
+    phone,
   }: {
     name: string;
     city?: string | null;
@@ -142,6 +146,7 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
     ward?: string | null;
     street?: string | null;
     avater?: string | null;
+    phone: string;
   }) => {
     try {
       let address = null;
@@ -149,7 +154,10 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
         address = [street, ward, district, city].join(", ");
       }
       // console.log("Values: ", { name, address, avater });
-      dispatch(updateUser({ name, address, avater }));
+      const data = userState.data.phone
+        ? { name, address, avater }
+        : { name, address, avater, phone };
+      dispatch(updateUser({ name, address, avater, phone }));
     } catch (err) {
       console.log(">>> UpdateUserInfo ERR:", err);
       Toast.show(errorMsg, toastConfig as ToastOptions);
@@ -173,6 +181,8 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
     []
   );
 
+  // console.log(userState.data);
+
   return (
     <View className="flex-1 bg-slate-200">
       {isUploadingImage && <LoadingModal />}
@@ -184,9 +194,10 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
           district: userAddress[2],
           city: userAddress[3],
           avater: userState.data.avater,
+          phone: userState.data.phone,
         }}
         onSubmit={(values, { setFieldValue }) => {
-          if (!values.name.trim()) {
+          if (!values.name.trim() || !values.phone.trim()) {
             values.name.trim() || setFieldValue("name", "");
             values.street?.trim() || setFieldValue("streetAddress", "");
             Toast.show(
@@ -376,17 +387,21 @@ const AccountInfoScreen = ({ navigation, route }: any) => {
                         <View style={styles.inputContainer}>
                           <CustomInput
                             label="Số điện thoại"
-                            value={userState.data.phone}
+                            value={values.phone}
                             onChangeText={handleChange("phone")}
                             onBlur={handleBlur("phone")}
                             require
                             maxLength={10}
                             keyboardType="numeric"
                             icon="phone"
-                            editable={false}
+                            editable={userState.data.phone ? false : true}
                             styledContainer="h-14"
                           />
-                          <ErrorText></ErrorText>
+                          <ErrorText
+                            error={errors.phone && touched.phone ? true : false}
+                          >
+                            {errors.phone?.toString()}
+                          </ErrorText>
                         </View>
 
                         {/* email */}

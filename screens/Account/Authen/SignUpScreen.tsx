@@ -85,26 +85,33 @@ const SignUpScreen = ({ navigation }: any) => {
     }: { name: string; email: string; phone: string; password: string },
     setSubmitting: (isSubmitting: boolean) => void
   ) => {
+    navigation.navigate("AccountEmailVerificationScreen", {
+      name,
+      email,
+      phone,
+      password,
+    });
+    setSubmitting(false);
     // url: https://minimarket-be.onrender.com/api/v1/auth/register
-    const url = domain + "/api/v1/auth/register";
-    try {
-      const response = await axios.post(url, { name, email, phone, password });
-      // console.log('>>> Response: ', response);
-      const user = response.data?.user;
-      if (user) {
-        Toast.show("Sign up successfully", toastConfig as ToastOptions);
-        navigation.navigate("AccountLoginScreen", { email });
-      } else {
-        Toast.show(defaultErrMsg, toastConfig as ToastOptions);
-      }
-    } catch (err) {
-      // console.error('>>> Error: ', err);
-      let msg;
-      // msg = (err as any).response.data.msg;
-      Toast.show(msg ?? defaultErrMsg, toastConfig as ToastOptions);
-    } finally {
-      setSubmitting(false);
-    }
+    // const url = domain + "/api/v1/auth/register";
+    // try {
+    //   const response = await axios.post(url, { name, email, phone, password });
+    //   // console.log('>>> Response: ', response);
+    //   const user = response.data?.user;
+    //   if (user) {
+    //     Toast.show("Sign up successfully", toastConfig as ToastOptions);
+    //     navigation.navigate("AccountLoginScreen", { email });
+    //   } else {
+    //     Toast.show(defaultErrMsg, toastConfig as ToastOptions);
+    //   }
+    // } catch (err) {
+    //   // console.error('>>> Error: ', err);
+    //   let msg;
+    //   // msg = (err as any).response.data.msg;
+    //   Toast.show(msg ?? defaultErrMsg, toastConfig as ToastOptions);
+    // } finally {
+    //   setSubmitting(false);
+    // }
   };
 
   return (
