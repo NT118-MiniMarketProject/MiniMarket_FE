@@ -198,6 +198,8 @@ export function paymentMethodConvert(stat: string): string {
   switch (stat) {
     case "Cash":
       return "Tiền mặt";
+    case "Momo":
+      return "Ví Momo";
     default:
       return "Không rõ";
   }

@@ -115,7 +115,7 @@ const Order = ({
 
                   {/* Giá Khuyến mãi */}
                   <Text
-                    style={[styles.text, { color: Colors.primary }]}
+                    style={[styles.text, { color: "#33B87C" }]}
                   >{`${priceFormatter(
                     firstItem.products.discount_price
                   )}đ`}</Text>
@@ -155,9 +155,9 @@ const Order = ({
             <Text style={styles.text}>Thành tiền: </Text>
 
             {/* Tổng giá trị đơn hàng */}
-            <Text
-              style={{ color: Colors.primary, fontSize: 14 }}
-            >{`${priceFormatter(order.total)}đ`}</Text>
+            <Text style={{ color: "#33B87C", fontSize: 14 }}>{`${priceFormatter(
+              order.total
+            )}đ`}</Text>
           </View>
         </View>
 
